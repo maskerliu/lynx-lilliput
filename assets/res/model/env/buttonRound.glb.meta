@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "39d992dc-52f3-4784-bc43-eaad7f7cddde",
+  "files": [],
+  "subMetas": {
+    "fa2f7": {
+      "importer": "gltf-mesh",
+      "uuid": "39d992dc-52f3-4784-bc43-eaad7f7cddde@fa2f7",
+      "displayName": "",
+      "id": "fa2f7",
+      "name": "Mesh buttonRound.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "4e851": {
+      "importer": "gltf-mesh",
+      "uuid": "39d992dc-52f3-4784-bc43-eaad7f7cddde@4e851",
+      "displayName": "",
+      "id": "4e851",
+      "name": "Mesh knob.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1587a": {
+      "importer": "gltf-scene",
+      "uuid": "39d992dc-52f3-4784-bc43-eaad7f7cddde@1587a",
+      "displayName": "",
+      "id": "1587a",
+      "name": "buttonRound.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "39d992dc-52f3-4784-bc43-eaad7f7cddde@1587a",
+    "assetFinder": {
+      "meshes": [
+        "39d992dc-52f3-4784-bc43-eaad7f7cddde@fa2f7",
+        "39d992dc-52f3-4784-bc43-eaad7f7cddde@4e851"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9",
+        "84f3fb43-719d-4ef7-88d7-59596eb7f2a0",
+        "992b7af6-ffeb-45ad-8e2a-0b13329f04c7"
+      ],
+      "scenes": [
+        "39d992dc-52f3-4784-bc43-eaad7f7cddde@1587a"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

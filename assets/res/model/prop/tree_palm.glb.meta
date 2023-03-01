@@ -1,0 +1,92 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "04791e5f-2ea3-4092-8454-7ec4b04cb43f",
+  "files": [],
+  "subMetas": {
+    "509c5": {
+      "importer": "gltf-mesh",
+      "uuid": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@509c5",
+      "displayName": "",
+      "id": "509c5",
+      "name": "Mesh tree_palm.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "11bfd": {
+      "importer": "gltf-material",
+      "uuid": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@11bfd",
+      "displayName": "",
+      "id": "11bfd",
+      "name": "woodBark.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "af578": {
+      "importer": "gltf-material",
+      "uuid": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@af578",
+      "displayName": "",
+      "id": "af578",
+      "name": "leafsGreen.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "7721b": {
+      "importer": "gltf-scene",
+      "uuid": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@7721b",
+      "displayName": "",
+      "id": "7721b",
+      "name": "tree_palm.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@7721b",
+    "assetFinder": {
+      "meshes": [
+        "04791e5f-2ea3-4092-8454-7ec4b04cb43f@509c5"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "04791e5f-2ea3-4092-8454-7ec4b04cb43f@11bfd",
+        "04791e5f-2ea3-4092-8454-7ec4b04cb43f@af578"
+      ],
+      "scenes": [
+        "04791e5f-2ea3-4092-8454-7ec4b04cb43f@7721b"
+      ]
+    }
+  }
+}

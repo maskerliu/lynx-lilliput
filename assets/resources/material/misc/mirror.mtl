@@ -1,0 +1,78 @@
+{
+  "__type__": "cc.Material",
+  "_name": "",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "1baf0fc9-befa-459c-8bdd-af1a450a0319",
+    "__expectedType__": "cc.EffectAsset"
+  },
+  "_techIdx": 0,
+  "_defines": [
+    {
+      "USE_INSTANCING": true,
+      "USE_REFLECTION_DENOISE": true,
+      "USE_METALLIC_ROUGHNESS_MAP": true
+    },
+    {},
+    {}
+  ],
+  "_states": [
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    }
+  ],
+  "_props": [
+    {
+      "mainColor": {
+        "__type__": "cc.Color",
+        "r": 28,
+        "g": 142,
+        "b": 207,
+        "a": 0
+      },
+      "occlusion": 1,
+      "roughness": 0.577,
+      "metallic": 0.704,
+      "normalStrength": 1.27,
+      "normalMap": {
+        "__uuid__": "5784861f-94e0-4cd0-ad3e-7a9573d9260e@6c48a",
+        "__expectedType__": "cc.TextureBase"
+      },
+      "pbrMap": {
+        "__uuid__": "e6f25927-a827-4995-b571-f61a6399145d@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      },
+      "metallicRoughnessMap": {
+        "__uuid__": "e6f25927-a827-4995-b571-f61a6399145d@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    },
+    {},
+    {}
+  ]
+}

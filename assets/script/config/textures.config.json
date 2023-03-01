@@ -1,0 +1,27 @@
+[
+  {
+    "name": "TerrainItemSnaps",
+    "path":"texture/",
+    "type": 2
+  },
+  {
+    "name": "criminalMaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "cyborgFemaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "skaterFemaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "skaterMaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  }
+]

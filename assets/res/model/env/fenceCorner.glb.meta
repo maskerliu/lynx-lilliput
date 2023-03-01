@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "c6f02932-60b6-4225-bb49-416b144723e4",
+  "files": [],
+  "subMetas": {
+    "630af": {
+      "importer": "gltf-mesh",
+      "uuid": "c6f02932-60b6-4225-bb49-416b144723e4@630af",
+      "displayName": "",
+      "id": "630af",
+      "name": "Mesh fenceCorner.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e10bf": {
+      "importer": "gltf-scene",
+      "uuid": "c6f02932-60b6-4225-bb49-416b144723e4@e10bf",
+      "displayName": "",
+      "id": "e10bf",
+      "name": "fenceCorner.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "c6f02932-60b6-4225-bb49-416b144723e4@e10bf",
+    "assetFinder": {
+      "meshes": [
+        "c6f02932-60b6-4225-bb49-416b144723e4@630af"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7"
+      ],
+      "scenes": [
+        "c6f02932-60b6-4225-bb49-416b144723e4@e10bf"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

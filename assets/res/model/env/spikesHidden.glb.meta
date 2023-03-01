@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "87ef501e-6cee-448a-9082-5104b681d208",
+  "files": [],
+  "subMetas": {
+    "5a0ac": {
+      "importer": "gltf-mesh",
+      "uuid": "87ef501e-6cee-448a-9082-5104b681d208@5a0ac",
+      "displayName": "",
+      "id": "5a0ac",
+      "name": "Mesh spikesHidden.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a1d7e": {
+      "importer": "gltf-scene",
+      "uuid": "87ef501e-6cee-448a-9082-5104b681d208@a1d7e",
+      "displayName": "",
+      "id": "a1d7e",
+      "name": "spikesHidden.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "87ef501e-6cee-448a-9082-5104b681d208@a1d7e",
+    "assetFinder": {
+      "meshes": [
+        "87ef501e-6cee-448a-9082-5104b681d208@5a0ac"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9"
+      ],
+      "scenes": [
+        "87ef501e-6cee-448a-9082-5104b681d208@a1d7e"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

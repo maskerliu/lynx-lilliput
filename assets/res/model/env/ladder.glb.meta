@@ -1,0 +1,63 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "d5f3a5ac-b79a-4269-a376-884f50a72444",
+  "files": [],
+  "subMetas": {
+    "7e05a": {
+      "importer": "gltf-mesh",
+      "uuid": "d5f3a5ac-b79a-4269-a376-884f50a72444@7e05a",
+      "displayName": "",
+      "id": "7e05a",
+      "name": "Mesh ladder.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f3733": {
+      "importer": "gltf-scene",
+      "uuid": "d5f3a5ac-b79a-4269-a376-884f50a72444@f3733",
+      "displayName": "",
+      "id": "f3733",
+      "name": "ladder.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "d5f3a5ac-b79a-4269-a376-884f50a72444@f3733",
+    "assetFinder": {
+      "meshes": [
+        "d5f3a5ac-b79a-4269-a376-884f50a72444@7e05a"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "84f3fb43-719d-4ef7-88d7-59596eb7f2a0"
+      ],
+      "scenes": [
+        "d5f3a5ac-b79a-4269-a376-884f50a72444@f3733"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

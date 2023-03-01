@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "1b4a9f4c-11bc-48d8-8894-7ce257614b54",
+  "files": [],
+  "subMetas": {
+    "53840": {
+      "importer": "gltf-scene",
+      "uuid": "1b4a9f4c-11bc-48d8-8894-7ce257614b54@53840",
+      "displayName": "",
+      "id": "53840",
+      "name": "blockDirtRamp.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a733d": {
+      "importer": "gltf-mesh",
+      "uuid": "1b4a9f4c-11bc-48d8-8894-7ce257614b54@a733d",
+      "displayName": "",
+      "id": "a733d",
+      "name": "Mesh blockDirtRamp.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "1b4a9f4c-11bc-48d8-8894-7ce257614b54@53840",
+    "assetFinder": {
+      "meshes": [
+        "1b4a9f4c-11bc-48d8-8894-7ce257614b54@a733d"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436"
+      ],
+      "scenes": [
+        "1b4a9f4c-11bc-48d8-8894-7ce257614b54@53840"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "26760568-b8eb-4bd0-8dfc-3838ae9241e3",
+  "files": [],
+  "subMetas": {
+    "02681": {
+      "importer": "gltf-mesh",
+      "uuid": "26760568-b8eb-4bd0-8dfc-3838ae9241e3@02681",
+      "displayName": "",
+      "id": "02681",
+      "name": "Mesh blockRoundedLow.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "0db1e": {
+      "importer": "gltf-scene",
+      "uuid": "26760568-b8eb-4bd0-8dfc-3838ae9241e3@0db1e",
+      "displayName": "",
+      "id": "0db1e",
+      "name": "blockRoundedLow.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "26760568-b8eb-4bd0-8dfc-3838ae9241e3@0db1e",
+    "assetFinder": {
+      "meshes": [
+        "26760568-b8eb-4bd0-8dfc-3838ae9241e3@02681"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436"
+      ],
+      "scenes": [
+        "26760568-b8eb-4bd0-8dfc-3838ae9241e3@0db1e"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

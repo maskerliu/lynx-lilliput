@@ -1,0 +1,109 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "1d2b3660-66ca-457e-b317-080694c0805f",
+  "files": [],
+  "subMetas": {
+    "41401": {
+      "importer": "gltf-mesh",
+      "uuid": "1d2b3660-66ca-457e-b317-080694c0805f@41401",
+      "displayName": "",
+      "id": "41401",
+      "name": "Mesh apple.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "92dfd": {
+      "importer": "gltf-material",
+      "uuid": "1d2b3660-66ca-457e-b317-080694c0805f@92dfd",
+      "displayName": "",
+      "id": "92dfd",
+      "name": "red.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "cdda2": {
+      "importer": "gltf-material",
+      "uuid": "1d2b3660-66ca-457e-b317-080694c0805f@cdda2",
+      "displayName": "",
+      "id": "cdda2",
+      "name": "brown.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "00fbf": {
+      "importer": "gltf-material",
+      "uuid": "1d2b3660-66ca-457e-b317-080694c0805f@00fbf",
+      "displayName": "",
+      "id": "00fbf",
+      "name": "green.material",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "28cd4": {
+      "importer": "gltf-scene",
+      "uuid": "1d2b3660-66ca-457e-b317-080694c0805f@28cd4",
+      "displayName": "",
+      "id": "28cd4",
+      "name": "apple.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "1d2b3660-66ca-457e-b317-080694c0805f@28cd4",
+    "assetFinder": {
+      "meshes": [
+        "1d2b3660-66ca-457e-b317-080694c0805f@41401"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "1d2b3660-66ca-457e-b317-080694c0805f@92dfd",
+        "1d2b3660-66ca-457e-b317-080694c0805f@cdda2",
+        "1d2b3660-66ca-457e-b317-080694c0805f@00fbf"
+      ],
+      "scenes": [
+        "1d2b3660-66ca-457e-b317-080694c0805f@28cd4"
+      ]
+    }
+  }
+}

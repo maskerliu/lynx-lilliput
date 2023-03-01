@@ -1,0 +1,75 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "46e7f500-e1c7-4f4b-8310-f3bef5083ed0",
+  "files": [],
+  "subMetas": {
+    "90759": {
+      "importer": "gltf-mesh",
+      "uuid": "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@90759",
+      "displayName": "",
+      "id": "90759",
+      "name": "Mesh cookingSpoon.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "cdda2": {
+      "importer": "gltf-material",
+      "uuid": "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@cdda2",
+      "displayName": "",
+      "id": "cdda2",
+      "name": "brown.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "39c93": {
+      "importer": "gltf-scene",
+      "uuid": "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@39c93",
+      "displayName": "",
+      "id": "39c93",
+      "name": "cookingSpoon.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@39c93",
+    "assetFinder": {
+      "meshes": [
+        "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@90759"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@cdda2"
+      ],
+      "scenes": [
+        "46e7f500-e1c7-4f4b-8310-f3bef5083ed0@39c93"
+      ]
+    }
+  }
+}

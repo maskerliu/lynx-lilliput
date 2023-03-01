@@ -1,0 +1,75 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7",
+  "files": [],
+  "subMetas": {
+    "f24f9": {
+      "importer": "gltf-mesh",
+      "uuid": "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@f24f9",
+      "displayName": "",
+      "id": "f24f9",
+      "name": "Mesh utensilFork.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b31f4": {
+      "importer": "gltf-material",
+      "uuid": "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@b31f4",
+      "displayName": "",
+      "id": "b31f4",
+      "name": "white.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d8159": {
+      "importer": "gltf-scene",
+      "uuid": "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@d8159",
+      "displayName": "",
+      "id": "d8159",
+      "name": "utensilFork.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@d8159",
+    "assetFinder": {
+      "meshes": [
+        "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@f24f9"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@b31f4"
+      ],
+      "scenes": [
+        "df06a91e-8cce-4b17-a6f0-b7bbc188b5e7@d8159"
+      ]
+    }
+  }
+}

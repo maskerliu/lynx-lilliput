@@ -1,0 +1,63 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "0bf81d31-f8bc-4627-89a7-d7c5368da1ca",
+  "files": [],
+  "subMetas": {
+    "42a6f": {
+      "importer": "gltf-mesh",
+      "uuid": "0bf81d31-f8bc-4627-89a7-d7c5368da1ca@42a6f",
+      "displayName": "",
+      "id": "42a6f",
+      "name": "Mesh doorClosed.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ed15c": {
+      "importer": "gltf-scene",
+      "uuid": "0bf81d31-f8bc-4627-89a7-d7c5368da1ca@ed15c",
+      "displayName": "",
+      "id": "ed15c",
+      "name": "doorClosed.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "0bf81d31-f8bc-4627-89a7-d7c5368da1ca@ed15c",
+    "assetFinder": {
+      "meshes": [
+        "0bf81d31-f8bc-4627-89a7-d7c5368da1ca@42a6f"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f"
+      ],
+      "scenes": [
+        "0bf81d31-f8bc-4627-89a7-d7c5368da1ca@ed15c"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

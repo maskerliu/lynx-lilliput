@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "604c514b-adb8-4281-900f-d13e4adb4360",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "fff23": {
+      "importer": "gltf-animation",
+      "uuid": "604c514b-adb8-4281-900f-d13e4adb4360@fff23",
+      "displayName": "",
+      "id": "fff23",
+      "name": "JumpLanding.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "9027b": {
+      "importer": "gltf-scene",
+      "uuid": "604c514b-adb8-4281-900f-d13e4adb4360@9027b",
+      "displayName": "",
+      "id": "9027b",
+      "name": "JumpLanding.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 1,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "JumpLanding",
+            "from": 0,
+            "to": 1,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "604c514b-adb8-4281-900f-d13e4adb4360@9027b",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "604c514b-adb8-4281-900f-d13e4adb4360@9027b"
+      ]
+    }
+  }
+}

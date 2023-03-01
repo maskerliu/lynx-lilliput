@@ -1,0 +1,352 @@
+[
+  {
+    "name": "block",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "skin": {
+      "grass": "snow"
+    },
+    "joint": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "blockCliff",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "joint": [
+      1,
+      1,
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "name": "blockCliffCorner",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "dirt",
+      "grass"
+    ],
+    "joint": [
+      0,
+      1,
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "name": "blockCornerLarge",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "joint": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  {
+    "name": "blockCornerSmall",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "joint": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  {
+    "name": "blockCurve",
+    "x": 2,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "joint": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "blockCurveLow",
+    "x": 2,
+    "y": 0.5,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "joint": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "blockDirt",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "dirt"
+    ],
+    "joint": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "blockEnd",
+    "x": 1,
+    "y": 0.5,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ],
+    "joint": [
+      0,
+      0,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  {
+    "name": "blockHalf",
+    "x": 1,
+    "y": 0.5,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ]
+  },
+  {
+    "name": "blockHexagon",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ]
+  },
+  {
+    "name": "blockHexagonLow",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "dirt",
+      "grass"
+    ]
+  },
+  {
+    "name": "blockLevel",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ]
+  },
+  {
+    "name": "blockQuarter",
+    "x": 0.5,
+    "y": 1,
+    "z": 0.5,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "grass",
+      "dirt"
+    ]
+  },
+  {
+    "name": "blockSlope",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "dirt",
+      "grass"
+    ]
+  },
+  {
+    "name": "blockSlopeHalf",
+    "x": 1,
+    "y": 0.5,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "dirt",
+      "grass"
+    ]
+  },
+  {
+    "name": "blockMoving",
+    "x": 1,
+    "y": 0.25,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "gold",
+      "wood"
+    ]
+  },
+  {
+    "name": "blockMovingLarge",
+    "x": 1,
+    "y": 0.5,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "gold",
+      "wood"
+    ]
+  },
+  {
+    "name": "blockMovingRed",
+    "x": 1,
+    "y": 0.5,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "gold",
+      "heart"
+    ]
+  },
+  {
+    "name": "bridge",
+    "x": 1,
+    "y": 0.4,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "wood",
+      "woodDark"
+    ]
+  },
+  {
+    "name": "bridgeHalf",
+    "x": 1,
+    "y": 0.4,
+    "z": 0.46,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "woodDark",
+      "wood"
+    ]
+  },
+  {
+    "name": "bridgeRamp",
+    "x": 1,
+    "y": 0.5,
+    "z": 0.88,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "wood",
+      "woodDark"
+    ]
+  },
+  {
+    "name": "platform",
+    "x": 1,
+    "y": 0.1,
+    "z": 1,
+    "anchor": 1,
+    "type": 0,
+    "material": [
+      "wood",
+      "woodDark"
+    ]
+  }
+]

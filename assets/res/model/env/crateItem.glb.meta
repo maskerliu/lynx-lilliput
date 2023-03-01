@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "cc549e61-8814-4c08-8342-1bdabb364b1a",
+  "files": [],
+  "subMetas": {
+    "2f8ed": {
+      "importer": "gltf-mesh",
+      "uuid": "cc549e61-8814-4c08-8342-1bdabb364b1a@2f8ed",
+      "displayName": "",
+      "id": "2f8ed",
+      "name": "Mesh crateItem.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "44d7b": {
+      "importer": "gltf-scene",
+      "uuid": "cc549e61-8814-4c08-8342-1bdabb364b1a@44d7b",
+      "displayName": "",
+      "id": "44d7b",
+      "name": "crateItem.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "cc549e61-8814-4c08-8342-1bdabb364b1a@44d7b",
+    "assetFinder": {
+      "meshes": [
+        "cc549e61-8814-4c08-8342-1bdabb364b1a@2f8ed"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "23df7e49-27b3-4be7-8fa7-84c7e2d611ae",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7"
+      ],
+      "scenes": [
+        "cc549e61-8814-4c08-8342-1bdabb364b1a@44d7b"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

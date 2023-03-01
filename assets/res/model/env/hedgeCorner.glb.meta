@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "b4573a76-8b86-4f66-8410-a75568b652c2",
+  "files": [],
+  "subMetas": {
+    "1f802": {
+      "importer": "gltf-mesh",
+      "uuid": "b4573a76-8b86-4f66-8410-a75568b652c2@1f802",
+      "displayName": "",
+      "id": "1f802",
+      "name": "Mesh hedgeCorner.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b29f9": {
+      "importer": "gltf-scene",
+      "uuid": "b4573a76-8b86-4f66-8410-a75568b652c2@b29f9",
+      "displayName": "",
+      "id": "b29f9",
+      "name": "hedgeCorner.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "b4573a76-8b86-4f66-8410-a75568b652c2@b29f9",
+    "assetFinder": {
+      "meshes": [
+        "b4573a76-8b86-4f66-8410-a75568b652c2@1f802"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae"
+      ],
+      "scenes": [
+        "b4573a76-8b86-4f66-8410-a75568b652c2@b29f9"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "__version__": "1.0.4",
+  "general": {
+    "designResolution": {
+      "width": 750,
+      "height": 1334,
+      "fitHeight": true
+    }
+  },
+  "custom_joint_texture_layouts": [],
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "Terrian"
+      },
+      {
+        "index": 2,
+        "name": "Prop"
+      },
+      {
+        "index": 3,
+        "name": "Character"
+      },
+      {
+        "index": 4,
+        "name": "Vehicle"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 1,
+      "1": 28,
+      "2": 30,
+      "3": 14,
+      "4": 22
+    },
+    "gravity": {
+      "y": -20
+    }
+  },
+  "layer": [
+    {
+      "name": "Terrian_Grid",
+      "value": 1
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "39372432-ac27-424d-8a59-b2ddc16a40dc",
+  "files": [],
+  "subMetas": {
+    "538fe": {
+      "importer": "gltf-mesh",
+      "uuid": "39372432-ac27-424d-8a59-b2ddc16a40dc@538fe",
+      "displayName": "",
+      "id": "538fe",
+      "name": "Mesh crateStrong.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b596c": {
+      "importer": "gltf-scene",
+      "uuid": "39372432-ac27-424d-8a59-b2ddc16a40dc@b596c",
+      "displayName": "",
+      "id": "b596c",
+      "name": "crateStrong.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "39372432-ac27-424d-8a59-b2ddc16a40dc@b596c",
+    "assetFinder": {
+      "meshes": [
+        "39372432-ac27-424d-8a59-b2ddc16a40dc@538fe"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9",
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7"
+      ],
+      "scenes": [
+        "39372432-ac27-424d-8a59-b2ddc16a40dc@b596c"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

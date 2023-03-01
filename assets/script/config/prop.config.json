@@ -1,0 +1,221 @@
+[
+  {
+    "name": "arrow",
+    "x": 0.456,
+    "y": 0.6,
+    "z": 0.13,
+    "anchor": 1,
+    "type": 1,
+    "react": 0,
+    "material": [
+      "dirt",
+      "wood"
+    ]
+  },
+  {
+    "name": "coinGold",
+    "x": 0.35,
+    "y": 0.4,
+    "z": 0.1,
+    "anchor": 0,
+    "type": 1,
+    "react": 1,
+    "material": [
+      "gold",
+      "wood"
+    ]
+  },
+  {
+    "name": "crate",
+    "x": 0.5,
+    "y": 0.5,
+    "z": 0.5,
+    "anchor": 1,
+    "type": 1,
+    "react": 2,
+    "material": [
+      "woodDark",
+      "wood"
+    ]
+  },
+  {
+    "name": "crateStrong",
+    "x": 0.54,
+    "y": 0.54,
+    "z": 0.54,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "metal",
+      "woodDark",
+      "wood"
+    ]
+  },
+  {
+    "name": "doorOpen",
+    "x": 0.6,
+    "y": 1,
+    "z": 0.2,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "metal"
+    ]
+  },
+  {
+    "name": "fence",
+    "x": 1,
+    "y": 0.4,
+    "z": 1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "woodDark",
+      "wood"
+    ],
+    "action": [
+      10
+    ]
+  },
+  {
+    "name": "fenceCorner",
+    "x": 1,
+    "y": 0.4,
+    "z": 1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "woodDark",
+      "wood"
+    ],
+    "action": [
+      10
+    ]
+  },
+  {
+    "name": "flag",
+    "x": 0.1,
+    "y": 0.9,
+    "z": 0.1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "heart",
+      "woodDark"
+    ],
+    "action": [
+      10
+    ]
+  },
+  {
+    "name": "flowers",
+    "x": 0.5,
+    "y": 0.4,
+    "z": 0.4,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "grass",
+      "_defaultMat",
+      "heart",
+      "snow"
+    ],
+    "action": [
+      8,
+      9
+    ]
+  },
+  {
+    "name": "flowersLow",
+    "x": 0.77,
+    "y": 0.12,
+    "z": 0.77,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "heart",
+      "grass",
+      "snow"
+    ]
+  },
+  {
+    "name": "heart",
+    "x": 0.4,
+    "y": 0.4,
+    "z": 0.12,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "heart"
+    ]
+  },
+  {
+    "name": "mushrooms",
+    "x": 0.53,
+    "y": 0.3,
+    "z": 0.53,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "heart",
+      "dirt"
+    ]
+  },
+  {
+    "name": "plant",
+    "x": 0.56,
+    "y": 0.18,
+    "z": 0.58,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "grass"
+    ]
+  },
+  {
+    "name": "rocks",
+    "x": 0.65,
+    "y": 0.4,
+    "z": 0.66,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "metal"
+    ]
+  },
+  {
+    "name": "saw",
+    "x": 0.88,
+    "y": 0.88,
+    "z": 0.32,
+    "anchor": 0,
+    "type": 1,
+    "material": [
+      "metal"
+    ]
+  },
+  {
+    "name": "tree",
+    "x": 1.1,
+    "y": 2,
+    "z": 1.1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "dirt",
+      "grass"
+    ]
+  },
+  {
+    "name": "treePine",
+    "x": 1,
+    "y": 2,
+    "z": 1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "dirt",
+      "grass"
+    ]
+  }
+]

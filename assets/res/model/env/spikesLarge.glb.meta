@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5ccc148b-7310-47da-99ca-9e84a0d9ba54",
+  "files": [],
+  "subMetas": {
+    "be8f2": {
+      "importer": "gltf-mesh",
+      "uuid": "5ccc148b-7310-47da-99ca-9e84a0d9ba54@be8f2",
+      "displayName": "",
+      "id": "be8f2",
+      "name": "Mesh spikesLarge.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d0dfa": {
+      "importer": "gltf-scene",
+      "uuid": "5ccc148b-7310-47da-99ca-9e84a0d9ba54@d0dfa",
+      "displayName": "",
+      "id": "d0dfa",
+      "name": "spikesLarge.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "5ccc148b-7310-47da-99ca-9e84a0d9ba54@d0dfa",
+    "assetFinder": {
+      "meshes": [
+        "5ccc148b-7310-47da-99ca-9e84a0d9ba54@be8f2"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9"
+      ],
+      "scenes": [
+        "5ccc148b-7310-47da-99ca-9e84a0d9ba54@d0dfa"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

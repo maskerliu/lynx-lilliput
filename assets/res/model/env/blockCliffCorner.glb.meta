@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "2339c769-774a-4b09-99c5-4669e760b71e",
+  "files": [],
+  "subMetas": {
+    "65969": {
+      "importer": "gltf-mesh",
+      "uuid": "2339c769-774a-4b09-99c5-4669e760b71e@65969",
+      "displayName": "",
+      "id": "65969",
+      "name": "Mesh blockCliffCorner.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "be771": {
+      "importer": "gltf-scene",
+      "uuid": "2339c769-774a-4b09-99c5-4669e760b71e@be771",
+      "displayName": "",
+      "id": "be771",
+      "name": "blockCliffCorner.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "2339c769-774a-4b09-99c5-4669e760b71e@be771",
+    "assetFinder": {
+      "meshes": [
+        "2339c769-774a-4b09-99c5-4669e760b71e@65969"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae"
+      ],
+      "scenes": [
+        "2339c769-774a-4b09-99c5-4669e760b71e@be771"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/res/material"
+  }
+}

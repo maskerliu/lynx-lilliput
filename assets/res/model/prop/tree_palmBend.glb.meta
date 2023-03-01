@@ -1,0 +1,92 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "66319437-a6c7-4866-a7ca-bf95880d4d57",
+  "files": [],
+  "subMetas": {
+    "93190": {
+      "importer": "gltf-mesh",
+      "uuid": "66319437-a6c7-4866-a7ca-bf95880d4d57@93190",
+      "displayName": "",
+      "id": "93190",
+      "name": "Mesh tree_palmBend.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "af578": {
+      "importer": "gltf-material",
+      "uuid": "66319437-a6c7-4866-a7ca-bf95880d4d57@af578",
+      "displayName": "",
+      "id": "af578",
+      "name": "leafsGreen.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "11bfd": {
+      "importer": "gltf-material",
+      "uuid": "66319437-a6c7-4866-a7ca-bf95880d4d57@11bfd",
+      "displayName": "",
+      "id": "11bfd",
+      "name": "woodBark.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d010d": {
+      "importer": "gltf-scene",
+      "uuid": "66319437-a6c7-4866-a7ca-bf95880d4d57@d010d",
+      "displayName": "",
+      "id": "d010d",
+      "name": "tree_palmBend.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "66319437-a6c7-4866-a7ca-bf95880d4d57@d010d",
+    "assetFinder": {
+      "meshes": [
+        "66319437-a6c7-4866-a7ca-bf95880d4d57@93190"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "66319437-a6c7-4866-a7ca-bf95880d4d57@af578",
+        "66319437-a6c7-4866-a7ca-bf95880d4d57@11bfd"
+      ],
+      "scenes": [
+        "66319437-a6c7-4866-a7ca-bf95880d4d57@d010d"
+      ]
+    }
+  }
+}

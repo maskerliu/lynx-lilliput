@@ -8,8 +8,8 @@
     "type": 1,
     "react": 0,
     "material": [
-      "dirt",
-      "wood"
+      "wood",
+      "woodDark"
     ]
   },
   {
@@ -52,6 +52,28 @@
     ]
   },
   {
+    "name": "lever",
+    "x": 0.58,
+    "y": 0.5,
+    "z": 0.28,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "metal"
+    ]
+  },
+  {
+    "name": "spikes",
+    "x": 0.8,
+    "y": 0.1,
+    "z": 0.8,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "metal"
+    ]
+  },
+  {
     "name": "doorOpen",
     "x": 0.6,
     "y": 1,
@@ -82,6 +104,21 @@
     "x": 1,
     "y": 0.4,
     "z": 1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "woodDark",
+      "wood"
+    ],
+    "action": [
+      10
+    ]
+  },
+  {
+    "name": "ladder",
+    "x": 0.38,
+    "y": 1,
+    "z": 0.1,
     "anchor": 1,
     "type": 1,
     "material": [
@@ -158,7 +195,7 @@
     "type": 1,
     "material": [
       "heart",
-      "dirt"
+      "wood"
     ]
   },
   {
@@ -202,7 +239,7 @@
     "anchor": 1,
     "type": 1,
     "material": [
-      "dirt",
+      "wood",
       "grass"
     ]
   },
@@ -214,7 +251,19 @@
     "anchor": 1,
     "type": 1,
     "material": [
-      "dirt",
+      "wood",
+      "grass"
+    ]
+  },
+  {
+    "name": "treePalm",
+    "x": 1,
+    "y": 2,
+    "z": 1,
+    "anchor": 1,
+    "type": 1,
+    "material": [
+      "wood",
       "grass"
     ]
   }

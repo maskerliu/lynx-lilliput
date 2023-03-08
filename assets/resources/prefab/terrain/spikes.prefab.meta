@@ -2,12 +2,12 @@
   "ver": "1.1.43",
   "importer": "prefab",
   "imported": true,
-  "uuid": "bec35667-c238-4774-9a92-2e230824a90f",
+  "uuid": "5e451377-db8f-4f02-a77f-1156d759a1ba",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Character"
+    "syncNodeName": "spikes"
   }
 }

@@ -124,11 +124,11 @@
     },
     "_materials": [
       {
-        "__uuid__": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@11bfd",
+        "__uuid__": "310b9028-2545-4f92-8bae-c979dedbf0d7",
         "__expectedType__": "cc.Material"
       },
       {
-        "__uuid__": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@af578",
+        "__uuid__": "4bfec035-6617-4560-8c86-ab8bc0a490ae",
         "__expectedType__": "cc.Material"
       }
     ],
@@ -262,7 +262,10 @@
     "__prefab": {
       "__id__": 12
     },
-    "_material": null,
+    "_material": {
+      "__uuid__": "d52fddd3-48cb-42d5-a9ac-f60f56ed9264",
+      "__expectedType__": "cc.PhysicsMaterial"
+    },
     "_isTrigger": false,
     "_center": {
       "__type__": "cc.Vec3",

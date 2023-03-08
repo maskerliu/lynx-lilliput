@@ -3,8 +3,12 @@ import { updateAccessToken } from './model/base.api'
 
 class UserService {
 
-  // a04d4751801fd1af5a1c15c24316ea40 顾小兵
-  // 5c2c44f25096b201d0c5a716704f4029 刘大毛
+  // 顾小兵
+  // token a04d4751801fd1af5a1c15c24316ea40 
+  // uid   8f4e7438-4285-4268-910c-3898fb8d6d96
+  // 刘大毛
+  // token 5c2c44f25096b201d0c5a716704f4029 
+  // uid   f947ed55-7e34-4a82-a9db-8a9cf6f2e608
 
   private static _instance: UserService
 
@@ -20,7 +24,6 @@ class UserService {
   }
 
   private constructor() {
-
     UserService._instance = this
   }
 
@@ -32,7 +35,6 @@ class UserService {
   }
 
   get accessToken() { return this._accessToken }
-
 
   async profile(uid?: string) {
     try {

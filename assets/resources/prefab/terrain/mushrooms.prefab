@@ -125,7 +125,7 @@
         "__expectedType__": "cc.Material"
       },
       {
-        "__uuid__": "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "__uuid__": "310b9028-2545-4f92-8bae-c979dedbf0d7",
         "__expectedType__": "cc.Material"
       }
     ],
@@ -229,7 +229,10 @@
     "__prefab": {
       "__id__": 10
     },
-    "_material": null,
+    "_material": {
+      "__uuid__": "d52fddd3-48cb-42d5-a9ac-f60f56ed9264",
+      "__expectedType__": "cc.PhysicsMaterial"
+    },
     "_isTrigger": false,
     "_center": {
       "__type__": "cc.Vec3",

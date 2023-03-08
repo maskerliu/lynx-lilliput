@@ -35,9 +35,9 @@
     "_lrot": {
       "__type__": "cc.Quat",
       "x": 0,
-      "y": 0.7071067811865475,
+      "y": 0,
       "z": 0,
-      "w": 0.7071067811865476
+      "w": 1
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -50,7 +50,7 @@
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 90,
+      "y": 0,
       "z": 0
     },
     "_id": ""
@@ -118,7 +118,7 @@
         "__expectedType__": "cc.Material"
       },
       {
-        "__uuid__": "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "__uuid__": "79e7d134-6cde-4b3e-a862-6a7b45241436",
         "__expectedType__": "cc.Material"
       }
     ],

@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "a90cc62f-a10a-4358-8deb-0c7a9b2d207f",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "3717b": {
+      "importer": "gltf-animation",
+      "uuid": "a90cc62f-a10a-4358-8deb-0c7a9b2d207f@3717b",
+      "displayName": "",
+      "id": "3717b",
+      "name": "Climbing.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "ba9bd": {
+      "importer": "gltf-scene",
+      "uuid": "a90cc62f-a10a-4358-8deb-0c7a9b2d207f@ba9bd",
+      "displayName": "",
+      "id": "ba9bd",
+      "name": "Climbing.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 2,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Climbing",
+            "from": 0,
+            "to": 2,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ],
+    "redirect": "a90cc62f-a10a-4358-8deb-0c7a9b2d207f@ba9bd",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "a90cc62f-a10a-4358-8deb-0c7a9b2d207f@ba9bd"
+      ]
+    }
+  }
+}

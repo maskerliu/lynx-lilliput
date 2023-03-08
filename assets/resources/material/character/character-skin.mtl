@@ -50,13 +50,13 @@
   "_props": [
     {
       "roughness": 0,
-      "metallic": 0.5,
+      "specularIntensity": 0,
       "normalStrength": 1.06,
       "mainTexture": {
         "__uuid__": "59f78448-7ac7-4fd6-8034-a528520134cd@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "pbrMap": {
+      "normalMap": {
         "__uuid__": "59f78448-7ac7-4fd6-8034-a528520134cd@6c48a",
         "__expectedType__": "cc.Texture2D"
       }

@@ -48,11 +48,15 @@
     {
       "mainColor": {
         "__type__": "cc.Color",
-        "r": 119,
-        "g": 87,
-        "b": 41,
-        "a": 143
-      }
+        "r": 153,
+        "g": 109,
+        "b": 54,
+        "a": 100
+      },
+      "occlusion": 1,
+      "roughness": 0.2,
+      "metallic": 0.6,
+      "specularIntensity": 0.4
     },
     {},
     {}

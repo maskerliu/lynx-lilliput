@@ -22,7 +22,6 @@ export default class RockerMgr extends Component {
   private moveDir: Vec2 = v2()
 
   private _isTouchStart: boolean = false
-  private _vec201 = v2(0, 1)
   private _lastang = 100
   private _tmpVec2: Vec2 = v2()
   private _tmpVec3: Vec3 = v3()
@@ -51,8 +50,8 @@ export default class RockerMgr extends Component {
   }
 
   show(show: boolean) {
-    this.dstPos.x = show ? 120 : -120
-    tween(this.node).to(0.8, { position: this.dstPos }, { easing: 'elasticOut' }).start()
+    this.dstPos.x = show ? 140 : -140
+    tween(this.node).to(0.5, { position: this.dstPos }, { easing: 'elasticOut' }).start()
   }
 
   private onTouchStart(ev: any) {
@@ -111,7 +110,7 @@ export default class RockerMgr extends Component {
 
     if (this._tmpVec2.equals(Vec2.ZERO)) return
 
-    this.rockerDirNode.angle = -math.toDegree(this._tmpVec2.signAngle(this._vec201))
+    this.rockerDirNode.angle = -math.toDegree(this._tmpVec2.signAngle(Vec2.UNIT_Y))
     if (len > 20) {
       this.rockerDirNode.active = true
       this.target?.onDirectionChanged(this.moveDir)

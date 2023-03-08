@@ -19,4 +19,19 @@
     "esModuleInterop": true,
     "experimentalDecorators": true
   },
+  "exclude": [
+    "assets/res",
+    "assets/resources",
+    "assets/scene",
+    "build",
+    "temp/asset-db",
+    "temp/crash",
+    "temp/logs",
+    "temp/profiles",
+    "temp/programming",
+    "temp/scene",
+    "library",
+    "node_modules",
+    "extensions",
+  ]
 }

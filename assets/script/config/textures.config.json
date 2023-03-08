@@ -1,10 +1,5 @@
 [
   {
-    "name": "TerrainItemSnaps",
-    "path":"texture/",
-    "type": 2
-  },
-  {
     "name": "criminalMaleA",
     "path": "texture/character/skin/",
     "type": 0

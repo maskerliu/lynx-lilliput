@@ -1,22 +1,19 @@
-import { Component, MeshCollider, MeshRenderer, PhysicMaterial, RigidBody, tween, v3, Vec3, _decorator } from 'cc'
+import { Collider, Component, MeshCollider, MeshRenderer, PhysicMaterial, RigidBody, tween, v3, Vec3, _decorator } from 'cc'
+import IslandMgr from './IslandMgr'
+import { terrainItemIdx } from './misc/Utils'
 const { ccclass, property } = _decorator
 
 import { Game, Terrain } from './model'
 import TerrainAssetMgr, { PhyEnvGroup } from './TerrainAssetMgr'
 
-const MAP_X = 20
-const MAP_Z = 20
-const MAP_Y = 3
 const DROP_Height = 0.4
 const DropPos: Vec3 = v3()
-
 const PreviewScale = v3(0.8, 1, 0.8)
 
 const PhyMtl = new PhysicMaterial()
-
-PhyMtl.friction = 5
-PhyMtl.rollingFriction = 10
-PhyMtl.spinningFriction = 10
+PhyMtl.friction = 0
+PhyMtl.rollingFriction = 0
+PhyMtl.spinningFriction = 0
 PhyMtl.restitution = 0
 
 @ccclass('TerrainItemMgr')
@@ -25,17 +22,17 @@ export default class TerrainItemMgr extends Component {
   private _info: Game.MapItem
 
   public isSelected: boolean = false
-  private isTranslucent: boolean = false
-  private meshRenderer: MeshRenderer
+  protected isTranslucent: boolean = false
+  protected meshRenderer: MeshRenderer
   private isDroping: boolean = false
 
   private rigidBody: RigidBody
 
-  // private static materials: Map<string, Material> = new Map()
-
   get config() { return this._config }
   get info() { return this._info }
 
+  private _index: number = -1
+  get index() { return this._index }
 
   get hasSkin() {
     return this._config.skin != null
@@ -45,15 +42,12 @@ export default class TerrainItemMgr extends Component {
     this.meshRenderer = this.node.getComponentInChildren(MeshRenderer)
   }
 
-  start() {
-
-  }
-
   update(dt: number) { }
 
   init(info: Game.MapItem) {
     this._info = info
     this._config = TerrainAssetMgr.getModelConfig(info.prefab)
+    this._index = terrainItemIdx(this.info.x, this.info.y, this.info.z)
 
     switch (this.config.type) {
       case Terrain.ModelType.Ground:
@@ -62,7 +56,7 @@ export default class TerrainItemMgr extends Component {
         this.rigidBody = this.getComponent(RigidBody)
         this.rigidBody.type = RigidBody.Type.STATIC
         this.rigidBody.group = PhyEnvGroup.Terrain
-        this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Character | PhyEnvGroup.Vehicle)
+        this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle)
 
         this.node.addComponent(MeshCollider)
         let collider = this.node.getComponent(MeshCollider)
@@ -70,22 +64,22 @@ export default class TerrainItemMgr extends Component {
         collider.mesh = this.meshRenderer.mesh
         collider.material = PhyMtl
         break
-      case Terrain.ModelType.Prop:
-        // this.getComponent(RigidBody).
+      case Terrain.ModelType.Prop: {
         this.node.position = v3(info.x, info.y, info.z)
+        // let collider = this.node.getComponent(Collider)
+        // collider.material = PhyMtl
         break
+      }
     }
 
     this.updateSkin(this._info.skin)
   }
 
-  get index() {
-    let x0 = MAP_X / 2 + this.info.x
-    let z0 = MAP_Z / 2 + this.info.z
-    return x0 + z0 * MAP_X + this.info.y * MAP_Z * MAP_X
-  }
+
+
 
   updatePosition(pos: Vec3) {
+    this.node.active = true
     this.info.x = pos.x
     this.info.y = pos.y
     this.info.z = pos.z
@@ -168,6 +162,12 @@ export default class TerrainItemMgr extends Component {
         this.node.position = origin
       }
     }).start()
+  }
+
+  beenCollected() {
+    let info = Object.assign(this.info)
+    info.prefab = null
+    this.node.parent.getComponent(IslandMgr).updateMap(info)
   }
 
 

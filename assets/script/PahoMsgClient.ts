@@ -91,7 +91,6 @@ class PahoMsgClient {
     try {
       let msgs = JSON.parse(message)
       this.msgHanlder?.onMessageArrived(msgs)
-      console.log(msgs)
     } catch (err) {
       console.log(err)
     }

@@ -20,7 +20,7 @@
       },
       {
         "index": 3,
-        "name": "Character"
+        "name": "Player"
       },
       {
         "index": 4,
@@ -31,12 +31,13 @@
       "0": 1,
       "1": 28,
       "2": 30,
-      "3": 14,
+      "3": 6,
       "4": 22
     },
     "gravity": {
-      "y": -20
-    }
+      "y": -10
+    },
+    "defaultMaterial": "adc79dd3-f1fc-4129-b4e8-9bf5bd3d4a63"
   },
   "layer": [
     {

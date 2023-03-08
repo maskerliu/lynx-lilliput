@@ -61,10 +61,10 @@ export default class OrbitCamera extends Component {
   get target() {
     return this._target
   }
-  set target(v) {
-    this._target = v
+  set target(node: Node) {
+    this._target = node
     this._targetRotation.set(this._startRotation)
-    this._targetCenter.set(v!.worldPosition)
+    this._targetCenter.set(node!.worldPosition)
   }
 
   start() {
@@ -82,129 +82,6 @@ export default class OrbitCamera extends Component {
 
     this._radius = this.radius
     this.limitRotation()
-
-  }
-
-  set reactArea(node: Node) {
-    if (this.enableTouch && this._reactArea) {
-      this._reactArea.off(Node.EventType.TOUCH_START, this.onTouchStart, this)
-      this._reactArea.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-      this._reactArea.off(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-      this._reactArea.off(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
-      this._reactArea.off(Node.EventType.MOUSE_WHEEL, this.onMouseWhee, this)
-    }
-
-    this._reactArea = node
-
-    if (this.enableTouch && this._reactArea) {
-      this._reactArea.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
-      this._reactArea.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-      this._reactArea.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-      this._reactArea.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
-    }
-
-    if (this.enableScaleRadius && this._reactArea) {
-      this._reactArea.on(Node.EventType.MOUSE_WHEEL, this.onMouseWhee, this)
-    }
-  }
-
-  updateTargetRotation(rot: Vec3) {
-    this.targetRotation.set(rot)
-    this._targetRotation.set(rot)
-    this._startRotation.set(rot)
-    this.resetTargetRotation()
-    Quat.fromEuler(this._rotation, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
-  }
-
-  resetTargetRotation() {
-    let targetRotation = this._targetRotation.set(this._startRotation)
-    if (this.followTargetRotationY) {
-      targetRotation = tempVec3_2.set(targetRotation)
-      Quat.toEuler(tempVec3, this.target!.worldRotation)
-      targetRotation.y += tempVec3.y
-    }
-  }
-
-  onTouchStart(event: EventTouch) {
-    let touchs = event.getAllTouches()
-    if (touchs.length >= 2) {
-      let p1 = touchs[0].getUIStartLocation()
-      let p2 = touchs[1].getUIStartLocation()
-      this._lastTouchDis = Vec2.distance(p1, p2)
-    }
-    else {
-      this._moveDis = 0
-    }
-  }
-
-  onTouchMove(event: EventTouch) {
-    let touchs = event.getAllTouches()
-    if (touchs.length >= 2) {
-      let p1 = touchs[0].getUILocation()
-      let p2 = touchs[1].getUILocation()
-      let dis = Vec2.distance(p1, p2)
-
-      // this._targetRadius += this.radiusScaleSpeed * -Math.sign(dis - this._lastTouchDis)
-      let m = this.maxRadius / 750
-      this._targetRadius -= (dis - this._lastTouchDis) * m
-      this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
-
-      this._lastTouchDis = dis
-
-      if (director.getScene()!.globals.shadows.enabled) {
-        let r = this._targetRadius + 6
-        // director.getScene()!.globals.shadows.setShadowDistance ( r)
-        // director.getScene()!.globals.shadows.orthoSize = r
-      }
-    } else {
-      let delta = event!.getDelta()
-      Quat.fromEuler(tempQuat, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
-
-      Quat.rotateX(tempQuat, tempQuat, -delta.y * DeltaFactor)
-      Quat.rotateAround(tempQuat, tempQuat, Vec3.UP, -delta.x * DeltaFactor)
-
-      Quat.toEuler(this._targetRotation, tempQuat)
-
-      this.limitRotation()
-
-      this._moveDis += (Math.abs(delta.x) + Math.abs(delta.y))
-    }
-  }
-
-  onTouchEnd(event: EventTouch) {
-    // if (this._moveDis < 30)
-    // Msgs.emit(Notify.UI.TOUCH_END, event)
-  }
-
-  onMouseWhee(event: EventMouse) {
-    let scrollY = event.getScrollY()
-    this._targetRadius += this.radiusScaleSpeed * -Math.sign(scrollY)
-    this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
-    if (director.getScene()!.globals.shadows.enabled) {
-      let r = this._targetRadius + 6
-      // director.getScene()!.globals.shadows.shadowDistance = r
-      // director.getScene()!.globals.shadows.orthoSize = r
-    }
-  }
-
-  limitRotation() {
-    let rotation = this._targetRotation
-
-    if (rotation.x < this.xRotationRange.x) {
-      rotation.x = this.xRotationRange.x
-    }
-    else if (rotation.x > this.xRotationRange.y) {
-      rotation.x = this.xRotationRange.y
-    }
-
-    if (rotation.y < this.yRotationRange.x) {
-      rotation.y = this.yRotationRange.x
-    }
-    else if (rotation.y > this.yRotationRange.y) {
-      rotation.y = this.yRotationRange.y
-    }
-
-    rotation.z = 0
   }
 
   update(dt: number) {
@@ -238,4 +115,122 @@ export default class OrbitCamera extends Component {
     this.node.position = tempVec3
     this.node.lookAt(this._center)
   }
+
+  set reactArea(node: Node) {
+    if (this.enableTouch && this._reactArea) {
+      this._reactArea.off(Node.EventType.TOUCH_START, this.onTouchStart, this)
+      this._reactArea.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+      this._reactArea.off(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+      this._reactArea.off(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+      this._reactArea.off(Node.EventType.MOUSE_WHEEL, this.onMouseWhee, this)
+    }
+
+    this._reactArea = node
+
+    if (this.enableTouch && this._reactArea) {
+      this._reactArea.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
+      this._reactArea.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+      this._reactArea.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+      this._reactArea.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+    }
+
+    if (this.enableScaleRadius && this._reactArea) {
+      this._reactArea.on(Node.EventType.MOUSE_WHEEL, this.onMouseWhee, this)
+    }
+  }
+
+  updateTargetRotation(rot: Vec3) {
+    this.targetRotation.set(rot)
+    this._targetRotation.set(rot)
+    this._startRotation.set(rot)
+    this.resetTargetRotation()
+    Quat.fromEuler(this._rotation, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
+  }
+
+  private resetTargetRotation() {
+    let targetRotation = this._targetRotation.set(this._startRotation)
+    if (this.followTargetRotationY) {
+      targetRotation = tempVec3_2.set(targetRotation)
+      Quat.toEuler(tempVec3, this.target!.worldRotation)
+      targetRotation.y += tempVec3.y
+    }
+  }
+
+  private onTouchStart(event: EventTouch) {
+    let touchs = event.getAllTouches()
+    if (touchs.length >= 2) {
+      let p1 = touchs[0].getUIStartLocation()
+      let p2 = touchs[1].getUIStartLocation()
+      this._lastTouchDis = Vec2.distance(p1, p2)
+    }
+    else {
+      this._moveDis = 0
+    }
+  }
+
+  private onTouchMove(event: EventTouch) {
+    let touchs = event.getAllTouches()
+    if (touchs.length >= 2) {
+      let p1 = touchs[0].getUILocation()
+      let p2 = touchs[1].getUILocation()
+      let dis = Vec2.distance(p1, p2)
+
+      // this._targetRadius += this.radiusScaleSpeed * -Math.sign(dis - this._lastTouchDis)
+      let m = this.maxRadius / 750
+      this._targetRadius -= (dis - this._lastTouchDis) * m
+      this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
+
+      this._lastTouchDis = dis
+    } else {
+      let delta = event!.getDelta()
+      Quat.fromEuler(tempQuat, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
+
+      Quat.rotateX(tempQuat, tempQuat, -delta.y * DeltaFactor)
+      Quat.rotateAround(tempQuat, tempQuat, Vec3.UP, -delta.x * DeltaFactor)
+
+      Quat.toEuler(this._targetRotation, tempQuat)
+
+      this.limitRotation()
+
+      this._moveDis += (Math.abs(delta.x) + Math.abs(delta.y))
+    }
+  }
+
+  private onTouchEnd(event: EventTouch) {
+    // if (this._moveDis < 30)
+    // Msgs.emit(Notify.UI.TOUCH_END, event)
+  }
+
+  private onMouseWhee(event: EventMouse) {
+    let scrollY = event.getScrollY()
+    this._targetRadius += this.radiusScaleSpeed * -Math.sign(scrollY)
+    this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
+    if (director.getScene()!.globals.shadows.enabled) {
+      let r = this._targetRadius + 6
+      // director.getScene()!.globals.shadows.shadowDistance = r
+      // director.getScene()!.globals.shadows.orthoSize = r
+    }
+  }
+
+  private limitRotation() {
+    let rotation = this._targetRotation
+
+    if (rotation.x < this.xRotationRange.x) {
+      rotation.x = this.xRotationRange.x
+    }
+    else if (rotation.x > this.xRotationRange.y) {
+      rotation.x = this.xRotationRange.y
+    }
+
+    if (rotation.y < this.yRotationRange.x) {
+      rotation.y = this.yRotationRange.x
+    }
+    else if (rotation.y > this.yRotationRange.y) {
+      rotation.y = this.yRotationRange.y
+    }
+
+    rotation.z = 0
+  }
+
+
 }

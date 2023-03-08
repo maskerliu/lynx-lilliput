@@ -7,7 +7,7 @@ export enum PhyEnvGroup {
   Default = 1 << 0,
   Terrain = 1 << 1,
   Prop = 1 << 2,
-  Character = 1 << 3,
+  Player = 1 << 3,
   Vehicle = 1 << 4,
   Test = 1 << 5,
 }

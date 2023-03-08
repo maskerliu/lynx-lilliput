@@ -1,15 +1,15 @@
 import {
-  CapsuleCollider,
-  clamp,
-  Component, DirectionalLight, Event, geometry,
-  ICollisionEvent, instantiate, lerp, Node, PhysicsSystem, Prefab, Quat,
-  resources, RigidBody, tween, UITransform, v2, v3, Vec2, Vec3, _decorator
+  clamp, Component, CylinderCollider, DirectionalLight, Event, geometry,
+  ICollisionEvent, instantiate, lerp, Node, PhysicsSystem, Prefab, quat, Quat,
+  RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Texture2D,
+  tween, UITransform, v2, v3, Vec2, Vec3, _decorator
 } from 'cc'
-import BoatMgr from './BoatMgr'
-import CharacterMgr from './CharacterMgr'
+import BattleService from './BattleService'
 import { Game, User } from './model'
+import TerrainAssetMgr from './TerrainAssetMgr'
 import TerrainItemMgr from './TerrainItemMgr'
 import { RockerTarget } from './ui/RockerMgr'
+const { ccclass, property } = _decorator
 
 
 export class PlayerActionEvent extends Event {
@@ -22,69 +22,112 @@ export class PlayerActionEvent extends Event {
   }
 }
 
-const { ccclass, property } = _decorator
 
 
-let v3_1 = v3()
-let v3_2 = v3()
-let v2_1 = v2()
-
-const Move_Speed = 100
-const Jump_Speed = 400
+const Move_Speed = 3
 const Roate_Speed = 10
+
+const StateAnim: Map<Game.CharacterState, string> = new Map()
+
+StateAnim.set(Game.CharacterState.Idle, 'Idle')
+StateAnim.set(Game.CharacterState.Running, 'Running')
+StateAnim.set(Game.CharacterState.Jump, 'Jumping')
+StateAnim.set(Game.CharacterState.JumpUp, 'JumpUp')
+StateAnim.set(Game.CharacterState.JumpLanding, 'JumpLanding')
+StateAnim.set(Game.CharacterState.Sitting, 'Sitting')
+StateAnim.set(Game.CharacterState.Dancing, 'Dancing')
+StateAnim.set(Game.CharacterState.Lifting, 'Lifting')
+StateAnim.set(Game.CharacterState.Throwing, 'Throw')
+StateAnim.set(Game.CharacterState.Kicking, 'Kicking')
+StateAnim.set(Game.CharacterState.BoxIdle, 'BoxIdle')
+StateAnim.set(Game.CharacterState.BoxWalk, 'BoxWalk')
+StateAnim.set(Game.CharacterState.Climbing, 'Climbing')
+StateAnim.set(Game.CharacterState.Push, 'Push')
 
 @ccclass('PlayerMgr')
 export default class PlayerMgr extends Component implements RockerTarget {
 
+  @property(Node)
+  dirNode: Node
+
+  @property(Prefab)
+  propPrefab: Node
+
   followCamera: Node
   followLight: DirectionalLight
+  userProfile: User.Profile
+  private myself: boolean = true
 
-  private curDir: Vec2 = v2()
+  private _state: Game.CharacterState = Game.CharacterState.Idle
+  get state() { return this._state }
+
+  private _curDir: Vec2 = v2()
+  get curDir() { return this._curDir }
+
   private _rotation: Quat = new Quat()
   private _rotateSpeed: number = 0
   private _rotationSpeedTo: number = 0
 
-  private rigidBody: RigidBody
-
-  private boatMgr: BoatMgr
-  private characterMgr: CharacterMgr
-
-  private prop: Prefab
-
   private _ray: geometry.Ray = new geometry.Ray()
-  private correctPos = v3()
   private occlusionPos = v3()
   private worldPos = v3()
+  private dstPos = v3(Vec3.NEG_ONE)
 
-  userProfile: User.Profile
+  private v3_dir = v3()
+  private v3_speed = v3()
+  private v3_correct = v3()
+
+  private rigidBody: RigidBody
+  private animation: SkeletalAnimation
+  private meshRenderer: SkinnedMeshRenderer
+
+  private curColliderProp: Node
+  private cannClimb: boolean = false
 
   async onLoad() {
     this.rigidBody = this.getComponent(RigidBody)
-    this.characterMgr = this.getComponentInChildren(CharacterMgr)
+    this.node.getChildByName('Character').scale = v3(.25, .25, .25)
+    this.animation = this.getComponentInChildren(SkeletalAnimation)
+    this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
   }
 
   start() {
-    // this.onBoat()
-    this.idle()
-    this.getComponent(CapsuleCollider).on('onCollisionEnter', this.onCollision, this)
+    this.getComponent(CylinderCollider).on('onCollisionEnter', this.onCollision, this)
+    this.getComponent(CylinderCollider).on('onCollisionStay', this.onCollision, this)
 
-    resources.load('prefab/prop/apple', Prefab, (err, prefab) => {
-      this.prop = prefab
-    })
+    let prop = instantiate(this.propPrefab)
+    prop.scale.set(0.05, 0.05, 0.05)
+    this.animation.sockets[0].target.addChild(prop)
   }
 
   init(profile: User.Profile) {
     this.userProfile = profile
-    this.characterMgr.skin = 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608' == profile.uid ? 'cyborgFemaleA' : 'criminalMaleA'
-    this.occlusionPos.set(this.node.position)
+    let skin = 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608' == profile.uid ? 'cyborgFemaleA' : 'criminalMaleA'
+    this.meshRenderer.material.setProperty('mainTexture', TerrainAssetMgr.getTexture(skin) as Texture2D)
+
+    this.myself = BattleService.isMyself(profile.uid)
+
+    this.rigidBody.useCCD = true
+    this.rigidBody.mass = 1
+    return this
   }
 
   private onCollision(event: ICollisionEvent) {
-    console.log(event.otherCollider.node.name)
-    // this.rigidBody.sleep()
-    this.correctPos.set(this.node.position)
-    this.correctPos.y = Math.round(this.node.position.y)
-    this.node.position = this.correctPos
+    this.block()
+
+    let prefab = event.otherCollider.node.getComponent(TerrainItemMgr)?.info.prefab
+
+    switch (prefab) {
+      case 'mushrooms':
+        this.curColliderProp = event.otherCollider.node
+        break
+      case 'labber':
+        this.cannClimb = true
+        break
+      default:
+        this.cannClimb = false
+        this.curColliderProp = null
+    }
   }
 
   update(dt: number) {
@@ -93,69 +136,56 @@ export default class PlayerMgr extends Component implements RockerTarget {
     //   this.occlusionPos.y += 0.2
     //   this.occlusion()
     // }
+    if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
+      let forward = this.node.forward.negative()
+      this.v3_dir.set(forward.x, 0, forward.z)
+      Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
+      this.node.rotation = this._rotation
+    }
 
     if (this._rotationSpeedTo != 0) {
       this._rotateSpeed = lerp(this._rotateSpeed, this._rotationSpeedTo, 30 * dt)
       this.node.rotation = this.node.rotation.slerp(this._rotation, this._rotateSpeed * dt)
     }
-    if (this.characterMgr.state == Game.CharacterState.JumpLanding || this.characterMgr.state == Game.CharacterState.JumpUp) {
-      this.rigidBody.useGravity = true
-    } else {
-      this.rigidBody.useGravity = false
+
+    if (this._state == Game.CharacterState.JumpUp && !this.animState()) {
+      this.rigidBody.applyImpulse(v3(0, -8, 0), Vec3.ZERO)
+      this.state = Game.CharacterState.JumpLanding
     }
 
+    if (!this.animState()) {
+      this.state = Game.CharacterState.Idle
+    }
 
-    switch (this.characterMgr.state) {
-      case Game.CharacterState.Running: {
-        let dir = this.node.forward.negative()
-        Vec3.multiplyScalar(v3_2, dir, Move_Speed * dt)
+    if (!this.myself) {
 
-        this.rigidBody.setLinearVelocity(v3_2)
-
-        this.rigidBody.getLinearVelocity(v3_2)
-        v3_2.x = clamp(v3_2.x, -5, 5)
-        v3_2.y = 0
-        v3_2.z = clamp(v3_2.z, -5, 5)
-        this.rigidBody.setLinearVelocity(v3_2)
-        break
+      if (this.dstPos.equals(Vec3.NEG_ONE)) {
+        let frame = BattleService.popGameFrame(this.userProfile.uid)
+        if (frame) this.onAction(frame)
       }
-      case Game.CharacterState.JumpUp:
-        if (!this.curDir.equals(Vec2.ZERO)) {
-          this.rigidBody.getLinearVelocity(v3_2)
-          v3_2.x = -this.curDir.x * Move_Speed * dt
-          v3_2.z = -this.curDir.y * Move_Speed * dt
-          this.rigidBody.setLinearVelocity(v3_2)
-          // this.rigidBody.applyImpulse(v3(this.curDir.x, 0, this.curDir.y))
-        }
-        break
-      case Game.CharacterState.Idle: {
-        this.idle()
-        break
-      }
+    }
+
+    if (this.dstPos.equals(this.node.position, 0.06)) {
+      this.dstPos.set(Vec3.NEG_ONE)
+      this.rigidBody.clearState()
+      this.state = Game.CharacterState.Idle
+    }
+
+    if (!this.dstPos.equals(Vec3.NEG_ONE)) {
+      this.runTo()
+    }
+
+    if (this._state == Game.CharacterState.Running) {
+      let dir = this.node.forward.negative()
+      Vec3.multiplyScalar(this.v3_speed, dir, Move_Speed)
+      this.v3_speed.y = 0
+      this.rigidBody.setLinearVelocity(this.v3_speed)
     }
   }
 
-
-  onDirectionChanged(dir: Vec2) {
-    this.curDir = dir
-    if (dir.equals(Vec2.ZERO)) {
-      this.characterMgr.updateState(Game.CharacterState.Idle)
-      this.idle()
-      return
-    }
-
-    this._rotationSpeedTo = Roate_Speed
-
-    if (this.characterMgr.state == Game.CharacterState.JumpLanding) return
-
-    if (this.characterMgr.state != Game.CharacterState.JumpUp) {
-      this.characterMgr.updateState(Game.CharacterState.Running)
-    }
-    this.updateRotationByTouch()
-  }
-
-  onAction(state: Game.CharacterState) {
-    switch (state) {
+  onAction(msg: Game.Msg) {
+    if (this.myself) this.dstPos.set(Vec3.NEG_ONE)
+    switch (msg.state) {
       case Game.CharacterState.JumpUp:
         this.jump()
         break
@@ -168,57 +198,136 @@ export default class PlayerMgr extends Component implements RockerTarget {
       case Game.CharacterState.Kicking:
         this.kick()
         break
+      case Game.CharacterState.Running:
+        // if (this.myself) return
+        this.dstPos.set(msg.pos.x, msg.pos.y, msg.pos.z)
+        this.runTo()
+        break
+      case Game.CharacterState.Idle:
+        this.state = Game.CharacterState.Idle
+        // this.node.forward = dir
+        this.rigidBody.clearState()
+        this.rigidBody.sleep()
+        break
+      case Game.CharacterState.BoxIdle:
+        this.state = Game.CharacterState.BoxIdle
+        this.rigidBody.clearState()
+        this.rigidBody.sleep()
+        break
+      case Game.CharacterState.BoxWalk:
+        this.state = Game.CharacterState.BoxWalk
+        this.rigidBody.clearState()
+        this.rigidBody.sleep()
+        break
+      case Game.CharacterState.Climbing:
+        this.climb()
+        break
     }
   }
 
-  jump() {
-    let success = this.characterMgr.updateState(Game.CharacterState.JumpUp)
-    if (!success) return
+  onDirectionChanged(dir: Vec2) {
+    if (this._state != Game.CharacterState.Idle &&
+      this._state != Game.CharacterState.Running &&
+      this._state != Game.CharacterState.JumpUp) {
+      return
+    }
 
+    this._curDir.set(dir)
+    if (this._state == Game.CharacterState.Running && dir.equals(Vec2.ZERO)) {
+      this.state = Game.CharacterState.Idle
+      return
+    }
+
+    this._rotationSpeedTo = Roate_Speed
+    this._rotateSpeed = 0
+    this.state = Game.CharacterState.Running
+    this.dstPos.set(Vec3.NEG_ONE)
+
+    let forward = this.followCamera.forward
+    this.v3_dir.set(forward.x, 0, forward.z)
+    if (!Vec2.ZERO.equals(this._curDir)) {
+      Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, this._curDir.signAngle(Vec2.UNIT_Y))
+    }
+    Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
+  }
+
+  onEditModel(edit: boolean) {
+    this.rigidBody.useGravity = !edit
+    this.rigidBody.type = edit ? RigidBody.Type.STATIC : RigidBody.Type.DYNAMIC
+  }
+
+  private block() {
+    if (this._state != Game.CharacterState.Running && this._state != Game.CharacterState.Idle) return
+
+    this.rigidBody.clearState()
     this.rigidBody.sleep()
+  }
+
+  private jump() {
+    this.state = Game.CharacterState.JumpUp
+    if (this._state != Game.CharacterState.JumpUp) return
     setTimeout(() => {
-      let forward = this.node.forward.negative()
-      this.rigidBody.applyImpulse(v3(this.curDir.x * 20, 80, this.curDir.y * 20))
+      let pos = v3(this.node.position)
+      pos.y += 0.1
+      this.node.position = pos
+      this.rigidBody.useGravity = true
+      this.rigidBody.applyImpulse(v3(this._curDir.x * 2, 6, this._curDir.y * 2), v3(0, 0, 0))
     }, 500)
   }
 
-  lift() {
+  private lift() {
     this.rigidBody.sleep()
-    this.characterMgr.updateState(Game.CharacterState.Lifting)
+    this.state = Game.CharacterState.Lifting
+
+    if (this.curColliderProp) {
+      this.curColliderProp.getComponent(TerrainItemMgr).beenCollected()
+      this.animation.sockets[0].target.addChild(this.curColliderProp)
+    }
   }
 
-  throw() {
+  private throw() {
     this.rigidBody.sleep()
     this._rotateSpeed = 0
-    this.characterMgr.updateState(Game.CharacterState.Throwing)
-
+    this.state = Game.CharacterState.Throwing
     setTimeout(() => {
-      let node = instantiate(this.prop)
-      let pos = v3(this.node.position)
-      pos.y += 0.5
-      node.position = pos
-      this.node.parent.addChild(node)
-
-      // node.addComponent(RigidBody)
-      // node.getComponent(RigidBody).type = RigidBody.Type.DYNAMIC
-      // node.getComponent(RigidBody).group = PhyEnvGroup.Prop
-      // node.getComponent(RigidBody).setMask(PhyEnvGroup.Terrain + PhyEnvGroup.Prop + PhyEnvGroup.Vehicle)
-
-      // node.addComponent(MeshCollider)
-      // node.getComponent(MeshCollider).mesh = node.getComponentInChildren(MeshRenderer).mesh
-      // node
-
-      let forward = this.node.forward.negative()
-      node.getComponent(RigidBody).applyForce(v3(forward.x * 200, 450, forward.z * 200))
+      // let node = instantiate(this.prop)
+      // let pos = v3(this.node.position)
+      // pos.y += 0.5
+      // node.position = pos
+      // this.node.parent.addChild(node)
+      // let forward = this.node.forward.negative()
+      // node.getComponent(RigidBody).applyImpulse(v3(forward.x * 5, this.jumpImpluse, forward.z * 5))
     }, 700)
   }
 
-  kick() {
+  private kick() {
     this.rigidBody.sleep()
-    this.characterMgr.updateState(Game.CharacterState.Kicking)
+    this.state = Game.CharacterState.Kicking
   }
 
-  onBoat() {
+  private climb() {
+    if (!this.cannClimb) return
+    this.state = Game.CharacterState.Climbing
+    this.rigidBody.setLinearVelocity(v3(0, Move_Speed, 0))
+  }
+
+  private runTo() {
+    this.state = Game.CharacterState.Running
+    Vec3.subtract(this.v3_dir, this.dstPos, this.node.position)
+    this._rotationSpeedTo = 0
+    this._rotateSpeed = 0
+    let rotation = quat()
+    Quat.fromViewUp(rotation, this.v3_dir)
+    this.node.rotation = rotation
+    this.v3_dir.set(Vec3.ZERO)
+  }
+
+  private boxIdle() {
+    this.state = Game.CharacterState.BoxIdle
+
+  }
+
+  private onBoat() {
     let dstY = this.node.position.y + 0.05
     let originY = this.node.position.y - 0.05
     let pos = v3(this.node.position)
@@ -228,34 +337,54 @@ export default class PlayerMgr extends Component implements RockerTarget {
       }
     }).repeatForever().start()
 
-    this.boatMgr.float()
     this.sit()
-  }
-
-  private idle() {
-    this.rigidBody.clearVelocity()
-    this.rigidBody.clearState()
-    this.rigidBody.clearForces()
-    this.rigidBody.sleep()
-    this._rotateSpeed = 0
   }
 
   private sit() {
     this.rigidBody.sleep()
     this._rotateSpeed = 0
-    this.characterMgr.updateState(Game.CharacterState.Sitting)
+    this.state = Game.CharacterState.Sitting
   }
 
-  private updateRotationByTouch() {
-    // if (!this.isUpdateTr || !this.isRocker) return
-    let forward = this.followCamera.forward
-    v3_1.set(forward.x, 0, forward.z)
-    if (this.curDir.x != 0 || this.curDir.y != 0) {
-      v2_1.set(this.curDir)
-      Vec3.rotateY(v3_1, v3_1, Vec3.ZERO, v2_1.signAngle(Vec2.UNIT_Y))
-    }
+  private set state(state: Game.CharacterState) {
+    // same state, not work
+    if (this._state == state) return
 
-    Quat.fromViewUp(this._rotation, v3_1.normalize())
+    // on action ongoing, can not break except idle or run
+    if (this._state != Game.CharacterState.Idle &&
+      this._state != Game.CharacterState.Running &&
+      this.animState())
+      return
+
+    this.animation?.crossFade(StateAnim.get(state), 0)
+    this._state = state
+    this.rigidBody.clearState()
+
+    switch (this._state) {
+      case Game.CharacterState.Idle:
+        this.rigidBody.clearState()
+        this.rigidBody.sleep()
+        this.rigidBody.setLinearVelocity(Vec3.ZERO)
+        this.rigidBody.useGravity = true
+        this.dstPos.set(Vec3.NEG_ONE)
+        break
+      case Game.CharacterState.JumpLanding:
+        this.rigidBody.useGravity = true
+        break
+      case Game.CharacterState.Running:
+        this.rigidBody.clearForces()
+        this.rigidBody.useGravity = true
+        break
+      case Game.CharacterState.Lifting:
+      case Game.CharacterState.Throwing:
+      case Game.CharacterState.Kicking:
+        this.rigidBody.useGravity = false
+        break
+    }
+  }
+
+  private animState() {
+    return this.animation.getState(StateAnim.get(this._state)).isPlaying
   }
 
   private occlusion() {
@@ -273,6 +402,5 @@ export default class PlayerMgr extends Component implements RockerTarget {
     }
 
   }
-
 }
 

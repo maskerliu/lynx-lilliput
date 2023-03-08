@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "469c8": {
+      "importer": "gltf-animation",
+      "uuid": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@469c8",
+      "displayName": "",
+      "id": "469c8",
+      "name": "BoxWalk.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.2333333492279053
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "9f126": {
+      "importer": "gltf-scene",
+      "uuid": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@9f126",
+      "displayName": "",
+      "id": "9f126",
+      "name": "BoxWalk.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 1.2333333492279053,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "BoxWalk",
+            "from": 0,
+            "to": 1.2333333492279053,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ],
+    "redirect": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@9f126",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@9f126"
+      ]
+    }
+  }
+}

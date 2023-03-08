@@ -2,12 +2,12 @@
   "ver": "1.1.43",
   "importer": "prefab",
   "imported": true,
-  "uuid": "2c976a41-5157-4fbf-95d5-6bf27ff2daa2",
+  "uuid": "51742b90-995e-4bec-ac56-48b6696263c6",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "gridItem"
+    "syncNodeName": "ladder"
   }
 }

@@ -1,4 +1,7 @@
-import { Button, Component, EditBox, Event, Label, Node, Toggle, ToggleContainer, tween, v3, _decorator } from 'cc'
+import {
+  Button, Component, EditBox, Event, Label, Node, screen,
+  Toggle, ToggleContainer, tween, v3, view, Widget, _decorator
+} from 'cc'
 import { TerrainEditActionType, TerrainEditHandler } from '../EnvEditHandler'
 import { Game } from '../model'
 import { PlayerActionEvent } from '../PlayerMgr'
@@ -8,18 +11,20 @@ const { ccclass, property } = _decorator
 
 @ccclass('UIMgr')
 export default class UIMgr extends Component {
+  @property(Node)
+  userInfoPanel: Node
+
+  @property(Node)
+  editBtn: Node
 
   @property(Node)
   rocker: Node
 
   @property(Node)
+  actions: Node
+
+  @property(Node)
   jumpBtn: Node
-
-  @property(Node)
-  actionBtns: Node
-
-  @property(Node)
-  userInfoPanel: Node
 
   @property(Node)
   terrainEditBtn: Node
@@ -71,9 +76,24 @@ export default class UIMgr extends Component {
     return this.userInfoPanel.getChildByName('RoomId').getComponent(EditBox).string
   }
 
+  onLoad() {
+    console.log(view.getViewportRect(), screen.devicePixelRatio)
+    let wid = this.node.getComponent(Widget)
+    wid.top = -view.getViewportRect().y
+    wid.bottom = -view.getViewportRect().y
+    wid.left = -view.getViewportRect().x
+    wid.right = -view.getViewportRect().x
+
+    // screen.requestFullScreen()
+  }
+
   onAction(event: Event, data: string) {
     let action = Number.parseInt(data) as Game.CharacterState
     this.node.dispatchEvent(new PlayerActionEvent(PlayerActionEvent.name, action, true))
+  }
+
+  canEdit(edit: boolean) {
+    this.terrainEditBtn.active = edit
   }
 
   onEnvEditToolbarChanged(event: Toggle) {
@@ -127,7 +147,7 @@ export default class UIMgr extends Component {
     this.terrainEditBtn.getComponent(Button)
 
     this.userInfoPanel.active = !isEdit
-    this.actionBtns.active = !isEdit
+    this.actions.active = !isEdit
     this.jumpBtn.active = !isEdit
     this.cameraReactArea.active = !isEdit
 
@@ -156,8 +176,8 @@ export default class UIMgr extends Component {
     }
   }
 
-  showSkinMenu() {
-    this.skinMenu.active = true
+  showSkinMenu(show: boolean) {
+    this.skinMenu.active = show
   }
 
   showActionButton() {

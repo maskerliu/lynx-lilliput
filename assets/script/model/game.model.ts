@@ -15,6 +15,10 @@ export namespace Game {
     Lifting,
     Throwing,
     Kicking,
+    BoxIdle,
+    BoxWalk,
+    Climbing,
+    Push,
   }
 
   export enum IslandStatus {
@@ -50,17 +54,19 @@ export namespace Game {
   }
 
   export enum MsgType {
-    Sys,
-    Cmd,
-    Enter,
-    Leave,
+    Sys, // 系统消息，预留
+    Cmd, // 指令动作
+    Enter, // 进入
+    Leave, // 离开
+    Sync, // 同步坐标
   }
 
   export interface Msg {
     uid?: string
     type: MsgType
     state?: CharacterState
-    pos: { x: number, y: number, z: number }
+    pos?: { x: number, y: number, z: number }
+    dir?: { x: number, y: number, z: number }
     seq?: number // 消息序列
   }
 }

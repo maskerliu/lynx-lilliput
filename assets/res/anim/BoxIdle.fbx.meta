@@ -2,24 +2,24 @@
   "ver": "2.3.2",
   "importer": "fbx",
   "imported": true,
-  "uuid": "6389aa74-4219-4172-b359-a378212af443",
+  "uuid": "3664aedf-4682-4624-9e97-45eb82427ff1",
   "files": [
     "__original-animation-0.cconb"
   ],
   "subMetas": {
-    "73b7f": {
+    "2df6c": {
       "importer": "gltf-animation",
-      "uuid": "6389aa74-4219-4172-b359-a378212af443@73b7f",
+      "uuid": "3664aedf-4682-4624-9e97-45eb82427ff1@2df6c",
       "displayName": "",
-      "id": "73b7f",
-      "name": "Take 001.animation",
+      "id": "2df6c",
+      "name": "BoxIdle.animation",
       "userData": {
         "gltfIndex": 0,
         "wrapMode": 2,
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 1.3666666746139526
+          "to": 6.300000190734863
         },
         "events": []
       },
@@ -30,12 +30,12 @@
       ],
       "subMetas": {}
     },
-    "03152": {
+    "5cef6": {
       "importer": "gltf-scene",
-      "uuid": "6389aa74-4219-4172-b359-a378212af443@03152",
+      "uuid": "3664aedf-4682-4624-9e97-45eb82427ff1@5cef6",
       "displayName": "",
-      "id": "03152",
-      "name": "ghost_ani.prefab",
+      "id": "5cef6",
+      "name": "BoxIdle.prefab",
       "userData": {
         "gltfIndex": 0
       },
@@ -54,27 +54,27 @@
     },
     "animationImportSettings": [
       {
-        "name": "Take 001",
-        "duration": 1.3666666746139526,
+        "name": "mixamo.com",
+        "duration": 6.300000190734863,
         "fps": 30,
         "splits": [
           {
-            "name": "Take 001",
+            "name": "BoxIdle",
             "from": 0,
-            "to": 1.3666666746139526,
+            "to": 6.300000190734863,
             "wrapMode": 2
           }
         ]
       }
     ],
-    "redirect": "6389aa74-4219-4172-b359-a378212af443@03152",
+    "redirect": "3664aedf-4682-4624-9e97-45eb82427ff1@5cef6",
     "assetFinder": {
       "meshes": [],
       "skeletons": [],
       "textures": [],
       "materials": [],
       "scenes": [
-        "6389aa74-4219-4172-b359-a378212af443@03152"
+        "3664aedf-4682-4624-9e97-45eb82427ff1@5cef6"
       ]
     }
   }

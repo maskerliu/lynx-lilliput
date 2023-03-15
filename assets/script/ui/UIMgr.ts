@@ -1,13 +1,36 @@
 import {
-  Button, Component, EditBox, Event, Label, Node, screen,
-  Toggle, ToggleContainer, tween, v3, view, Widget, _decorator
+  Button, Component, EditBox, Event, Label, Node, Toggle, ToggleContainer, tween, v3, view, Widget, _decorator
 } from 'cc'
 import { TerrainEditActionType, TerrainEditHandler } from '../EnvEditHandler'
-import { Game } from '../model'
-import { PlayerActionEvent } from '../PlayerMgr'
+import { Game, Terrain } from '../model'
+import { PlayerEvent } from '../player/PlayerMgr'
+import ActionsMgr from './ActionsMgr'
 import RockerMgr from './RockerMgr'
 import TerrainItemBarMgr from './TerrainItemBarMgr'
 const { ccclass, property } = _decorator
+
+
+
+export class UIEvent extends Event {
+
+  static Name = 'UIEvent'
+
+  static Type = {
+    TerrainEdit: 'OnTerrainEdit',
+    UserInfoBind: 'OnUserInfoBind',
+    EnterIsland: 'OnEnterIsland'
+  }
+  static UserInfoBind = 'OnUserInfoBind'
+  static EnterIsland = 'OnEnterIsland'
+
+  customData: any
+
+  constructor(type: string, data?: any) {
+    super(UIEvent.Name, true)
+    this.type = type
+    this.customData = data
+  }
+}
 
 @ccclass('UIMgr')
 export default class UIMgr extends Component {
@@ -22,9 +45,6 @@ export default class UIMgr extends Component {
 
   @property(Node)
   actions: Node
-
-  @property(Node)
-  jumpBtn: Node
 
   @property(Node)
   terrainEditBtn: Node
@@ -59,6 +79,7 @@ export default class UIMgr extends Component {
   @property(Node)
   loading: Node
 
+  private actionsMgr: ActionsMgr
   private _editHandler: TerrainEditHandler
 
   set editHandler(handler: TerrainEditHandler) {
@@ -68,16 +89,17 @@ export default class UIMgr extends Component {
 
   private _curToolItem = 'Select'
 
-  get inputToken() {
+  private get inputToken() {
     return this.userInfoPanel.getChildByName('UserToken').getComponent(EditBox).string
   }
 
-  get inputRoomId() {
+  private get inputRoomId() {
     return this.userInfoPanel.getChildByName('RoomId').getComponent(EditBox).string
   }
 
   onLoad() {
-    console.log(view.getViewportRect(), screen.devicePixelRatio)
+    this.actionsMgr = this.actions.getComponent(ActionsMgr)
+
     let wid = this.node.getComponent(Widget)
     wid.top = -view.getViewportRect().y
     wid.bottom = -view.getViewportRect().y
@@ -87,9 +109,21 @@ export default class UIMgr extends Component {
     // screen.requestFullScreen()
   }
 
+  onEdit() {
+    this.node.dispatchEvent(new UIEvent(UIEvent.Type.TerrainEdit))
+  }
+
+  onBind(event: Event) {
+    this.node.dispatchEvent(new UIEvent(UIEvent.Type.UserInfoBind, this.inputToken))
+  }
+
+  onEnter(event: Event) {
+    this.node.dispatchEvent(new UIEvent(UIEvent.Type.EnterIsland, this.inputRoomId))
+  }
+
   onAction(event: Event, data: string) {
     let action = Number.parseInt(data) as Game.CharacterState
-    this.node.dispatchEvent(new PlayerActionEvent(PlayerActionEvent.name, action, true))
+    this.node.dispatchEvent(new PlayerEvent(PlayerEvent.Type.OnAction, action))
   }
 
   canEdit(edit: boolean) {
@@ -148,7 +182,6 @@ export default class UIMgr extends Component {
 
     this.userInfoPanel.active = !isEdit
     this.actions.active = !isEdit
-    this.jumpBtn.active = !isEdit
     this.cameraReactArea.active = !isEdit
 
     this.editReactArea.active = isEdit
@@ -176,12 +209,12 @@ export default class UIMgr extends Component {
     }
   }
 
-  showSkinMenu(show: boolean) {
-    this.skinMenu.active = show
+  updateActions(interactions: Array<Terrain.ModelInteraction>) {
+    this.actionsMgr.updateActions(interactions)
   }
 
-  showActionButton() {
-
+  showSkinMenu(show: boolean) {
+    this.skinMenu.active = show
   }
 
   private showSubMenu(node: Node) {

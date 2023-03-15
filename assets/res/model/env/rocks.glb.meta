@@ -50,13 +50,13 @@
       "textures": [],
       "materials": [
         "34db6ec5-7cfb-48f5-bfb2-597e1090f6f8",
-        "84f3fb43-719d-4ef7-88d7-59596eb7f2a0"
+        "23a71507-4e84-441d-aba9-ded10de24e9e"
       ],
       "scenes": [
         "6f81f314-2172-45d1-bf7b-6f451b961948@9c9ed"
       ]
     },
     "dumpMaterials": true,
-    "materialDumpDir": "db://assets/res/material"
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

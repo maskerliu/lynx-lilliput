@@ -1,7 +1,7 @@
 import {
   Camera, Component, Event, EventTouch, geometry, instantiate,
   MeshRenderer,
-  Node, PhysicsSystem, Quat, quat, Terrain, Touch, tween, UITransform, v3, Vec3, _decorator
+  Node, PhysicsSystem, Quat, quat, Touch, tween, UITransform, v3, Vec3, _decorator
 } from 'cc'
 import BattleService from './BattleService'
 const { ccclass, property } = _decorator
@@ -9,20 +9,41 @@ const { ccclass, property } = _decorator
 import { TerrainEditAction, TerrainEditActionType, TerrainEditHandler } from './EnvEditHandler'
 import { terrainItemIdx } from './misc/Utils'
 import { Game, GameApi } from './model'
+import LadderMgr from './prop/LadderMgr'
 import LeverMgr from './prop/LeverMgr'
 import SpikesMgr from './prop/SpikesMgr'
-import TerrainAssetMgr from './TerrainAssetMgr'
+import IslandAssetMgr from './IslandAssetMgr'
 import TerrainItemMgr from './TerrainItemMgr'
+import SkinnedTerrainItemMgr from './SkinnedTerrainItemMgr'
+import DiceMgr from './prop/DiceMgr'
+import CrateMgr from './prop/CrateMgr'
+import MushroomMgr from './prop/MushroomMgr'
+import RocksMgr from './prop/RocksMgr'
 
 
-export class SkinMenuEvent extends Event {
-  show: boolean
-  constructor(name: string, bubbles: boolean, show: boolean) {
-    super(name, bubbles)
+export class IslandEvent extends Event {
+  customData: boolean
 
-    this.show = show
+  static Type = {
+    SkinMenu: 'SkinMenu'
+  }
+
+  constructor(type: string, data: any) {
+    super(type, true)
+
+    this.customData = data
   }
 }
+
+const PropMgrs: Map<string, any> = new Map()
+
+PropMgrs.set(CrateMgr.ItemName, CrateMgr)
+PropMgrs.set(DiceMgr.ItemName, DiceMgr)
+PropMgrs.set(LadderMgr.ItemName, LadderMgr)
+PropMgrs.set(LeverMgr.ItemName, LeverMgr)
+PropMgrs.set(MushroomMgr.ItemName, MushroomMgr)
+PropMgrs.set(SpikesMgr.ItemName, SpikesMgr)
+PropMgrs.set(RocksMgr.ItemName, RocksMgr)
 
 @ccclass('IslandMgr')
 export default class IslandMgr extends Component implements TerrainEditHandler {
@@ -75,6 +96,8 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   private curTerrainItemMgr: TerrainItemMgr = null
   private lstOcclusions: Array<number> = []
   private curOcclusions: Array<number> = []
+
+  private static SkinMenuEvent: IslandEvent = new IslandEvent(IslandEvent.Type.SkinMenu, true)
 
   onLoad() {
     this.hitMeshRenderer = this.hitNode.getComponentInChildren(MeshRenderer)
@@ -142,20 +165,10 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     })
   }
 
-  check(node: Node) {
-    let forward = node.forward
-    // let ray = geometry.Ray.
-
-    // let layer = Math.floor(pos.y)
-    // this.mapInfo
-  }
-
-  shake(dir: Vec3) {
-    this.mapInfo.forEach(it => {
-      if (it.config.name == 'tree') {
-        it.shake(dir)
-      }
-    })
+  handleInteract(index: number, action: Game.CharacterState) {
+    let item = this.mapInfo.get(index)
+    if (item == null) return
+    item.interact(action)
   }
 
   async onEditModeChanged(isEdit: boolean) {
@@ -246,7 +259,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   onSkinChanged(skin: string) {
     for (let mgr of this.mapInfo.values()) {
       if (!mgr.isSelected) { continue }
-      mgr.updateSkin(skin)
+      (mgr as SkinnedTerrainItemMgr).updateSkin(skin)
     }
   }
 
@@ -311,11 +324,12 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     }
 
     if (onSkin != -1) {
-      this.node.dispatchEvent(new SkinMenuEvent(SkinMenuEvent.name, true, true))
+      IslandMgr.SkinMenuEvent.customData = true
+      this.node.dispatchEvent(IslandMgr.SkinMenuEvent)
       return TerrainEditActionType.None
     }
-
-    this.node.dispatchEvent(new SkinMenuEvent(SkinMenuEvent.name, true, false))
+    IslandMgr.SkinMenuEvent.customData = false
+    this.node.dispatchEvent(IslandMgr.SkinMenuEvent)
 
     let item = PhysicsSystem.instance.raycastResults[onSelected == -1 ? 0 : onSelected]
     let pos = this.node.getComponent(UITransform).convertToNodeSpaceAR(item.hitPoint)
@@ -327,10 +341,10 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
 
     // 超出边界
     if (Math.abs(this.hitNode.position.x) > 9 || Math.abs(this.hitNode.position.z) > 9) {
-      this.hitMeshRenderer.setMaterial(TerrainAssetMgr.getMaterial('heart-translucent'), 0)
+      this.hitMeshRenderer.setMaterial(IslandAssetMgr.getMaterial('heart-translucent'), 0)
       return TerrainEditActionType.None
     } else {
-      this.hitMeshRenderer.setMaterial(TerrainAssetMgr.getMaterial('grass-translucent'), 0)
+      this.hitMeshRenderer.setMaterial(IslandAssetMgr.getMaterial('grass-translucent'), 0)
     }
 
     return onSelected == -1 ? TerrainEditActionType.None : TerrainEditActionType.Selected
@@ -410,7 +424,8 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
 
   private addTerrainItem(info: Game.MapItem) {
     if (info == null) return
-    let prefab = TerrainAssetMgr.getPrefab(info.prefab)
+    let prefab = IslandAssetMgr.getPrefab(info.prefab)
+    let config = IslandAssetMgr.getModelConfig(info.prefab)
     if (prefab == null) return
 
     let node = instantiate(prefab)
@@ -420,19 +435,45 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     this.node.addChild(node)
 
     let mgr: TerrainItemMgr
-    switch (info.prefab) {
-      case 'lever':
-        node.addComponent(LeverMgr)
-        mgr = node.getComponent(LeverMgr)
-        break
-      case 'spikes': node.addComponent(SpikesMgr)
-        mgr = node.getComponent(SpikesMgr)
-        break
-      default:
+
+    if (PropMgrs.has(config.name)) {
+      let clazz = PropMgrs.get(config.name)
+      node.addComponent(clazz)
+      mgr = node.getComponent(clazz)
+    } else {
+      if (config.skin == 1) {
+        node.addComponent(SkinnedTerrainItemMgr)
+        mgr = node.getComponent(SkinnedTerrainItemMgr)
+      } else {
         node.addComponent(TerrainItemMgr)
         mgr = node.getComponent(TerrainItemMgr)
-        break
+      }
     }
+
+    // switch (config.name) {
+    //   case 'lever':
+    //     node.addComponent(LeverMgr)
+    //     mgr = node.getComponent(LeverMgr)
+    //     break
+    //   case 'spikes':
+    //     node.addComponent(SpikesMgr)
+    //     mgr = node.getComponent(SpikesMgr)
+    //     break
+    //   case 'ladder':
+    //     node.addComponent(LadderMgr)
+    //     mgr = node.getComponent(LadderMgr)
+    //     break
+    //   case 'dice':
+    //     node.addComponent(DiceMgr)
+    //     mgr = node.getComponent(DiceMgr)
+    //     break
+    //   case 'crate':
+    //     node.addComponent(CrateMgr)
+    //     mgr = node.getComponent(CrateMgr)
+    //     break
+    //   default:
+    //     break
+    // }
 
     mgr.init(info)
 
@@ -475,8 +516,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     this.occlusionPos.y += 0.3
     this.node.getComponent(UITransform).convertToWorldSpaceAR(this.occlusionPos, this.worldPos)
     geometry.Ray.fromPoints(this._ray, this.camera.node.position, this.worldPos)
+    let distance = Vec3.distance(this.worldPos, this.camera.node.position)
 
-    if (!PhysicsSystem.instance.raycast(this._ray, 0xffffffff, 500)) return false
+    if (!PhysicsSystem.instance.raycast(this._ray, 0xffffffff, distance)) return false
 
     this.curOcclusions = []
     for (let i = 0; i < PhysicsSystem.instance.raycastResults.length; ++i) {
@@ -491,8 +533,8 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       return !this.curOcclusions.includes(it)
     })
 
-    tmp.forEach(it => { this.mapInfo.get(it).translucent(false) })
-    this.curOcclusions.forEach(it => { this.mapInfo.get(it).translucent(true) })
+    tmp.forEach(it => { this.mapInfo.get(it)?.translucent(false) })
+    this.curOcclusions.forEach(it => { this.mapInfo.get(it)?.translucent(true) })
     this.lstOcclusions = this.curOcclusions
   }
 

@@ -1,10 +1,7 @@
-import { Collider, Component, Mesh, MeshCollider, MeshRenderer, Node, PhysicMaterial, Quat, quat, RigidBody, tween, v3, Vec3, _decorator } from 'cc'
-import IslandMgr from '../IslandMgr'
-import { terrainItemIdx } from '../misc/Utils'
+import { BoxCollider, ICollisionEvent, MeshRenderer, Node, Quat, quat, tween, _decorator } from 'cc'
 const { ccclass, property } = _decorator
 
-import { Game, Terrain } from '../model'
-import TerrainAssetMgr, { PhyEnvGroup } from '../TerrainAssetMgr'
+import IslandAssetMgr from '../IslandAssetMgr'
 import TerrainItemMgr from '../TerrainItemMgr'
 
 
@@ -30,13 +27,32 @@ export default class LeverMgr extends TerrainItemMgr {
     let angle = 90
     Quat.rotateX(this.q_roatation, this.q_roatation, Math.PI / 180 * angle)
 
-    tween(this.handle).to(0.5, { rotation: this.q_roatation }, {
-      easing: 'linear', onComplete: () => {
-        angle = -angle
-        Quat.rotateX(this.q_roatation, this.q_roatation, Math.PI / 180 * angle)
-      }
-    }).repeatForever().start()
+    // tween(this.handle).to(0.5, { rotation: this.q_roatation }, {
+    //   easing: 'linear', onComplete: () => {
+    //     angle = -angle
+    //     Quat.rotateX(this.q_roatation, this.q_roatation, Math.PI / 180 * angle)
+    //   }
+    // }).repeatForever().start()
+    
+    this.getComponent(BoxCollider).on('onTriggerEnter', this.onTriggerEnter, this)
+    this.getComponent(BoxCollider).on('onTriggerExit', this.onTriggerExit, this)
+  }
 
+
+  private onTriggerEnter(event: ICollisionEvent) {
+    console.log(event.otherCollider.node.name)
+
+    if (event.otherCollider.name == 'player') {
+      // emit can climb event
+    }
+  }
+
+  private onTriggerExit(event: ICollisionEvent) {
+    console.log(event.otherCollider.node.name)
+
+    if (event.otherCollider.name == 'player') {
+      // emit can climb event
+    }
   }
 
   translucent(did: boolean) {
@@ -45,15 +61,17 @@ export default class LeverMgr extends TerrainItemMgr {
     for (let i = 0; i < this.leverMeshRenderer.materials.length; ++i) {
       let name = this.leverMeshRenderer.materials[i].parent.name.split('-translucent')[0]
       name = !this.isTranslucent && did ? `${name}-translucent` : name
-      this.leverMeshRenderer.setMaterial(TerrainAssetMgr.getMaterial(name), i)
+      this.leverMeshRenderer.setMaterial(IslandAssetMgr.getMaterial(name), i)
     }
 
     for (let i = 0; i < this.handleMeshRenderer.materials.length; ++i) {
       let name = this.handleMeshRenderer.materials[i].parent.name.split('-translucent')[0]
       name = !this.isTranslucent && did ? `${name}-translucent` : name
-      this.handleMeshRenderer.setMaterial(TerrainAssetMgr.getMaterial(name), i)
+      this.handleMeshRenderer.setMaterial(IslandAssetMgr.getMaterial(name), i)
     }
 
     this.isTranslucent = did
   }
 }
+
+LeverMgr.ItemName = 'lever'

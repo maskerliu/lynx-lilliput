@@ -15,7 +15,9 @@
   ],
   "_states": [
     {
-      "rasterizerState": {},
+      "rasterizerState": {
+        "lineWidth": 5
+      },
       "depthStencilState": {},
       "blendState": {
         "targets": [

@@ -37,7 +37,7 @@
       }
     ],
     "_prefab": {
-      "__id__": 23
+      "__id__": 22
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -169,7 +169,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "606255be-e15d-444e-98ff-9eaae3cd96c1@e6ab6",
+      "__uuid__": "e7168325-ec66-4b02-9b51-00cc849769d9@00471",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
@@ -418,7 +418,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "606255be-e15d-444e-98ff-9eaae3cd96c1@7ce2b",
+      "__uuid__": "e7168325-ec66-4b02-9b51-00cc849769d9@7f223",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
@@ -451,11 +451,7 @@
     "__prefab": {
       "__id__": 21
     },
-    "clickEvents": [
-      {
-        "__id__": 22
-      }
-    ],
+    "clickEvents": [],
     "_interactable": true,
     "_transition": 0,
     "_normalColor": {
@@ -487,7 +483,7 @@
       "a": 255
     },
     "_normalSprite": {
-      "__uuid__": "606255be-e15d-444e-98ff-9eaae3cd96c1@7ce2b",
+      "__uuid__": "e7168325-ec66-4b02-9b51-00cc849769d9@7f223",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_hoverSprite": null,
@@ -508,14 +504,6 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "52oLGcHR1H4Kpa3mwZcOqK"
-  },
-  {
-    "__type__": "cc.ClickEvent",
-    "target": null,
-    "component": "",
-    "_componentId": "",
-    "handler": "",
-    "customEventData": ""
   },
   {
     "__type__": "cc.PrefabInfo",

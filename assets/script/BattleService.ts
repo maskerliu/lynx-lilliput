@@ -1,18 +1,28 @@
 
 import { v3, Vec3 } from 'cc'
-import { Game, User } from './model'
-import PlayerMgr from './PlayerMgr'
 import IslandMgr from './IslandMgr'
+import { Game, User } from './model'
+import PlayerMgr from './player/PlayerMgr'
 import UserService from './UserService'
 
 // import msgClient, { MessageHandler } from './PahoMsgClient'
-let msgClient: any = {
-  init() { },
-  subscribe() { },
-  unsubscribe() { },
-  send() { },
+
+
+interface MessageHandler {
+  onMessageArrived(msg: Array<Game.Msg>): void
 }
-interface MessageHandler { }
+
+class LocalMsgClient {
+  isLocal: boolean = true
+  msgHanlder: MessageHandler
+
+  init(uid: string) { }
+  subscribe(topic: string) { }
+  unsubscribe(topic: string) { }
+  send(topic: string, messages: string) { }
+}
+
+let msgClient = new LocalMsgClient()
 
 const offset = 20
 
@@ -25,7 +35,7 @@ class BattleService {
   get curIsland() { return this._curIsland }
 
   private _isStart: boolean = false
-  get isStart() { return this._isStart }
+  get started() { return this._isStart }
 
   private gameMsgs: Array<Game.Msg>
   private timer: any = null
@@ -68,7 +78,9 @@ class BattleService {
     if (this._curIsland == null || this.player() == null) return
     if (msg.state == null &&
       this.player().state != Game.CharacterState.Idle &&
-      this.player().state != Game.CharacterState.Running)
+      this.player().state != Game.CharacterState.Run &&
+      this.player().state != Game.CharacterState.BoxIdle &&
+      this.player().state != Game.CharacterState.BoxWalk)
       return
 
     msg.uid = this.profile.uid
@@ -132,7 +144,11 @@ class BattleService {
     return ps[idx].pos
   }
 
-  island(id: string) {
+  island(id?: string) {
+    if (id == null) {
+      if (this._curIsland) return this.islands.get(this._curIsland._id)
+      else return null
+    }
     return this.islands.get(id)
   }
 
@@ -153,35 +169,52 @@ class BattleService {
   }
 
 
-  enter(player: PlayerMgr, island: IslandMgr) {
+  enter(player: PlayerMgr, island: IslandMgr, handler: MessageHandler) {
+
+    if (this._curIsland) {
+      if (this._curIsland._id == island.senceInfo._id) { } else {
+        this.stop()
+      }
+    }
+
+    this.start(island.senceInfo, handler)
+
     player.node.removeFromParent()
+    player.resume()
     island.node.addChild(player.node)
     player.node.position = Vec3.ONE
     this.sendGameMsg({ type: Game.MsgType.Enter, state: Game.CharacterState.Idle })
   }
 
-  leave(player: PlayerMgr, island: IslandMgr) {
-    player.node.removeFromParent()
+  leave() {
+    this.player().node.removeFromParent()
     this.sendGameMsg({ type: Game.MsgType.Leave, state: Game.CharacterState.Idle })
+    this.stop()
   }
 
-  async start(island: Game.Island, handler: MessageHandler) {
+  private async start(island: Game.Island, handler: MessageHandler) {
     this._curIsland = island
     this.gameFrame = 0
     msgClient.msgHanlder = handler
     msgClient.subscribe(`_game/island/${this.curIsland._id}`)
+
     if (this.timer) clearInterval(this.timer)
     this.timer = setInterval(() => {
       if (this.gameMsgs.length == 0) return
 
-      msgClient.send(`_game/island/${this.curIsland._id}`, JSON.stringify(this.gameMsgs))
+      if (msgClient.isLocal) {
+        msgClient.msgHanlder.onMessageArrived(this.gameMsgs)
+      } else {
+        msgClient.send(`_game/island/${this.curIsland._id}`, JSON.stringify(this.gameMsgs))
+      }
+
       this.gameMsgs.splice(0, this.gameMsgs.length)
     }, 50)
 
     this._isStart = true
   }
 
-  stop() {
+  private stop() {
     msgClient.unsubscribe(`_game/island/${this.curIsland._id}`)
     this._curIsland = null
     if (this.timer) clearInterval(this.timer)

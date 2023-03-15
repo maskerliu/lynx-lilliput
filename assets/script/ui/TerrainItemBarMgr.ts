@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator
 import { TerrainEditHandler } from '../EnvEditHandler'
 import { Terrain } from '../model'
 
-import TerrainAssetMgr from '../TerrainAssetMgr'
+import IslandAssetMgr from '../IslandAssetMgr'
 
 @ccclass('TerrainItemBarMgr')
 export default class TerrainItemBarMgr extends Component {
@@ -65,7 +65,7 @@ export default class TerrainItemBarMgr extends Component {
   }
 
   onTerrainItemSelected(event: Toggle) {
-    // let atlas = TerrainAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
+    // let atlas = IslandAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
     this.selectedPropSnap.spriteFrame = this.atlas.getSpriteFrame(event.target.name)
     let contentSize = this.selectedPropSnap.getComponent(UITransform).contentSize
     let scaleX = 80 / contentSize.width
@@ -76,8 +76,8 @@ export default class TerrainItemBarMgr extends Component {
   }
 
   private loadTrrainScrollBarItems() {
-    let configs = TerrainAssetMgr.getModelCongfigs(this.modelType)
-    // let atlas = TerrainAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
+    let configs = IslandAssetMgr.getModelCongfigs(this.modelType)
+    // let atlas = IslandAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
     let s = size(configs.length * 115 - 15, 140)
     this.scrollView.content.getComponent(UITransform).setContentSize(s)
     this.itemsContainer.node.getComponent(UITransform).setContentSize(s)

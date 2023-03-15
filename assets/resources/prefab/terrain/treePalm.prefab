@@ -28,10 +28,13 @@
       },
       {
         "__id__": 11
+      },
+      {
+        "__id__": 13
       }
     ],
     "_prefab": {
-      "__id__": 13
+      "__id__": 15
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -140,7 +143,7 @@
       "__uuid__": "04791e5f-2ea3-4092-8454-7ec4b04cb43f@509c5",
       "__expectedType__": "cc.Mesh"
     },
-    "_shadowCastingMode": 0,
+    "_shadowCastingMode": 1,
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
@@ -252,7 +255,7 @@
     "fileId": "a9gfUL4/VBTLlrERocP8Zt"
   },
   {
-    "__type__": "cc.BoxCollider",
+    "__type__": "cc.CylinderCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -273,11 +276,39 @@
       "y": 0.7,
       "z": 0
     },
+    "_radius": 0.1,
+    "_height": 1.4,
+    "_direction": 1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "08Pxz8l5dLCpNOGz4cYPhY"
+  },
+  {
+    "__type__": "cc.BoxCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 14
+    },
+    "_material": null,
+    "_isTrigger": true,
+    "_center": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0.7,
+      "z": 0
+    },
     "_size": {
       "__type__": "cc.Vec3",
-      "x": 0.2,
+      "x": 0.4,
       "y": 1.4,
-      "z": 0.2
+      "z": 0.4
     },
     "_id": ""
   },

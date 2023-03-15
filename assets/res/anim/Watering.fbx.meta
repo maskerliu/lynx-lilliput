@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "ded90631-0063-49b2-bcc7-e2a596a07108",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "42dc7": {
+      "importer": "gltf-animation",
+      "uuid": "ded90631-0063-49b2-bcc7-e2a596a07108@42dc7",
+      "displayName": "",
+      "id": "42dc7",
+      "name": "Watering.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 5.599999904632568
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "a3837": {
+      "importer": "gltf-scene",
+      "uuid": "ded90631-0063-49b2-bcc7-e2a596a07108@a3837",
+      "displayName": "",
+      "id": "a3837",
+      "name": "Watering.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 5.599999904632568,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Watering",
+            "from": 0,
+            "to": 5.599999904632568,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "ded90631-0063-49b2-bcc7-e2a596a07108@a3837",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "ded90631-0063-49b2-bcc7-e2a596a07108@a3837"
+      ]
+    }
+  }
+}

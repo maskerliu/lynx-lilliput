@@ -7,6 +7,7 @@ export interface MessageHandler {
 
 class PahoMsgClient {
 
+  isLocal: boolean = false
   private retry = 0
   private option = {
     port: 8884,

@@ -3,6 +3,8 @@
   "extends": "./temp/tsconfig.cocos.json",
   /* Add your custom configuration here. */
   "compilerOptions": {
+    "target": "ES2016",
+    "module": "ES6",
     "declaration": true,
     "declarationMap": true,
     "allowJs": true,

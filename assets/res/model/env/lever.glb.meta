@@ -75,6 +75,6 @@
       ]
     },
     "dumpMaterials": true,
-    "materialDumpDir": "db://assets/res/material"
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

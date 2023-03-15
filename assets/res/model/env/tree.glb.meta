@@ -49,14 +49,14 @@
       "skeletons": [],
       "textures": [],
       "materials": [
-        "02df2022-4729-4593-a788-4599bbd0eaab",
-        "1ac696e0-7719-4633-8f93-63fcb5050998"
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae"
       ],
       "scenes": [
         "8c033fad-7840-4f7f-a6a5-807d7bc17170@74dd3"
       ]
     },
     "dumpMaterials": true,
-    "materialDumpDir": "db://assets/res/material"
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

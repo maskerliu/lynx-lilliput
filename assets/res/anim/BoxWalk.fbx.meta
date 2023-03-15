@@ -2,14 +2,30 @@
   "ver": "2.3.2",
   "importer": "fbx",
   "imported": true,
-  "uuid": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4",
+  "uuid": "f8c6dbea-66c9-49e6-8103-77819b5cd6c7",
   "files": [
     "__original-animation-0.cconb"
   ],
   "subMetas": {
+    "79072": {
+      "importer": "gltf-scene",
+      "uuid": "f8c6dbea-66c9-49e6-8103-77819b5cd6c7@79072",
+      "displayName": "",
+      "id": "79072",
+      "name": "BoxWalk.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
     "469c8": {
       "importer": "gltf-animation",
-      "uuid": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@469c8",
+      "uuid": "f8c6dbea-66c9-49e6-8103-77819b5cd6c7@469c8",
       "displayName": "",
       "id": "469c8",
       "name": "BoxWalk.animation",
@@ -19,7 +35,7 @@
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 1.2333333492279053
+          "to": 2.866666555404663
         },
         "events": []
       },
@@ -27,22 +43,6 @@
       "imported": true,
       "files": [
         ".cconb"
-      ],
-      "subMetas": {}
-    },
-    "9f126": {
-      "importer": "gltf-scene",
-      "uuid": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@9f126",
-      "displayName": "",
-      "id": "9f126",
-      "name": "BoxWalk.prefab",
-      "userData": {
-        "gltfIndex": 0
-      },
-      "ver": "1.0.12",
-      "imported": true,
-      "files": [
-        ".json"
       ],
       "subMetas": {}
     }
@@ -55,26 +55,26 @@
     "animationImportSettings": [
       {
         "name": "mixamo.com",
-        "duration": 1.2333333492279053,
+        "duration": 2.866666555404663,
         "fps": 30,
         "splits": [
           {
             "name": "BoxWalk",
             "from": 0,
-            "to": 1.2333333492279053,
+            "to": 2.866666555404663,
             "wrapMode": 2
           }
         ]
       }
     ],
-    "redirect": "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@9f126",
+    "redirect": "f8c6dbea-66c9-49e6-8103-77819b5cd6c7@79072",
     "assetFinder": {
       "meshes": [],
       "skeletons": [],
       "textures": [],
       "materials": [],
       "scenes": [
-        "9a57138b-6bd3-46c0-a3ec-8c1566817ab4@9f126"
+        "f8c6dbea-66c9-49e6-8103-77819b5cd6c7@79072"
       ]
     }
   }

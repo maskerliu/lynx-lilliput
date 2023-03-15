@@ -54,7 +54,6 @@
         "a": 255
       },
       "roughness": 0.2,
-      "metallic": 0.1,
       "specularIntensity": 0,
       "emissive": {
         "__type__": "cc.Color",

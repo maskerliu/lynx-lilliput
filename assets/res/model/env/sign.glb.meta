@@ -49,15 +49,15 @@
       "skeletons": [],
       "textures": [],
       "materials": [
-        "03ff6803-0ba0-41a4-9a4f-fbfc931c47bb",
-        "2c00bcf9-50c0-456f-9a71-ec9e8f724c72",
-        "bdaf670b-cad3-4e38-b07e-9a847e25cafd"
+        "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f",
+        "23a71507-4e84-441d-aba9-ded10de24e9e"
       ],
       "scenes": [
         "79720060-ee31-44a6-aeef-02224e83fdbe@9ccfa"
       ]
     },
     "dumpMaterials": true,
-    "materialDumpDir": "db://assets/res/material"
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

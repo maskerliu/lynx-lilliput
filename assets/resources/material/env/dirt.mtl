@@ -10,7 +10,9 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_INSTANCING": true
+      "USE_INSTANCING": true,
+      "USE_ALBEDO_MAP": true,
+      "USE_PBR_MAP": true
     },
     {},
     {}
@@ -46,17 +48,30 @@
   ],
   "_props": [
     {
+      "tilingOffset": {
+        "__type__": "cc.Vec4",
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0,
+        "w": 0
+      },
       "mainColor": {
         "__type__": "cc.Color",
-        "r": 153,
-        "g": 109,
-        "b": 54,
-        "a": 100
+        "r": 121,
+        "g": 115,
+        "b": 105,
+        "a": 112
       },
-      "occlusion": 1,
-      "roughness": 0.2,
-      "metallic": 0.6,
-      "specularIntensity": 0.4
+      "roughness": 1,
+      "specularIntensity": 0,
+      "mainTexture": {
+        "__uuid__": "8f835428-bb9b-4ca2-bc16-ed934f974ae3@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      },
+      "pbrMap": {
+        "__uuid__": "8f835428-bb9b-4ca2-bc16-ed934f974ae3@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
     },
     {},
     {}

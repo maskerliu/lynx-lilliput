@@ -74,7 +74,7 @@
         "_value": false
       },
       "geometry-renderer": {
-        "_value": true
+        "_value": false
       },
       "debug-renderer": {
         "_value": false
@@ -104,7 +104,7 @@
         "_value": false
       },
       "light-probe": {
-        "_value": true
+        "_value": false
       },
       "tiled-map": {
         "_value": false
@@ -116,7 +116,7 @@
         "_value": false
       },
       "marionette": {
-        "_value": true
+        "_value": false
       },
       "custom-pipeline": {
         "_value": false
@@ -129,12 +129,9 @@
       "animation",
       "audio",
       "base",
-      "geometry-renderer",
       "gfx-webgl",
       "gfx-webgl2",
       "intersection-2d",
-      "light-probe",
-      "marionette",
       "particle",
       "physics-ammo",
       "primitive",

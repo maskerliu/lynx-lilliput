@@ -7,7 +7,7 @@ export default class BoatMgr extends Component {
   private floatPos: Vec3 = v3()
 
   start() {
-    this.float()
+    // this.float()
   }
 
   update(deltaTime: number) {

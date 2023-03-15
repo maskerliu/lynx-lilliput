@@ -12,11 +12,16 @@ export namespace Terrain {
     Prop,
   }
 
-  export enum ModelReact {
+  export enum ModelInteraction {
     None,
+    Throw,
     Push, // 可推动
     Lift, // 可捡起
-    Shake // 可晃动
+    Shake, // 可晃动
+    Grab, // 可采集
+    Climb, // 可攀爬
+    Sit, // 可坐下
+    Attack, // 可攻击
   }
 
   export interface ModelConfig {
@@ -26,11 +31,11 @@ export namespace Terrain {
     z: number
     anchor: ModelAnchor
     type: ModelType
-    react?: ModelReact
+    react?: ModelInteraction
     joint?: number[]
     material?: Array<string>
-    skin?: any
-    action?: Array<number> // 道具可被使用的动作
+    skin?: number
+    interactions?: Array<ModelInteraction> // 道具可被使用的动作
   }
 
   export enum AssetType {

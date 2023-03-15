@@ -2,14 +2,14 @@
   "ver": "2.3.2",
   "importer": "fbx",
   "imported": true,
-  "uuid": "3664aedf-4682-4624-9e97-45eb82427ff1",
+  "uuid": "b38e7049-4263-4eef-ae12-240517021551",
   "files": [
     "__original-animation-0.cconb"
   ],
   "subMetas": {
     "2df6c": {
       "importer": "gltf-animation",
-      "uuid": "3664aedf-4682-4624-9e97-45eb82427ff1@2df6c",
+      "uuid": "b38e7049-4263-4eef-ae12-240517021551@2df6c",
       "displayName": "",
       "id": "2df6c",
       "name": "BoxIdle.animation",
@@ -19,7 +19,7 @@
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 6.300000190734863
+          "to": 1.7999999523162842
         },
         "events": []
       },
@@ -30,11 +30,11 @@
       ],
       "subMetas": {}
     },
-    "5cef6": {
+    "60e24": {
       "importer": "gltf-scene",
-      "uuid": "3664aedf-4682-4624-9e97-45eb82427ff1@5cef6",
+      "uuid": "b38e7049-4263-4eef-ae12-240517021551@60e24",
       "displayName": "",
-      "id": "5cef6",
+      "id": "60e24",
       "name": "BoxIdle.prefab",
       "userData": {
         "gltfIndex": 0
@@ -55,26 +55,26 @@
     "animationImportSettings": [
       {
         "name": "mixamo.com",
-        "duration": 6.300000190734863,
+        "duration": 1.7999999523162842,
         "fps": 30,
         "splits": [
           {
             "name": "BoxIdle",
             "from": 0,
-            "to": 6.300000190734863,
+            "to": 1.7999999523162842,
             "wrapMode": 2
           }
         ]
       }
     ],
-    "redirect": "3664aedf-4682-4624-9e97-45eb82427ff1@5cef6",
+    "redirect": "b38e7049-4263-4eef-ae12-240517021551@60e24",
     "assetFinder": {
       "meshes": [],
       "skeletons": [],
       "textures": [],
       "materials": [],
       "scenes": [
-        "3664aedf-4682-4624-9e97-45eb82427ff1@5cef6"
+        "b38e7049-4263-4eef-ae12-240517021551@60e24"
       ]
     }
   }

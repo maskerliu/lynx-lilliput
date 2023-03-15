@@ -141,7 +141,7 @@
       "__uuid__": "3edbb1b1-9495-4afe-b0cf-c259f400bf69@156f4",
       "__expectedType__": "cc.Mesh"
     },
-    "_shadowCastingMode": 0,
+    "_shadowCastingMode": 1,
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
@@ -233,11 +233,8 @@
     "__prefab": {
       "__id__": 10
     },
-    "_material": {
-      "__uuid__": "d52fddd3-48cb-42d5-a9ac-f60f56ed9264",
-      "__expectedType__": "cc.PhysicsMaterial"
-    },
-    "_isTrigger": false,
+    "_material": null,
+    "_isTrigger": true,
     "_center": {
       "__type__": "cc.Vec3",
       "x": 0,

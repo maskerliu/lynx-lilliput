@@ -6,13 +6,11 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
     ],
-    "skin": {
-      "grass": "snow"
-    },
     "joint": [
       1,
       1,
@@ -29,6 +27,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -49,6 +48,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "dirt",
       "grass"
@@ -69,6 +69,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -89,6 +90,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -109,6 +111,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -129,6 +132,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -168,6 +172,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -188,6 +193,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -200,6 +206,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -212,6 +219,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "dirt",
       "grass"
@@ -224,6 +232,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -236,6 +245,7 @@
     "z": 0.5,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "grass",
       "dirt"
@@ -260,6 +270,7 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
+    "skin": 1,
     "material": [
       "dirt",
       "grass"

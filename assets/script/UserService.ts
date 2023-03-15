@@ -4,7 +4,7 @@ import { updateAccessToken } from './model/base.api'
 class UserService {
 
   // 顾小兵
-  // token a04d4751801fd1af5a1c15c24316ea40 
+  // token a04d4751801fd1af5a1c15c24316ea40
   // uid   8f4e7438-4285-4268-910c-3898fb8d6d96
   // 刘大毛
   // token 5c2c44f25096b201d0c5a716704f4029 

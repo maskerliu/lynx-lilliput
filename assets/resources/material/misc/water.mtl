@@ -29,19 +29,19 @@
     {
       "mainColor": {
         "__type__": "cc.Color",
-        "r": 28,
-        "g": 142,
-        "b": 207,
+        "r": 0,
+        "g": 102,
+        "b": 158,
         "a": 151
       },
       "reflectTexture": {
-        "__uuid__": "2ce578ba-e0ce-4ad5-9576-93e513e49add@b47c0",
+        "__uuid__": "7fb14ae9-230b-4356-a2d3-0ba33f14fb7a@b47c0",
         "__expectedType__": "cc.TextureCube"
       },
-      "fReflect": 0.55,
-      "fresnelPow": 6,
+      "fReflect": 0.39,
+      "fresnelPow": 0,
       "noiseTexture": {
-        "__uuid__": "3e8e25ab-5cc2-46da-8aea-91b8241f84b8@6c48a",
+        "__uuid__": "60b52f34-201d-491b-8b8c-f7b459ffd583@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
     }

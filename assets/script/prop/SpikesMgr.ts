@@ -1,12 +1,7 @@
-import { Collider, Component, MeshCollider, Node, MeshRenderer, PhysicMaterial, RigidBody, tween, v3, Vec3, _decorator } from 'cc'
-import IslandMgr from '../IslandMgr'
-import { terrainItemIdx } from '../misc/Utils'
+import { MeshRenderer, Node, tween, v3, _decorator } from 'cc'
 const { ccclass, property } = _decorator
 
-import { Game, Terrain } from '../model'
-import TerrainAssetMgr, { PhyEnvGroup } from '../TerrainAssetMgr'
 import TerrainItemMgr from '../TerrainItemMgr'
-
 
 @ccclass('SpikesMgr')
 export default class SpikesMgr extends TerrainItemMgr {
@@ -30,20 +25,7 @@ export default class SpikesMgr extends TerrainItemMgr {
   }
 
   // translucent(did: boolean) {
-  //   if (this.isTranslucent == did) return
-
-  //   for (let i = 0; i < this.leverMeshRenderer.materials.length; ++i) {
-  //     let name = this.leverMeshRenderer.materials[i].name.split('-translucent')[0]
-  //     name = !this.isTranslucent && did ? `${name}-translucent` : name
-  //     this.leverMeshRenderer.setMaterial(TerrainAssetMgr.getMaterial(name), i)
-  //   }
-
-  //   for (let i = 0; i < this.handleMeshRenderer.materials.length; ++i) {
-  //     let name = this.handleMeshRenderer.materials[i].name.split('-translucent')[0]
-  //     name = !this.isTranslucent && did ? `${name}-translucent` : name
-  //     this.handleMeshRenderer.setMaterial(TerrainAssetMgr.getMaterial(name), i)
-  //   }
-
-  //   this.isTranslucent = did
   // }
 }
+
+SpikesMgr.ItemName = 'spikes'

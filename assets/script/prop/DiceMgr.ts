@@ -1,4 +1,4 @@
-import { BoxCollider, ICollisionEvent, ITriggerEvent, RigidBody, tween, v3, _decorator } from 'cc'
+import { BoxCollider, ICollisionEvent, ITriggerEvent, RigidBody, SphereCollider, tween, v3, _decorator } from 'cc'
 import { Game, Terrain } from '../model'
 const { ccclass, property } = _decorator
 
@@ -14,12 +14,20 @@ export default class DiceMgr extends TerrainItemMgr {
 
   onLoad() {
     super.onLoad()
+
     this.rigidBody = this.getComponent(RigidBody)
 
-    this.getComponent(BoxCollider).on('onTriggerEnter', this.onTriggerEnter, this)
-    this.getComponent(BoxCollider).on('onTriggerExit', this.onTriggerExit, this)
+    this.getComponent(SphereCollider)?.on('onTriggerEnter', this.onTriggerEnter, this)
+    this.getComponent(SphereCollider)?.on('onTriggerExit', this.onTriggerExit, this)
+
+    this.getComponent(BoxCollider).on('onCollisionEnter', this.onCollision, this)
+    this.getComponent(BoxCollider).on('onCollisionStay', this.onCollision, this)
   }
 
+
+  onCollision() {
+    // this.rigidBody.clearState()
+  }
 
   private onTriggerEnter(event: ITriggerEvent) {
 
@@ -42,13 +50,13 @@ export default class DiceMgr extends TerrainItemMgr {
     switch (action) {
       case Game.CharacterState.Kick:
         setTimeout(() => {
-          this.rigidBody.applyImpulse(v3(0, 80, 0))
-          this.rigidBody.applyTorque(v3(120, 80, 163))
+          this.rigidBody.applyImpulse(v3(0, 18, 0))
+          this.rigidBody.applyTorque(v3(22, 30, 26))
         }, 400)
         break
     }
   }
-  
+
   preview() {
     tween(this.node).to(0.5, { scale: DicePreviewScale }, { easing: 'bounceOut' }).start()
   }

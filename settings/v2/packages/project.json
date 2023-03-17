@@ -31,13 +31,17 @@
       "0": 1,
       "1": 28,
       "2": 30,
-      "3": 6,
-      "4": 22
+      "3": 22,
+      "4": 30
     },
     "gravity": {
       "y": -10
     },
-    "defaultMaterial": "adc79dd3-f1fc-4129-b4e8-9bf5bd3d4a63"
+    "defaultMaterial": "adc79dd3-f1fc-4129-b4e8-9bf5bd3d4a63",
+    "fixedTimeStep": 0.016667,
+    "maxSubSteps": 1,
+    "allowSleep": true,
+    "autoSimulation": true
   },
   "layer": [
     {

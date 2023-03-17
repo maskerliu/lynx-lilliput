@@ -1,5 +1,5 @@
 
-import { v3, Vec3 } from 'cc'
+import { Director, director, PhysicsSystem, v3, Vec3 } from 'cc'
 import IslandMgr from './IslandMgr'
 import { Game, User } from './model'
 import PlayerMgr from './player/PlayerMgr'
@@ -169,20 +169,19 @@ class BattleService {
   }
 
 
-  enter(player: PlayerMgr, island: IslandMgr, handler: MessageHandler) {
-
+  async enter(player: PlayerMgr, island: IslandMgr, handler: MessageHandler) {
     if (this._curIsland) {
       if (this._curIsland._id == island.senceInfo._id) { } else {
         this.stop()
       }
     }
-
-    this.start(island.senceInfo, handler)
-
+    await this.start(island.senceInfo, handler)
     player.node.removeFromParent()
-    player.resume()
+    player.sleep()
+
+    player.node.position.set(Vec3.UNIT_Y)
     island.node.addChild(player.node)
-    player.node.position = Vec3.ONE
+    player.resume()
     this.sendGameMsg({ type: Game.MsgType.Enter, state: Game.CharacterState.Idle })
   }
 

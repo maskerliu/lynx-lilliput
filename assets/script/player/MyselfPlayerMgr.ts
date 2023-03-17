@@ -109,7 +109,6 @@ export default class MyselfPlayerMgr extends BasicPlayerMgr implements RockerTar
   }
 
   onEditModel(edit: boolean) {
-    PhysicsSystem.instance.enable = !edit
     if (!edit) {
       this.resume()
     }

@@ -80,7 +80,6 @@ export default class LilliputMgr extends Component implements MessageHandler {
       BattleService.sendGameMsg(msg)
     }, this)
 
-
     this.ambientInfo = director.getScene().globals.ambient
     this.skyboxInfo = director.getScene().globals.skybox
   }
@@ -97,22 +96,20 @@ export default class LilliputMgr extends Component implements MessageHandler {
     this.orbitCamera.target = this.bornNode
 
 
-    // this.bornNode.getChildByName('fences').children.forEach(it => {
-    //   let angle = Quat.getAxisAngle(this.v3_0, it.rotation)
-    //   angle = angle * 180 / Math.PI * this.v3_0.y
-    //   let info: Game.MapItem = { x: it.position.x, y: it.position.y, z: it.position.z, prefab: it.name, angle }
-    //   this.bornTerrainInfos.push(info)
-    // })
+    this.bornNode.getChildByName('fences').children.forEach(it => {
+      let angle = Quat.getAxisAngle(this.v3_0, it.rotation)
+      angle = angle * 180 / Math.PI * this.v3_0.y
+      let info: Game.MapItem = { x: it.position.x, y: it.position.y, z: it.position.z, prefab: it.name, angle }
+      this.bornTerrainInfos.push(info)
+    })
 
-    // this.bornNode.getChildByName('ground').children.forEach(it => {
-    //   let angle = Quat.getAxisAngle(this.v3_0, it.rotation)
-    //   angle = angle * 180 / Math.PI * this.v3_0.y
-    //   let info: Game.MapItem = { x: it.position.x, y: it.position.y, z: it.position.z, prefab: it.name, angle }
-    //   this.bornTerrainInfos.push(info)
-    // })
+    this.bornNode.getChildByName('ground').children.forEach(it => {
+      let angle = Quat.getAxisAngle(this.v3_0, it.rotation)
+      angle = angle * 180 / Math.PI * this.v3_0.y
+      let info: Game.MapItem = { x: it.position.x, y: it.position.y, z: it.position.z, prefab: it.name, angle }
+      this.bornTerrainInfos.push(info)
+    })
   }
-
-
 
   update(dt: number) {
     if (!IslandAssetMgr.isPreloaded) {
@@ -126,19 +123,19 @@ export default class LilliputMgr extends Component implements MessageHandler {
       }
     }
 
-    if (this.isDay) {
-      if (this.ambientInfo.skyIllum < 50000) {
-        this.ambientInfo.skyIllum += 100
-      } else {
-        this.isDay = false
-      }
-    } else {
-      if (this.ambientInfo.skyIllum > 10000) {
-        this.ambientInfo.skyIllum -= 100
-      } else {
-        this.isDay = true
-      }
-    }
+    // if (this.isDay) {
+    //   if (this.ambientInfo.skyIllum < 50000) {
+    //     this.ambientInfo.skyIllum += 100
+    //   } else {
+    //     this.isDay = false
+    //   }
+    // } else {
+    //   if (this.ambientInfo.skyIllum > 10000) {
+    //     this.ambientInfo.skyIllum -= 100
+    //   } else {
+    //     this.isDay = true
+    //   }
+    // }
 
     if (this.skyboxInfo.rotationAngle >= 360) {
       this.skyboxInfo.rotationAngle = 0
@@ -153,6 +150,10 @@ export default class LilliputMgr extends Component implements MessageHandler {
       if (BattleService.started)
         BattleService.sendGameMsg({ type: Game.MsgType.Cmd })
     }
+  }
+
+  onDestroy() {
+    console.log('destroy')
   }
 
   async onMessageArrived(msgs: Array<Game.Msg>) {
@@ -215,29 +216,32 @@ export default class LilliputMgr extends Component implements MessageHandler {
   }
 
   async onEnterIsland(uid: string) {
-    // PhysicsSystem.instance.enable = false
-
     let islandId: string = null
+    let timestamp: number = 0
     let island = BattleService.userIsland(uid)
     if (island == null) {
-      let island = instantiate(this.islandPrefab)
+      let node = instantiate(this.islandPrefab)
 
-      island.position = BattleService.randomPos()
-      this.node.addChild(island)
-      let mgr = island.getComponent(IslandMgr)
+      node.position = BattleService.randomPos()
+      this.node.addChild(node)
+      let mgr = node.getComponent(IslandMgr)
+      timestamp = new Date().getTime()
       islandId = await mgr.loadMap(uid)
+      console.log('island render:', new Date().getTime() - timestamp)
+     
       mgr.camera = this.mainCamera
       mgr.editReactArea = this.uiMgr.editReactArea
       BattleService.addIsland(islandId, mgr)
-    } else {
-      islandId = island.senceInfo._id
+      island = BattleService.island(islandId)
     }
 
-    island = BattleService.island(islandId)
-    BattleService.enter(BattleService.player(), island, this)
+    timestamp = new Date().getTime()
+    await BattleService.enter(BattleService.player(), island, this)
+    console.log('player enter:', new Date().getTime() - timestamp)
     this.uiMgr.canEdit(BattleService.canEdit())
     BattleService.sendGameMsg({ type: Game.MsgType.Enter, state: Game.CharacterState.Idle })
 
+    console.log(PhysicsSystem.instance.physicsWorld)
   }
 
   async onLeaveIsland() {

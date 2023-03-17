@@ -1,15 +1,15 @@
 import {
-  clamp, Component, CylinderCollider, DirectionalLight, Event, geometry,
-  ICollisionEvent, instantiate, ITriggerEvent, lerp, Node, PhysicsSystem, Prefab, quat, Quat,
+  Component, CylinderCollider, DirectionalLight, Event, ICollisionEvent, ITriggerEvent, lerp, Node, PhysicsSystem, Prefab, quat, Quat,
   RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Texture2D,
-  tween, UITransform, v2, v3, Vec2, Vec3, _decorator, physics, CapsuleCollider, Animation
+  tween, v2, v3, Vec2, Vec3, _decorator
 } from 'cc'
 import BattleService from '../BattleService'
+import IslandAssetMgr, { PhyEnvGroup } from '../IslandAssetMgr'
+import { isDebug } from '../misc/Utils'
 import { Game, User } from '../model'
-import IslandAssetMgr from '../IslandAssetMgr'
+import LadderMgr from '../prop/LadderMgr'
 import TerrainItemMgr from '../TerrainItemMgr'
 import { RockerTarget } from '../ui/RockerMgr'
-import LadderMgr from '../prop/LadderMgr'
 const { ccclass, property } = _decorator
 
 
@@ -83,7 +83,6 @@ export default class PlayerMgr extends Component implements RockerTarget {
   private v3_speed = v3()
 
   private rigidBody: RigidBody
-  private fixedConstraint: physics.FixedConstraint
   private animation: SkeletalAnimation
   private meshRenderer: SkinnedMeshRenderer
 
@@ -98,7 +97,6 @@ export default class PlayerMgr extends Component implements RockerTarget {
     this.animation = this.getComponentInChildren(SkeletalAnimation)
     this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
     this.propNode = this.animation.sockets[0].target.getChildByName('Prop')
-    this.fixedConstraint = this.getComponent(physics.FixedConstraint)
   }
 
   start() {
@@ -108,18 +106,21 @@ export default class PlayerMgr extends Component implements RockerTarget {
     this.getComponent(CylinderCollider).on('onTriggerEnter', this.onTriggerEnter, this)
     this.getComponent(CylinderCollider).on('onTriggerStay', this.onTriggerStay, this)
     this.getComponent(CylinderCollider).on('onTriggerExit', this.onTriggerExit, this)
+  }
 
-    // let prop = instantiate(this.propPrefab)
-    // prop.scale.set(0.05, 0.05, 0.05)
-    // this.animation.sockets[0].target.addChild(prop)
+  status() {
+    console.log(this.rigidBody.isAwake)
+  }
+
+  sleep() {
+    // this.rigidBody.clearState()
+    this.rigidBody.sleep()
+    this.rigidBody.useGravity = false
   }
 
   resume() {
-    this.rigidBody.clearState()
+    // this.rigidBody.clearState()
     this.rigidBody.useGravity = true
-    this.rigidBody.type = RigidBody.Type.DYNAMIC
-
-    this.fixedConstraint.connectedBody = null
 
     this._curDir.set(Vec2.ZERO)
     this._rotateSpeed = 0
@@ -143,22 +144,21 @@ export default class PlayerMgr extends Component implements RockerTarget {
     this.meshRenderer.material.setProperty('mainTexture', IslandAssetMgr.getTexture(skin) as Texture2D)
 
     this.myself = BattleService.isMyself(profile.uid)
+
+    let debugNode = this.node.getChildByName('Debug')
+    if (debugNode) debugNode.active = isDebug
+
     return this
   }
 
   private onCollisionEnter(event: ICollisionEvent) {
 
     if (event.otherCollider.node.name == 'dice') {
-      this.fixedConstraint.connectedBody = event.otherCollider.node.getComponent(RigidBody)
-      PhysicsSystem.instance.syncSceneToPhysics()
+
     }
   }
 
   private onCollisionExit(event: ICollisionEvent) {
-    if (event.otherCollider.node.name == 'dice' && this.fixedConstraint.connectedBody != null) {
-      console.log('remove dice contraint')
-      this.fixedConstraint.connectedBody = null
-    }
   }
 
   private onCollisionStay(event: ICollisionEvent) {
@@ -167,10 +167,10 @@ export default class PlayerMgr extends Component implements RockerTarget {
       case Game.CharacterState.Climb:
         break
 
-      case Game.CharacterState.Run:
-        if (event.otherCollider.node.getComponent(RigidBody) == this.fixedConstraint.connectedBody) {
-          console.log('add dice contraint')
-        }
+      // case Game.CharacterState.Run:
+      // if (event.otherCollider.node.getComponent(RigidBody) == this.fixedConstraint.connectedBody) {
+      //   console.log('add dice contraint')
+      // }
       default:
         this.rigidBody.clearState()
         break
@@ -183,10 +183,9 @@ export default class PlayerMgr extends Component implements RockerTarget {
   }
 
   private onTriggerStay(event: ITriggerEvent) {
-    // if (event.otherCollider.node.name == 'ladder') {
-    //   this.canClimb = true
-    //   console.log(this.canClimb)
-    // }
+    if (event.otherCollider.node.name == 'ladder') {
+      this.canClimb = true
+    }
   }
 
   private onTriggerExit(event: ITriggerEvent) {
@@ -200,7 +199,7 @@ export default class PlayerMgr extends Component implements RockerTarget {
     }
 
     if (event.otherCollider.node.name == 'dice') {
-      console.log(this.fixedConstraint.connectedBody)
+      // console.log(this.fixedConstraint.connectedBody)
     }
   }
 
@@ -219,7 +218,6 @@ export default class PlayerMgr extends Component implements RockerTarget {
     }
 
     if (this._state == Game.CharacterState.JumpUp && !this.animState()) {
-      this.rigidBody.applyImpulse(v3(0, -8, 0), Vec3.ZERO)
       this.state = Game.CharacterState.JumpLand
     }
 
@@ -236,7 +234,6 @@ export default class PlayerMgr extends Component implements RockerTarget {
 
     if (this.dstPos.equals(this.node.position, 0.06)) {
       this.dstPos.set(Vec3.NEG_ONE)
-      this.rigidBody.clearState()
       this.state = Game.CharacterState.Idle
     }
 
@@ -287,18 +284,15 @@ export default class PlayerMgr extends Component implements RockerTarget {
       case Game.CharacterState.Idle:
         this.state = Game.CharacterState.Idle
         // this.node.forward = dir
-        this.rigidBody.clearState()
-        this.rigidBody.sleep()
+        // this.rigidBody.clearState()
         break
       case Game.CharacterState.BoxIdle:
         this.state = Game.CharacterState.BoxIdle
-        this.rigidBody.clearState()
-        this.rigidBody.sleep()
+        // this.rigidBody.clearState()
         break
       case Game.CharacterState.BoxWalk:
         this.state = Game.CharacterState.BoxWalk
-        this.rigidBody.clearState()
-        this.rigidBody.sleep()
+        // this.rigidBody.clearState()
         break
       case Game.CharacterState.Climb:
         this.climb()
@@ -337,11 +331,18 @@ export default class PlayerMgr extends Component implements RockerTarget {
     Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
   }
 
-  onEditModel(edit: boolean) {
-    PhysicsSystem.instance.enable = !edit
-    if (!edit) {
-      this.resume()
-    }
+  onEditModel(edit: boolean, pos: Vec3) {
+    // if (edit) {
+    //   // this.rigidBody.type = RigidBody.Type.STATIC
+    //   this.rigidBody.clearState()
+    //   this.rigidBody.sleep()
+    // } else {
+    //   // this.rigidBody.type = RigidBody.Type.DYNAMIC
+    //   this.resume()
+    // }
+
+    this.rigidBody.useGravity = !edit
+    this.node.position.set(pos)
   }
 
   private jump() {
@@ -352,7 +353,7 @@ export default class PlayerMgr extends Component implements RockerTarget {
       pos.y += 0.1
       this.node.position = pos
       this.rigidBody.useGravity = true
-      this.rigidBody.applyImpulse(v3(this._curDir.x * 2, 6, this._curDir.y * 2), v3(0, 0, 0))
+      this.rigidBody.applyImpulse(v3(this._curDir.x * 2, 10, this._curDir.y * 2), v3(0, 0, 0))
     }, 500)
   }
 
@@ -370,7 +371,6 @@ export default class PlayerMgr extends Component implements RockerTarget {
   }
 
   private throw() {
-    this.rigidBody.sleep()
     this._rotateSpeed = 0
     this.state = Game.CharacterState.Throw
     setTimeout(() => {
@@ -449,7 +449,6 @@ export default class PlayerMgr extends Component implements RockerTarget {
   }
 
   private sit() {
-    this.rigidBody.sleep()
     this._rotateSpeed = 0
     this.state = Game.CharacterState.Sit
   }
@@ -460,20 +459,19 @@ export default class PlayerMgr extends Component implements RockerTarget {
 
     // on action ongoing, can not break except idle or run
     if (this._state != Game.CharacterState.Idle &&
+      this._state != Game.CharacterState.BoxWalk &&
       this._state != Game.CharacterState.Run &&
+      this._state != Game.CharacterState.BoxIdle &&
       this._state != Game.CharacterState.Climb &&
       this.animState())
       return
 
     this.animation?.crossFade(StateAnim.get(state), 0)
     this._state = state
-    this.rigidBody.clearState()
-    this.rigidBody.type = RigidBody.Type.DYNAMIC
+    // this.rigidBody.clearState()
 
     switch (this._state) {
       case Game.CharacterState.Idle:
-        this.rigidBody.clearState()
-        this.rigidBody.sleep()
         this.rigidBody.setLinearVelocity(Vec3.ZERO)
         this.rigidBody.useGravity = true
         this.dstPos.set(Vec3.NEG_ONE)
@@ -482,8 +480,8 @@ export default class PlayerMgr extends Component implements RockerTarget {
         this.rigidBody.useGravity = true
         break
       case Game.CharacterState.Run:
-        this.rigidBody.clearForces()
-        this.rigidBody.useGravity = false
+        // this.rigidBody.clearForces()
+        this.rigidBody.useGravity = true
         break
       case Game.CharacterState.Lift:
       case Game.CharacterState.Throw:

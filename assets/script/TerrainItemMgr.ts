@@ -1,6 +1,6 @@
 import { Component, Event, MeshCollider, MeshRenderer, PhysicMaterial, RigidBody, tween, v3, Vec3, _decorator } from 'cc'
 import IslandMgr from './IslandMgr'
-import { terrainItemIdx } from './misc/Utils'
+import { isDebug, terrainItemIdx } from './misc/Utils'
 const { ccclass, property } = _decorator
 
 import IslandAssetMgr, { PhyEnvGroup } from './IslandAssetMgr'
@@ -11,10 +11,10 @@ const DropPos: Vec3 = v3()
 const PreviewScale = v3(0.8, 1, 0.8)
 
 const PhyMtl = new PhysicMaterial()
-PhyMtl.friction = 0.1
+PhyMtl.friction = 1
 PhyMtl.rollingFriction = 0
 PhyMtl.spinningFriction = 0
-PhyMtl.restitution = 0
+PhyMtl.restitution = 1
 
 
 export class PropEvent extends Event {
@@ -62,6 +62,9 @@ export default class TerrainItemMgr extends Component {
   onLoad() {
     this.meshRenderer = this.node.getComponentInChildren(MeshRenderer)
     this.rigidBody = this.getComponent(RigidBody)
+
+    let debugNode = this.node.getChildByName('Debug')
+    if (debugNode) debugNode.active = isDebug
   }
 
   update(dt: number) { }
@@ -75,22 +78,24 @@ export default class TerrainItemMgr extends Component {
       case Terrain.ModelType.Ground:
         this.node.position = v3(info.x, info.y + 1 - this.config.y, info.z)
 
-        this.addComponent(RigidBody)
-        this.rigidBody = this.getComponent(RigidBody)
-        this.rigidBody.type = RigidBody.Type.STATIC
-        this.rigidBody.group = PhyEnvGroup.Terrain
-        this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle)
+        if (this.rigidBody == null) {
+          this.addComponent(RigidBody)
 
-        this.node.addComponent(MeshCollider)
-        let collider = this.node.getComponent(MeshCollider)
-        collider.convex = true
-        collider.mesh = this.meshRenderer.mesh
-        collider.material = PhyMtl
+          this.rigidBody = this.getComponent(RigidBody)
+          this.rigidBody.type = RigidBody.Type.STATIC
+          this.rigidBody.group = PhyEnvGroup.Terrain
+          this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle)
+
+          this.node.addComponent(MeshCollider)
+          let collider = this.node.getComponent(MeshCollider)
+          collider.convex = true
+          collider.mesh = this.meshRenderer.mesh
+          collider.material = PhyMtl
+        }
+
         break
       case Terrain.ModelType.Prop: {
         this.node.position = v3(info.x, info.y, info.z)
-        // let collider = this.node.getComponent(Collider)
-        // collider.material = PhyMtl
         break
       }
     }
@@ -180,6 +185,4 @@ export default class TerrainItemMgr extends Component {
     info.prefab = null
     this.node.parent.getComponent(IslandMgr).updateMap(info)
   }
-
-
 }

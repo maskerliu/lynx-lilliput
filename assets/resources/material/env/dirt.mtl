@@ -60,7 +60,7 @@
         "r": 121,
         "g": 115,
         "b": 105,
-        "a": 112
+        "a": 255
       },
       "roughness": 1,
       "specularIntensity": 0,

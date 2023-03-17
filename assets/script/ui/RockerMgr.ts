@@ -91,7 +91,7 @@ export default class RockerMgr extends Component {
 
   private updateMove() {
     if (!this._isTouchStart || this.curMove.equals(this.tarMove)) return
-
+    
     this.curMove = this.tarMove
     this.curMove.x -= this.winSize.width / 2
     this.curMove.y -= this.winSize.height / 2

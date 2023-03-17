@@ -16,7 +16,7 @@ class UserService {
   private _profile: User.Profile
   private _profiles: Map<string, User.Profile> = new Map()
 
-  public static instance() {
+  public static get instance() {
     if (UserService._instance == null) {
       return new UserService()
     }
@@ -58,4 +58,4 @@ class UserService {
   }
 }
 
-export default UserService.instance()
+export default UserService.instance

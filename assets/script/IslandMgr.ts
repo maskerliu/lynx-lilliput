@@ -1,5 +1,5 @@
 import {
-  Camera, Component, Event, EventTouch, geometry, instantiate,
+  Camera, Component, Director, director, Event, EventTouch, geometry, instantiate,
   MeshRenderer,
   Node, PhysicsSystem, Quat, quat, Touch, tween, UITransform, v3, Vec3, _decorator
 } from 'cc'
@@ -61,9 +61,6 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   private hitPoint: Node
 
   @property(Node)
-  private block: Node
-
-  @property(Node)
   private skinBtn: Node
 
   @property(Node)
@@ -74,12 +71,11 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
 
   private hitMeshRenderer: MeshRenderer
 
-  private skinBtnPos = v3(0, -10, 0)
+  private skinBtnPos = v3(0, -2, 0)
   private mapInfo: Map<number, TerrainItemMgr> = new Map()
   private _senceInfo: Game.Island = null
   get senceInfo() { return this._senceInfo }
 
-  // private player: PlayerMgr
   private orginPlayerPos = v3()
   private v3_0 = v3()
   private v3_1 = v3()
@@ -122,25 +118,27 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   async loadMap(uid?: string) {
+    let timestamp = new Date().getTime()
     try {
       this._senceInfo = await GameApi.getUserIsland(uid)
 
-      if (this.senceInfo.map == null || this.senceInfo.map.length == 0) {
+      if (this._senceInfo.map == null || this.senceInfo.map.length == 0) {
         throw 'map is error'
       }
     } catch (err) {
       await this.genOriginTerrain()
-    }
+    } 
 
     for (let item of this.mapInfo.values()) {
       item.node.destroy()
     }
+    this.mapInfo.clear()
 
-    this.senceInfo.map.forEach(it => {
+    this._senceInfo.map.forEach(it => {
       this.addTerrainItem(it)
-
     })
 
+    console.log('terrain gen:', new Date().getTime() - timestamp)
     return this.senceInfo._id
   }
 
@@ -179,9 +177,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     this.hitPoint.active = isEdit
     this.waterLayer.active = isEdit
     this.skinBtn.active = isEdit
+    this.curLayer = 0
 
-    BattleService.player().onEditModel(isEdit)
-
+    let world: any = PhysicsSystem.instance.physicsWorld
     if (isEdit) {
       this.curLayer = 0
       this.curAction = TerrainEditActionType.Selected
@@ -192,16 +190,19 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       this.checkLayer.position.set(0, this.curLayer, 0)
       this.waterLayer.position.set(0, this.curLayer + 0.5, 0)
       this.hitNode.position.set(0, -2, 0)
+      this.skinBtn.position.set(0, -2, 0)
       this.hitPoint.position.set(0, -2, 0)
 
-      BattleService.player().node.position.set(this.orginPlayerPos.x, this.curLayer + 1, this.orginPlayerPos.z)
+      BattleService.player().onEditModel(isEdit, v3(this.orginPlayerPos.x, this.curLayer + 1, this.orginPlayerPos.z))
       for (let mgr of this.mapInfo.values()) {
         mgr.translucent(mgr.info.y > this.curLayer)
         mgr.preview()
       }
       this.registerEvent()
+      console.log(world)
     } else {
-      BattleService.player().node.position = this.orginPlayerPos
+
+      BattleService.player().onEditModel(isEdit, this.orginPlayerPos)
 
       for (let key of this.mapInfo.keys()) {
         this.mapInfo.get(key).apply()
@@ -210,6 +211,8 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       await GameApi.saveIsland(this.convert2RemoteData())
 
       this.unRegisterEvent()
+
+      console.log(world)
     }
   }
 
@@ -221,7 +224,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     }
 
     this.curPropName = name
-    let info: Game.MapItem = { x: 0, y: -10, z: 0, prefab: name, angle: 0 }
+    let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: name, angle: 0 }
     this.addTerrainItem(info)
   }
 
@@ -233,7 +236,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     this.curLayer = layer
     let pos = v3(this.checkLayer.position)
     pos.y = layer
-    this.checkLayer.position = pos
+    this.checkLayer.position.set(this.checkLayer.position.x, layer, this.checkLayer.position.z)
+    console.log(this.checkLayer)
+
 
     pos.y = this.curLayer + 0.1
     tween(this.waterLayer).to(0.5, { position: pos }, { easing: 'linear' }).start()
@@ -300,10 +305,10 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   private selectGirdItem(touch: Touch): TerrainEditActionType {
     this.camera.screenPointToRay(touch.getLocationX(), touch.getLocationY(), this._ray)
 
-    if (!PhysicsSystem.instance.raycast(this._ray, 0xffffffff, 500)) return TerrainEditActionType.None
-
-    // PhysicsSystem.instance.raycastResults.forEach(it => { console.log(it.collider.node.name) })
-
+    if (!PhysicsSystem.instance.raycast(this._ray, 0xffffffff, 500)) {
+      console.log('no hit')
+      return TerrainEditActionType.None
+    }
     let onSkin = -1, onSelected = -1
     for (let i = 0; i < PhysicsSystem.instance.raycastResults.length; i++) {
       let item = PhysicsSystem.instance.raycastResults[i]
@@ -359,7 +364,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       }
       case TerrainEditActionType.Add_Done: {
         if (this.curTerrainItemMgr == null) {
-          let info: Game.MapItem = { x: 0, y: -10, z: 0, prefab: this.curPropName, angle: 0 }
+          let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: this.curPropName, angle: 0 }
           this.addTerrainItem(info)
         }
 
@@ -423,17 +428,20 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   private addTerrainItem(info: Game.MapItem) {
+    let timestamp = new Date().getTime()
     if (info == null) return
     let prefab = IslandAssetMgr.getPrefab(info.prefab)
     let config = IslandAssetMgr.getModelConfig(info.prefab)
     if (prefab == null) return
 
+    // console.log(info.prefab)
     let node = instantiate(prefab)
     node.position = v3(info.x, info.y, info.z)
     Quat.rotateY(this.q_rotation, node.rotation, Math.PI / 180 * info.angle)
     node.rotation = this.q_rotation
     this.node.addChild(node)
-
+    // console.log('add child:', new Date().getTime() - timestamp)
+    timestamp = new Date().getTime()
     let mgr: TerrainItemMgr
 
     if (PropMgrs.has(config.name)) {
@@ -450,32 +458,8 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       }
     }
 
-    // switch (config.name) {
-    //   case 'lever':
-    //     node.addComponent(LeverMgr)
-    //     mgr = node.getComponent(LeverMgr)
-    //     break
-    //   case 'spikes':
-    //     node.addComponent(SpikesMgr)
-    //     mgr = node.getComponent(SpikesMgr)
-    //     break
-    //   case 'ladder':
-    //     node.addComponent(LadderMgr)
-    //     mgr = node.getComponent(LadderMgr)
-    //     break
-    //   case 'dice':
-    //     node.addComponent(DiceMgr)
-    //     mgr = node.getComponent(DiceMgr)
-    //     break
-    //   case 'crate':
-    //     node.addComponent(CrateMgr)
-    //     mgr = node.getComponent(CrateMgr)
-    //     break
-    //   default:
-    //     break
-    // }
-
     mgr.init(info)
+    // console.log('mgr init:', new Date().getTime() - timestamp)
 
     if (info.y >= 0) {
       node.active = true

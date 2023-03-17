@@ -23,8 +23,8 @@ export default class LadderMgr extends TerrainItemMgr {
   get ladderPos() {
     let pos = v3(this.node.position)
     let radius = this.info.angle * Math.PI / 180
-    pos.x += -Math.sin(radius) * 0.45
-    pos.z += -Math.cos(radius) * 0.45
+    pos.x += -Math.sin(radius) * 0.3
+    pos.z += -Math.cos(radius) * 0.3
 
     // this.point.position = pos
     return pos

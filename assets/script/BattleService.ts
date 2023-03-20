@@ -1,5 +1,5 @@
 
-import { Director, director, PhysicsSystem, v3, Vec3 } from 'cc'
+import { instantiate, Prefab, v3, Vec3 } from 'cc'
 import IslandMgr from './IslandMgr'
 import { Game, User } from './model'
 import PlayerMgr from './player/PlayerMgr'
@@ -26,8 +26,7 @@ let msgClient = new LocalMsgClient()
 
 const offset = 20
 
-class BattleService {
-
+class BattleService implements MessageHandler {
   private static _instance: BattleService
 
   private _curIsland: Game.Island = null
@@ -41,12 +40,16 @@ class BattleService {
   private timer: any = null
   private gameFrame: number
   private gameFrames: Map<string, Array<Game.Msg>> = new Map()
-  private profile: User.Profile
+  private myself: User.Profile
 
   private players: Map<string, PlayerMgr> = new Map()
   private islands: Map<string, IslandMgr> = new Map()
 
   private positions: Array<{ pos: Vec3, existed: boolean }> = []
+
+  private playerPrefab: Prefab = null
+  private islandPrefab: Prefab = null
+
 
   static instance() {
 
@@ -62,7 +65,7 @@ class BattleService {
     this.gameMsgs = new Array()
     this.timer = null
     this.gameFrame = 0
-    this.profile = null
+    this.myself = null
 
     this.positions.push({ pos: v3(offset, 0, offset), existed: false })
     this.positions.push({ pos: v3(offset, 0, -offset), existed: false })
@@ -83,7 +86,7 @@ class BattleService {
       this.player().state != Game.CharacterState.BoxWalk)
       return
 
-    msg.uid = this.profile.uid
+    msg.uid = this.myself.uid
     msg.seq = this.gameFrame++
     msg.state = msg.state ? msg.state : this.player().state
     msg.pos = this.v3ToXYZ(this.player()?.node.position)
@@ -92,17 +95,20 @@ class BattleService {
       msg.dir = this.v3ToXYZ(this.player()?.node.forward)
     }
 
+    // console.log(msg)
     this.gameMsgs.push(msg)
   }
 
-  async init() {
-    this.profile = await UserService.profile()
-    msgClient.init(this.profile.uid)
+  async init(playerPrefab: Prefab, islandPrefab: Prefab) {
+    this.playerPrefab = playerPrefab
+    this.islandPrefab = islandPrefab
+    this.myself = await UserService.profile()
+    msgClient.init(this.myself.uid)
   }
 
   player(uid?: string) {
     if (uid == null)
-      return this.players.get(this.profile.uid)
+      return this.players.get(this.myself.uid)
     else
       return this.players.get(uid)
   }
@@ -113,12 +119,12 @@ class BattleService {
   }
 
   isMyself(uid: string) {
-    return this.profile.uid == uid
+    return this.myself.uid == uid
   }
 
   canEdit(): boolean {
-    if (this._curIsland == null || this.profile == null) return false
-    return this._curIsland.owner == this.profile.uid
+    if (this._curIsland == null || this.myself == null) return false
+    return this._curIsland.owner == this.myself.uid
   }
 
   removePlayer(uid: string) {
@@ -128,7 +134,7 @@ class BattleService {
   }
 
   userIsland(uid?: string) {
-    if (uid == null) uid = this.profile.uid
+    if (uid == null) uid = this.myself.uid
 
     for (let island of this.islands.values()) {
       if (island.senceInfo?.owner == uid) {
@@ -169,13 +175,13 @@ class BattleService {
   }
 
 
-  async enter(player: PlayerMgr, island: IslandMgr, handler: MessageHandler) {
+  async enter(player: PlayerMgr, island: IslandMgr) {
     if (this._curIsland) {
       if (this._curIsland._id == island.senceInfo._id) { } else {
         this.stop()
       }
     }
-    await this.start(island.senceInfo, handler)
+    await this.start(island.senceInfo)
     player.node.removeFromParent()
     player.sleep()
 
@@ -191,10 +197,10 @@ class BattleService {
     this.stop()
   }
 
-  private async start(island: Game.Island, handler: MessageHandler) {
+  private async start(island: Game.Island) {
     this._curIsland = island
     this.gameFrame = 0
-    msgClient.msgHanlder = handler
+    msgClient.msgHanlder = this
     msgClient.subscribe(`_game/island/${this.curIsland._id}`)
 
     if (this.timer) clearInterval(this.timer)
@@ -213,6 +219,41 @@ class BattleService {
     this._isStart = true
   }
 
+  async onMessageArrived(msgs: Array<Game.Msg>) {
+    msgs.forEach(async (it) => {
+      if (this.myself.uid == it.uid) return
+
+      switch (it.type) {
+        case Game.MsgType.Enter:
+          let uid = this.myself.uid == it.uid ? 'shadow' : it.uid
+          let island = this.island(this.curIsland._id)
+          let mgr = this.player(uid)
+          let profile = await UserService.profile(it.uid)
+          profile.uid = uid
+          if (mgr == null) {
+            let player = instantiate(this.playerPrefab)
+            player.position = v3(0, 0, 0)
+            island.node.addChild(player)
+            mgr = player.getComponent(PlayerMgr)
+            mgr.init(profile)
+            this.addPlayer(uid, mgr)
+          }
+          island.node.addChild(mgr.node)
+          mgr.node.position = v3(it.pos.x, it.pos.y, it.pos.z)
+          break
+        case Game.MsgType.Cmd:
+          if (it.uid == this.myself.uid) it.uid = 'shadow'
+          this.pushGameFrame(it)
+          break
+        case Game.MsgType.Leave:
+          if (it.uid == this.myself.uid) it.uid = 'shadow'
+          this.removePlayer(it.uid)
+          break
+      }
+    })
+
+  }
+
   private stop() {
     msgClient.unsubscribe(`_game/island/${this.curIsland._id}`)
     this._curIsland = null
@@ -227,7 +268,7 @@ class BattleService {
   }
 
   popGameFrame(uid: string) {
-    if (uid != this.profile.uid && this.gameFrames.has(uid))
+    if (uid != this.myself.uid && this.gameFrames.has(uid))
       return this.gameFrames.get(uid).shift()
     return null
   }

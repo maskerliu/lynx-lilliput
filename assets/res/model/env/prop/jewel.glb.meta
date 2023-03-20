@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "4b9b9120-59fa-42a0-82b0-513eff609b70",
+  "files": [],
+  "subMetas": {
+    "62add": {
+      "importer": "gltf-mesh",
+      "uuid": "4b9b9120-59fa-42a0-82b0-513eff609b70@62add",
+      "displayName": "",
+      "id": "62add",
+      "name": "Mesh jewel.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e3cdc": {
+      "importer": "gltf-scene",
+      "uuid": "4b9b9120-59fa-42a0-82b0-513eff609b70@e3cdc",
+      "displayName": "",
+      "id": "e3cdc",
+      "name": "jewel.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "4b9b9120-59fa-42a0-82b0-513eff609b70@e3cdc",
+    "assetFinder": {
+      "meshes": [
+        "4b9b9120-59fa-42a0-82b0-513eff609b70@62add"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "8cc83691-3780-49d6-9da4-5b624a5e48a1"
+      ],
+      "scenes": [
+        "4b9b9120-59fa-42a0-82b0-513eff609b70@e3cdc"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

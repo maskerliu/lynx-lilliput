@@ -5,6 +5,10 @@ import { get, post } from './base.api'
 
 export namespace GameApi {
 
+  export function getConfig() {
+    
+  }
+
   export function getIsland(islandId: string) {
     return get<Game.Island>(RemoteAPI.Game.BasePath + RemoteAPI.Game.Island, { islandId })
   }

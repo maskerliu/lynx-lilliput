@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5c5e3b29-e6c6-47a1-b14b-f5b1104b0352",
+  "files": [],
+  "subMetas": {
+    "b0b78": {
+      "importer": "gltf-mesh",
+      "uuid": "5c5e3b29-e6c6-47a1-b14b-f5b1104b0352@b0b78",
+      "displayName": "",
+      "id": "b0b78",
+      "name": "Mesh blockMovingBlue.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "7b431": {
+      "importer": "gltf-scene",
+      "uuid": "5c5e3b29-e6c6-47a1-b14b-f5b1104b0352@7b431",
+      "displayName": "",
+      "id": "7b431",
+      "name": "blockMovingBlue.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "5c5e3b29-e6c6-47a1-b14b-f5b1104b0352@7b431",
+    "assetFinder": {
+      "meshes": [
+        "5c5e3b29-e6c6-47a1-b14b-f5b1104b0352@b0b78"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "23df7e49-27b3-4be7-8fa7-84c7e2d611ae",
+        "8cc83691-3780-49d6-9da4-5b624a5e48a1"
+      ],
+      "scenes": [
+        "5c5e3b29-e6c6-47a1-b14b-f5b1104b0352@7b431"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

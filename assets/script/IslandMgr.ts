@@ -127,16 +127,14 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       }
     } catch (err) {
       await this.genOriginTerrain()
-    } 
+    }
 
     for (let item of this.mapInfo.values()) {
       item.node.destroy()
     }
     this.mapInfo.clear()
 
-    this._senceInfo.map.forEach(it => {
-      this.addTerrainItem(it)
-    })
+    this._senceInfo.map.forEach(it => { this.addTerrainItem(it) })
 
     console.log('terrain gen:', new Date().getTime() - timestamp)
     return this.senceInfo._id
@@ -199,8 +197,10 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
         mgr.preview()
       }
       this.registerEvent()
-      console.log(world)
     } else {
+
+      this.curTerrainItemMgr?.node?.destroy()
+      this.curTerrainItemMgr = null
 
       BattleService.player().onEditModel(isEdit, this.orginPlayerPos)
 
@@ -219,13 +219,26 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   onEditItemChanged(name: string): void {
     if (this.curPropName == name) return
 
-    if (this.curTerrainItemMgr) {
-      this.curTerrainItemMgr.node.destroy()
+
+    try {
+
+      if (this.curTerrainItemMgr) {
+        if (this.curTerrainItemMgr.node == null) {
+          this.curTerrainItemMgr = null
+        } else {
+          this.curTerrainItemMgr.node.destroy()
+          this.curTerrainItemMgr = null
+        }
+      }
+
+      this.curPropName = name
+      let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: name, angle: 0 }
+      this.curTerrainItemMgr = this.addTerrainItem(info)
+    } catch (err) {
+      console.log(err)
+      console.log(name)
     }
 
-    this.curPropName = name
-    let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: name, angle: 0 }
-    this.addTerrainItem(info)
   }
 
   onEditActionChanged(type: TerrainEditActionType): void {
@@ -237,8 +250,6 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     let pos = v3(this.checkLayer.position)
     pos.y = layer
     this.checkLayer.position.set(this.checkLayer.position.x, layer, this.checkLayer.position.z)
-    console.log(this.checkLayer)
-
 
     pos.y = this.curLayer + 0.1
     tween(this.waterLayer).to(0.5, { position: pos }, { easing: 'linear' }).start()
@@ -365,7 +376,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       case TerrainEditActionType.Add_Done: {
         if (this.curTerrainItemMgr == null) {
           let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: this.curPropName, angle: 0 }
-          this.addTerrainItem(info)
+          this.curTerrainItemMgr = this.addTerrainItem(info)
         }
 
         let mgr = this.mapInfo.get(idx)
@@ -412,7 +423,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
           this.mapInfo.get(key).onSelected(idx == key)
         }
 
-        if (this.mapInfo.has(idx) && this.mapInfo.get(idx).hasSkin) {
+        if (this.mapInfo.has(idx) && this.mapInfo.get(idx).skinnable) {
           this.skinBtnPos.set(action.pos)
           this.skinBtnPos.y += 3
           this.skinBtn.position = this.skinBtnPos
@@ -464,10 +475,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     if (info.y >= 0) {
       node.active = true
       this.mapInfo.set(mgr.index, mgr)
-    }
-    else {
-      node.active = false
-      this.curTerrainItemMgr = mgr
+      return null
+    } else {
+      return mgr
     }
   }
 

@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "a70c11fd-dd44-48a0-9e07-c065093851c0",
+  "files": [],
+  "subMetas": {
+    "d742e": {
+      "importer": "gltf-mesh",
+      "uuid": "a70c11fd-dd44-48a0-9e07-c065093851c0@d742e",
+      "displayName": "",
+      "id": "d742e",
+      "name": "Mesh poles.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b035b": {
+      "importer": "gltf-scene",
+      "uuid": "a70c11fd-dd44-48a0-9e07-c065093851c0@b035b",
+      "displayName": "",
+      "id": "b035b",
+      "name": "poles.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "a70c11fd-dd44-48a0-9e07-c065093851c0@b035b",
+    "assetFinder": {
+      "meshes": [
+        "a70c11fd-dd44-48a0-9e07-c065093851c0@d742e"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7"
+      ],
+      "scenes": [
+        "a70c11fd-dd44-48a0-9e07-c065093851c0@b035b"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

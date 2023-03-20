@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5e59a1a0-33c9-45d1-8be7-5a686a7bab4f",
+  "files": [],
+  "subMetas": {
+    "679e7": {
+      "importer": "gltf-mesh",
+      "uuid": "5e59a1a0-33c9-45d1-8be7-5a686a7bab4f@679e7",
+      "displayName": "",
+      "id": "679e7",
+      "name": "Mesh spikeBlock.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "101a0": {
+      "importer": "gltf-scene",
+      "uuid": "5e59a1a0-33c9-45d1-8be7-5a686a7bab4f@101a0",
+      "displayName": "",
+      "id": "101a0",
+      "name": "spikeBlock.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "5e59a1a0-33c9-45d1-8be7-5a686a7bab4f@101a0",
+    "assetFinder": {
+      "meshes": [
+        "5e59a1a0-33c9-45d1-8be7-5a686a7bab4f@679e7"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9",
+        "8cc83691-3780-49d6-9da4-5b624a5e48a1"
+      ],
+      "scenes": [
+        "5e59a1a0-33c9-45d1-8be7-5a686a7bab4f@101a0"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

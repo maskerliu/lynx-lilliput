@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5ac69f15-0e7a-4393-a53e-eab65cc67b33",
+  "files": [],
+  "subMetas": {
+    "13cc3": {
+      "importer": "gltf-mesh",
+      "uuid": "5ac69f15-0e7a-4393-a53e-eab65cc67b33@13cc3",
+      "displayName": "",
+      "id": "13cc3",
+      "name": "Mesh blockSnowCurveHalf.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "9fcb4": {
+      "importer": "gltf-scene",
+      "uuid": "5ac69f15-0e7a-4393-a53e-eab65cc67b33@9fcb4",
+      "displayName": "",
+      "id": "9fcb4",
+      "name": "blockSnowCurveHalf.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "5ac69f15-0e7a-4393-a53e-eab65cc67b33@9fcb4",
+    "assetFinder": {
+      "meshes": [
+        "5ac69f15-0e7a-4393-a53e-eab65cc67b33@13cc3"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "0bd40d54-e097-46d9-a236-fadc1001ebdc"
+      ],
+      "scenes": [
+        "5ac69f15-0e7a-4393-a53e-eab65cc67b33@9fcb4"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "224fa5ed-6ef2-4ba5-bff7-cb2061cca05b",
+  "files": [],
+  "subMetas": {
+    "24325": {
+      "importer": "gltf-scene",
+      "uuid": "224fa5ed-6ef2-4ba5-bff7-cb2061cca05b@24325",
+      "displayName": "",
+      "id": "24325",
+      "name": "blockSlopeHalf.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "453b8": {
+      "importer": "gltf-mesh",
+      "uuid": "224fa5ed-6ef2-4ba5-bff7-cb2061cca05b@453b8",
+      "displayName": "",
+      "id": "453b8",
+      "name": "Mesh blockSlopeHalf.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "224fa5ed-6ef2-4ba5-bff7-cb2061cca05b@24325",
+    "assetFinder": {
+      "meshes": [
+        "224fa5ed-6ef2-4ba5-bff7-cb2061cca05b@453b8"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae"
+      ],
+      "scenes": [
+        "224fa5ed-6ef2-4ba5-bff7-cb2061cca05b@24325"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

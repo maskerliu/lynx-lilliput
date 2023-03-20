@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "f28ca690-c5e3-453d-8420-925e0931060c",
+  "files": [],
+  "subMetas": {
+    "6901c": {
+      "importer": "gltf-mesh",
+      "uuid": "f28ca690-c5e3-453d-8420-925e0931060c@6901c",
+      "displayName": "",
+      "id": "6901c",
+      "name": "Mesh treeSnow.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "99d6b": {
+      "importer": "gltf-scene",
+      "uuid": "f28ca690-c5e3-453d-8420-925e0931060c@99d6b",
+      "displayName": "",
+      "id": "99d6b",
+      "name": "treeSnow.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "f28ca690-c5e3-453d-8420-925e0931060c@99d6b",
+    "assetFinder": {
+      "meshes": [
+        "f28ca690-c5e3-453d-8420-925e0931060c@6901c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "0bd40d54-e097-46d9-a236-fadc1001ebdc"
+      ],
+      "scenes": [
+        "f28ca690-c5e3-453d-8420-925e0931060c@99d6b"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

@@ -52,6 +52,8 @@
       "scenes": [
         "15fd2eb8-c5d9-4ba5-8aff-49bef17f0011@72d7b"
       ]
-    }
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

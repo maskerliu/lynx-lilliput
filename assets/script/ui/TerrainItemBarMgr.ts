@@ -24,7 +24,7 @@ export default class TerrainItemBarMgr extends Component {
   private dstPos: Vec3
   private scrollView: ScrollView
   private selectedPropSnap: Sprite
-  private modelType: Terrain.ModelType = Terrain.ModelType.Ground
+  private modelType: Terrain.ModelType = Terrain.ModelType.BlockGrass
 
   editHandler: TerrainEditHandler
 
@@ -53,10 +53,23 @@ export default class TerrainItemBarMgr extends Component {
   }
 
   onTerrainGroupChanged(event: Toggle) {
-    if (event.node.name == 'Terrain') {
-      this.modelType = Terrain.ModelType.Ground
-    } else if (event.node.name == 'Props') {
-      this.modelType = Terrain.ModelType.Prop
+
+    switch (event.node.name) {
+      case 'Default':
+        this.modelType = Terrain.ModelType.BlockGrass
+        break
+      case 'Snow':
+        this.modelType = Terrain.ModelType.BlockSnow
+        break
+      case 'Dirt':
+        this.modelType = Terrain.ModelType.BlockDirt
+        break
+      case 'Skinnable':
+        this.modelType = Terrain.ModelType.Skinnable
+        break
+      case 'Props':
+        this.modelType = Terrain.ModelType.Prop
+        break
     }
 
     this.loadTrrainScrollBarItems()

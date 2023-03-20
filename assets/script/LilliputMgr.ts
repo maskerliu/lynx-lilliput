@@ -1,4 +1,4 @@
-import { Camera, Component, DirectionalLight, renderer, geometry, instantiate, Node, Prefab, quat, Quat, v3, _decorator, director, SkyboxInfo, AmbientInfo, physics, PhysicsSystem } from 'cc'
+import { AmbientInfo, Camera, Component, DirectionalLight, director, geometry, instantiate, Node, PhysicsSystem, Prefab, quat, Quat, SkyboxInfo, v3, _decorator } from 'cc'
 const { ccclass, property } = _decorator
 
 import BattleService from './BattleService'
@@ -123,19 +123,19 @@ export default class LilliputMgr extends Component implements MessageHandler {
       }
     }
 
-    // if (this.isDay) {
-    //   if (this.ambientInfo.skyIllum < 50000) {
-    //     this.ambientInfo.skyIllum += 100
-    //   } else {
-    //     this.isDay = false
-    //   }
-    // } else {
-    //   if (this.ambientInfo.skyIllum > 10000) {
-    //     this.ambientInfo.skyIllum -= 100
-    //   } else {
-    //     this.isDay = true
-    //   }
-    // }
+    if (this.isDay) {
+      if (this.ambientInfo.skyIllum < 50000) {
+        this.ambientInfo.skyIllum += 100
+      } else {
+        this.isDay = false
+      }
+    } else {
+      if (this.ambientInfo.skyIllum > 10000) {
+        this.ambientInfo.skyIllum -= 100
+      } else {
+        this.isDay = true
+      }
+    }
 
     if (this.skyboxInfo.rotationAngle >= 360) {
       this.skyboxInfo.rotationAngle = 0
@@ -159,19 +159,21 @@ export default class LilliputMgr extends Component implements MessageHandler {
   async onMessageArrived(msgs: Array<Game.Msg>) {
     let myself = await UserService.profile()
     msgs.forEach(async (it) => {
-      if (myself.uid == it.uid) return
+      // if (myself.uid == it.uid) return
       switch (it.type) {
         case Game.MsgType.Enter:
+          let uid = myself.uid == it.uid ? 'shadow' : it.uid
           let island = BattleService.island(BattleService.curIsland._id)
-          let mgr = BattleService.player(it.uid)
+          let mgr = BattleService.player(uid)
           let profile = await UserService.profile(it.uid)
+          profile.uid = uid
           if (mgr == null) {
             let player = instantiate(this.playerPrefab)
             player.position = v3(0, 0, 0)
             this.node.addChild(player)
             mgr = player.getComponent(PlayerMgr)
             mgr.init(profile)
-            BattleService.addPlayer(profile.uid, mgr)
+            BattleService.addPlayer(uid, mgr)
           }
           mgr.node.removeFromParent()
           island.node.addChild(mgr.node)
@@ -197,12 +199,12 @@ export default class LilliputMgr extends Component implements MessageHandler {
 
     UserService.accessToken = token
     let profile = await UserService.profile()
-    await BattleService.init()
+    await BattleService.init(this.playerPrefab, this.islandPrefab)
 
     let player = BattleService.player(profile.uid)
     if (player == null) {
       let player = instantiate(this.playerPrefab)
-      player.position = v3(0, 3, 0)
+      player.position = v3(1, 3, 1)
       this.node.addChild(player)
       player.getComponent(PlayerMgr).init(profile)
       let mgr = player.getComponent(PlayerMgr)
@@ -228,7 +230,7 @@ export default class LilliputMgr extends Component implements MessageHandler {
       timestamp = new Date().getTime()
       islandId = await mgr.loadMap(uid)
       console.log('island render:', new Date().getTime() - timestamp)
-     
+
       mgr.camera = this.mainCamera
       mgr.editReactArea = this.uiMgr.editReactArea
       BattleService.addIsland(islandId, mgr)
@@ -236,11 +238,9 @@ export default class LilliputMgr extends Component implements MessageHandler {
     }
 
     timestamp = new Date().getTime()
-    await BattleService.enter(BattleService.player(), island, this)
+    await BattleService.enter(BattleService.player(), island)
     console.log('player enter:', new Date().getTime() - timestamp)
     this.uiMgr.canEdit(BattleService.canEdit())
-    BattleService.sendGameMsg({ type: Game.MsgType.Enter, state: Game.CharacterState.Idle })
-
     console.log(PhysicsSystem.instance.physicsWorld)
   }
 

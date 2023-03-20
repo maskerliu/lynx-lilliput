@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "e9ae910d-2d20-41e1-be81-243a542840c0",
+  "files": [],
+  "subMetas": {
+    "f87b9": {
+      "importer": "gltf-mesh",
+      "uuid": "e9ae910d-2d20-41e1-be81-243a542840c0@f87b9",
+      "displayName": "",
+      "id": "f87b9",
+      "name": "Mesh blockSnowCliff.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "7bc23": {
+      "importer": "gltf-scene",
+      "uuid": "e9ae910d-2d20-41e1-be81-243a542840c0@7bc23",
+      "displayName": "",
+      "id": "7bc23",
+      "name": "blockSnowCliff.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "e9ae910d-2d20-41e1-be81-243a542840c0@7bc23",
+    "assetFinder": {
+      "meshes": [
+        "e9ae910d-2d20-41e1-be81-243a542840c0@f87b9"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "0bd40d54-e097-46d9-a236-fadc1001ebdc",
+        "79e7d134-6cde-4b3e-a862-6a7b45241436"
+      ],
+      "scenes": [
+        "e9ae910d-2d20-41e1-be81-243a542840c0@7bc23"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

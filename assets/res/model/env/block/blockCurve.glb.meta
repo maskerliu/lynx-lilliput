@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "8eb23944-d438-47a4-9fd8-d16739be4971",
+  "files": [],
+  "subMetas": {
+    "1ad37": {
+      "importer": "gltf-mesh",
+      "uuid": "8eb23944-d438-47a4-9fd8-d16739be4971@1ad37",
+      "displayName": "",
+      "id": "1ad37",
+      "name": "Mesh blockCurve.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fb004": {
+      "importer": "gltf-scene",
+      "uuid": "8eb23944-d438-47a4-9fd8-d16739be4971@fb004",
+      "displayName": "",
+      "id": "fb004",
+      "name": "blockCurve.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "8eb23944-d438-47a4-9fd8-d16739be4971@fb004",
+    "assetFinder": {
+      "meshes": [
+        "8eb23944-d438-47a4-9fd8-d16739be4971@1ad37"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae",
+        "79e7d134-6cde-4b3e-a862-6a7b45241436"
+      ],
+      "scenes": [
+        "8eb23944-d438-47a4-9fd8-d16739be4971@fb004"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

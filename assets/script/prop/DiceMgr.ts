@@ -17,22 +17,14 @@ export default class DiceMgr extends TerrainItemMgr {
 
     this.rigidBody = this.getComponent(RigidBody)
 
-    this.getComponent(SphereCollider)?.on('onTriggerEnter', this.onTriggerEnter, this)
-    this.getComponent(SphereCollider)?.on('onTriggerExit', this.onTriggerExit, this)
-
-    this.getComponent(BoxCollider).on('onCollisionEnter', this.onCollision, this)
-    this.getComponent(BoxCollider).on('onCollisionStay', this.onCollision, this)
-  }
-
-
-  onCollision() {
-    // this.rigidBody.clearState()
+    this.getComponent(SphereCollider).on('onTriggerEnter', this.onTriggerEnter, this)
+    this.getComponent(SphereCollider).on('onTriggerExit', this.onTriggerExit, this)
   }
 
   private onTriggerEnter(event: ITriggerEvent) {
-
     if (event.otherCollider.node.name == 'player') {
       // emit can climb event
+
       DiceMgr.ShowInteractEvent.propIndex = this.index
       this.node.dispatchEvent(DiceMgr.ShowInteractEvent)
 

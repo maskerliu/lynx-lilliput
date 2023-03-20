@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "d9bf9f98-8437-4c65-b899-b31ef3560663",
+  "files": [],
+  "subMetas": {
+    "31cfe": {
+      "importer": "gltf-mesh",
+      "uuid": "d9bf9f98-8437-4c65-b899-b31ef3560663@31cfe",
+      "displayName": "",
+      "id": "31cfe",
+      "name": "Mesh blockSnowSlope.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "56ea8": {
+      "importer": "gltf-scene",
+      "uuid": "d9bf9f98-8437-4c65-b899-b31ef3560663@56ea8",
+      "displayName": "",
+      "id": "56ea8",
+      "name": "blockSnowSlope.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "d9bf9f98-8437-4c65-b899-b31ef3560663@56ea8",
+    "assetFinder": {
+      "meshes": [
+        "d9bf9f98-8437-4c65-b899-b31ef3560663@31cfe"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "0bd40d54-e097-46d9-a236-fadc1001ebdc",
+        "79e7d134-6cde-4b3e-a862-6a7b45241436"
+      ],
+      "scenes": [
+        "d9bf9f98-8437-4c65-b899-b31ef3560663@56ea8"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

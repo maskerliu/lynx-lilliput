@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "337bb7da-4f61-40ea-ba53-0d1e343feac6",
+  "files": [],
+  "subMetas": {
+    "e0d52": {
+      "importer": "gltf-mesh",
+      "uuid": "337bb7da-4f61-40ea-ba53-0d1e343feac6@e0d52",
+      "displayName": "",
+      "id": "e0d52",
+      "name": "Mesh blockSlope.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a383e": {
+      "importer": "gltf-scene",
+      "uuid": "337bb7da-4f61-40ea-ba53-0d1e343feac6@a383e",
+      "displayName": "",
+      "id": "a383e",
+      "name": "blockSlope.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "337bb7da-4f61-40ea-ba53-0d1e343feac6@a383e",
+    "assetFinder": {
+      "meshes": [
+        "337bb7da-4f61-40ea-ba53-0d1e343feac6@e0d52"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae"
+      ],
+      "scenes": [
+        "337bb7da-4f61-40ea-ba53-0d1e343feac6@a383e"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

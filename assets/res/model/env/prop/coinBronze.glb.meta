@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "de7f34d4-d2ca-4018-9a0a-812a6ad4ef7f",
+  "files": [],
+  "subMetas": {
+    "7fd1d": {
+      "importer": "gltf-mesh",
+      "uuid": "de7f34d4-d2ca-4018-9a0a-812a6ad4ef7f@7fd1d",
+      "displayName": "",
+      "id": "7fd1d",
+      "name": "Mesh coinBronze.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d5c70": {
+      "importer": "gltf-scene",
+      "uuid": "de7f34d4-d2ca-4018-9a0a-812a6ad4ef7f@d5c70",
+      "displayName": "",
+      "id": "d5c70",
+      "name": "coinBronze.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "de7f34d4-d2ca-4018-9a0a-812a6ad4ef7f@d5c70",
+    "assetFinder": {
+      "meshes": [
+        "de7f34d4-d2ca-4018-9a0a-812a6ad4ef7f@7fd1d"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f"
+      ],
+      "scenes": [
+        "de7f34d4-d2ca-4018-9a0a-812a6ad4ef7f@d5c70"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

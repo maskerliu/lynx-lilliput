@@ -5,7 +5,7 @@ const MAP_X = 20
 const MAP_Z = 20
 const MAP_Y = 4
 
-export const isDebug = false
+export const isDebug = true
 
 export function v3ToXYZ(pos: Vec3) {
   return { x: pos.x, y: pos.y, z: pos.z }

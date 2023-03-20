@@ -2,12 +2,12 @@
   "ver": "2.3.2",
   "importer": "gltf",
   "imported": true,
-  "uuid": "87ef501e-6cee-448a-9082-5104b681d208",
+  "uuid": "f0b6d121-3c27-4552-9db9-25fc6b05f6b5",
   "files": [],
   "subMetas": {
     "5a0ac": {
       "importer": "gltf-mesh",
-      "uuid": "87ef501e-6cee-448a-9082-5104b681d208@5a0ac",
+      "uuid": "f0b6d121-3c27-4552-9db9-25fc6b05f6b5@5a0ac",
       "displayName": "",
       "id": "5a0ac",
       "name": "Mesh spikesHidden.mesh",
@@ -24,7 +24,7 @@
     },
     "a1d7e": {
       "importer": "gltf-scene",
-      "uuid": "87ef501e-6cee-448a-9082-5104b681d208@a1d7e",
+      "uuid": "f0b6d121-3c27-4552-9db9-25fc6b05f6b5@a1d7e",
       "displayName": "",
       "id": "a1d7e",
       "name": "spikesHidden.prefab",
@@ -41,10 +41,10 @@
   },
   "userData": {
     "imageMetas": [],
-    "redirect": "87ef501e-6cee-448a-9082-5104b681d208@a1d7e",
+    "redirect": "f0b6d121-3c27-4552-9db9-25fc6b05f6b5@a1d7e",
     "assetFinder": {
       "meshes": [
-        "87ef501e-6cee-448a-9082-5104b681d208@5a0ac"
+        "f0b6d121-3c27-4552-9db9-25fc6b05f6b5@5a0ac"
       ],
       "skeletons": [],
       "textures": [],
@@ -52,10 +52,10 @@
         "276239e4-9038-4193-b3a1-ef48d06e90c9"
       ],
       "scenes": [
-        "87ef501e-6cee-448a-9082-5104b681d208@a1d7e"
+        "f0b6d121-3c27-4552-9db9-25fc6b05f6b5@a1d7e"
       ]
     },
     "dumpMaterials": true,
-    "materialDumpDir": "db://assets/res/material"
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

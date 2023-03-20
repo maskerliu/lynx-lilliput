@@ -8,7 +8,10 @@ export namespace Terrain {
   }
 
   export enum ModelType {
-    Ground,
+    BlockGrass,
+    BlockSnow,
+    BlockDirt,
+    Skinnable,
     Prop,
   }
 

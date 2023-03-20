@@ -1,0 +1,63 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "c4299d31-3927-4a9d-912e-dacc0ae8d74a",
+  "files": [],
+  "subMetas": {
+    "8586c": {
+      "importer": "gltf-mesh",
+      "uuid": "c4299d31-3927-4a9d-912e-dacc0ae8d74a@8586c",
+      "displayName": "",
+      "id": "8586c",
+      "name": "Mesh fence.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "4379c": {
+      "importer": "gltf-scene",
+      "uuid": "c4299d31-3927-4a9d-912e-dacc0ae8d74a@4379c",
+      "displayName": "",
+      "id": "4379c",
+      "name": "fence.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "c4299d31-3927-4a9d-912e-dacc0ae8d74a@4379c",
+    "assetFinder": {
+      "meshes": [
+        "c4299d31-3927-4a9d-912e-dacc0ae8d74a@8586c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "23a71507-4e84-441d-aba9-ded10de24e9e"
+      ],
+      "scenes": [
+        "c4299d31-3927-4a9d-912e-dacc0ae8d74a@4379c"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

@@ -1,6 +1,10 @@
 import { Asset, Enum, Material, Prefab, resources, SpriteAtlas, SpriteFrame, Texture2D } from 'cc'
-import PropConfigs from './config/prop.config.json'
-import TerrainConfigs from './config/terrain.config.json'
+
+import TerrainGrassConfigs from './config/terrain.grass.config.json'
+import TerrainSnowConfigs from './config/terrain.snow.config.json'
+import TerrainDirtConfigs from './config/terrain.dirt.config.json'
+import TerrainSkinnableConfigs from './config/trrain.skinnable.config.json'
+import PropConfigs from './config/terrain.prop.config.json'
 import { Terrain } from './model'
 import TextureConfigs from './config/textures.config.json'
 export enum PhyEnvGroup {
@@ -30,7 +34,19 @@ class IslandAssetMgr {
 
   private constructor() {
     this.configs = new Map()
-    TerrainConfigs.forEach(it => {
+    TerrainGrassConfigs.forEach(it => {
+      this.configs.set(it.name, it)
+      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
+    })
+    TerrainDirtConfigs.forEach(it=>{
+      this.configs.set(it.name, it)
+      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
+    })
+    TerrainSnowConfigs.forEach(it => {
+      this.configs.set(it.name, it)
+      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
+    })
+    TerrainSkinnableConfigs.forEach(it => {
       this.configs.set(it.name, it)
       it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
@@ -57,7 +73,18 @@ class IslandAssetMgr {
   }
 
   getModelCongfigs(type: Terrain.ModelType) {
-    return type == Terrain.ModelType.Ground ? TerrainConfigs as Array<Terrain.ModelConfig> : PropConfigs as Array<Terrain.ModelConfig>
+    switch (type) {
+      case Terrain.ModelType.BlockGrass:
+        return TerrainGrassConfigs
+      case Terrain.ModelType.BlockSnow:
+        return TerrainSnowConfigs
+      case Terrain.ModelType.BlockDirt:
+        return TerrainDirtConfigs
+      case Terrain.ModelType.Skinnable:
+        return TerrainSkinnableConfigs
+      case Terrain.ModelType.Prop:
+        return PropConfigs
+    }
   }
 
   hasPrefab(name: string) { return this.prefabs.has(name) }
@@ -95,7 +122,25 @@ class IslandAssetMgr {
     })
 
     this.configs.forEach(it => {
-      resources.load(`prefab/terrain/${it.name}`, Prefab, (err, prefab) => {
+      let path = ''
+      switch (it.type) {
+        case Terrain.ModelType.BlockDirt:
+          path = 'dirt'
+          break
+        case Terrain.ModelType.BlockGrass:
+          path = 'default'
+          break
+        case Terrain.ModelType.BlockSnow:
+          path = 'snow'
+          break
+        case Terrain.ModelType.Skinnable:
+          path = 'skinnable'
+          break
+        case Terrain.ModelType.Prop:
+          path = 'prop'
+          break
+      }
+      resources.load(`prefab/terrain/${path}/${it.name}`, Prefab, (err, prefab) => {
         this.addPrefab(it.name, prefab)
       })
     })
@@ -110,7 +155,7 @@ class IslandAssetMgr {
       })
     })
 
-    
+
   }
 }
 

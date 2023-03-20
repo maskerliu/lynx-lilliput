@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "27a0961b-cc24-403b-88dc-adeb88287db8",
+  "files": [],
+  "subMetas": {
+    "aec7e": {
+      "importer": "gltf-mesh",
+      "uuid": "27a0961b-cc24-403b-88dc-adeb88287db8@aec7e",
+      "displayName": "",
+      "id": "aec7e",
+      "name": "Mesh bridge.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "c8923": {
+      "importer": "gltf-scene",
+      "uuid": "27a0961b-cc24-403b-88dc-adeb88287db8@c8923",
+      "displayName": "",
+      "id": "c8923",
+      "name": "bridge.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "27a0961b-cc24-403b-88dc-adeb88287db8@c8923",
+    "assetFinder": {
+      "meshes": [
+        "27a0961b-cc24-403b-88dc-adeb88287db8@aec7e"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "310b9028-2545-4f92-8bae-c979dedbf0d7",
+        "9563d094-6326-4c8f-8709-eaeeb0a9434f"
+      ],
+      "scenes": [
+        "27a0961b-cc24-403b-88dc-adeb88287db8@c8923"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

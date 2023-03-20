@@ -1,0 +1,63 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "97e9fc33-f3fe-4fea-b442-f9c6f996fa8f",
+  "files": [],
+  "subMetas": {
+    "c422f": {
+      "importer": "gltf-mesh",
+      "uuid": "97e9fc33-f3fe-4fea-b442-f9c6f996fa8f@c422f",
+      "displayName": "",
+      "id": "c422f",
+      "name": "Mesh lock.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "532b7": {
+      "importer": "gltf-scene",
+      "uuid": "97e9fc33-f3fe-4fea-b442-f9c6f996fa8f@532b7",
+      "displayName": "",
+      "id": "532b7",
+      "name": "lock.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "97e9fc33-f3fe-4fea-b442-f9c6f996fa8f@532b7",
+    "assetFinder": {
+      "meshes": [
+        "97e9fc33-f3fe-4fea-b442-f9c6f996fa8f@c422f"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "23df7e49-27b3-4be7-8fa7-84c7e2d611ae",
+        "276239e4-9038-4193-b3a1-ef48d06e90c9",
+        "310b9028-2545-4f92-8bae-c979dedbf0d7"
+      ],
+      "scenes": [
+        "97e9fc33-f3fe-4fea-b442-f9c6f996fa8f@532b7"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

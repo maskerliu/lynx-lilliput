@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "4763f888-ea92-45fb-9491-83a77b43c7ba",
+  "files": [],
+  "subMetas": {
+    "21e14": {
+      "importer": "gltf-mesh",
+      "uuid": "4763f888-ea92-45fb-9491-83a77b43c7ba@21e14",
+      "displayName": "",
+      "id": "21e14",
+      "name": "Mesh doorLargeOpen.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "92a4a": {
+      "importer": "gltf-scene",
+      "uuid": "4763f888-ea92-45fb-9491-83a77b43c7ba@92a4a",
+      "displayName": "",
+      "id": "92a4a",
+      "name": "doorLargeOpen.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "4763f888-ea92-45fb-9491-83a77b43c7ba@92a4a",
+    "assetFinder": {
+      "meshes": [
+        "4763f888-ea92-45fb-9491-83a77b43c7ba@21e14"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "276239e4-9038-4193-b3a1-ef48d06e90c9"
+      ],
+      "scenes": [
+        "4763f888-ea92-45fb-9491-83a77b43c7ba@92a4a"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

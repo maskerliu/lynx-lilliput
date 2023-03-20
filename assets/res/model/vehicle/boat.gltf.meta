@@ -49,17 +49,17 @@
       "skeletons": [],
       "textures": [],
       "materials": [
-        "5f4179c0-ff2b-4464-a3c9-0149149611f0",
-        "f7739a6d-dcbd-4da7-a309-9cd8f2507815",
-        "5f3a3e51-5e01-4e42-adcc-03c5cbc3bdc3",
-        "452d11af-5b10-4286-9308-4c1a984a1d6e",
-        "a3ba05d8-5786-4563-bba3-d5a117a16e80"
+        "202a8f00-4f44-4fd6-bdbc-6b7a0ba3f72f",
+        "94cdee00-d12d-42f9-9dfd-f4124b26ddee",
+        "474ac406-fef3-4677-9fb8-6f96254688b7",
+        "a41a1e20-f21b-4654-bf92-39631ee9870f",
+        "dabae0e8-6d8c-411d-a95e-eb86e07fd347"
       ],
       "scenes": [
         "0f6d1c12-9cc7-4a96-9fd1-e723ecabe93f@b4cf6"
       ]
     },
     "dumpMaterials": true,
-    "materialDumpDir": "db://assets/res/model/vehicle/Materials_boat"
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

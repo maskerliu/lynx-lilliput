@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "9be6e7ea-6b2d-481f-b768-b8aa413849b0",
+  "files": [],
+  "subMetas": {
+    "57bb7": {
+      "importer": "gltf-mesh",
+      "uuid": "9be6e7ea-6b2d-481f-b768-b8aa413849b0@57bb7",
+      "displayName": "",
+      "id": "57bb7",
+      "name": "Mesh blockCliff.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "5b5e8": {
+      "importer": "gltf-scene",
+      "uuid": "9be6e7ea-6b2d-481f-b768-b8aa413849b0@5b5e8",
+      "displayName": "",
+      "id": "5b5e8",
+      "name": "blockCliff.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "9be6e7ea-6b2d-481f-b768-b8aa413849b0@5b5e8",
+    "assetFinder": {
+      "meshes": [
+        "9be6e7ea-6b2d-481f-b768-b8aa413849b0@57bb7"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae",
+        "79e7d134-6cde-4b3e-a862-6a7b45241436"
+      ],
+      "scenes": [
+        "9be6e7ea-6b2d-481f-b768-b8aa413849b0@5b5e8"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

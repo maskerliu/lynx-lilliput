@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "6486c252-6dd4-41bc-9eeb-88b482301585",
+  "files": [],
+  "subMetas": {
+    "cdc2f": {
+      "importer": "gltf-mesh",
+      "uuid": "6486c252-6dd4-41bc-9eeb-88b482301585@cdc2f",
+      "displayName": "",
+      "id": "cdc2f",
+      "name": "Mesh blockHexagonLow.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f43f7": {
+      "importer": "gltf-scene",
+      "uuid": "6486c252-6dd4-41bc-9eeb-88b482301585@f43f7",
+      "displayName": "",
+      "id": "f43f7",
+      "name": "blockHexagonLow.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "6486c252-6dd4-41bc-9eeb-88b482301585@f43f7",
+    "assetFinder": {
+      "meshes": [
+        "6486c252-6dd4-41bc-9eeb-88b482301585@cdc2f"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "79e7d134-6cde-4b3e-a862-6a7b45241436",
+        "4bfec035-6617-4560-8c86-ab8bc0a490ae"
+      ],
+      "scenes": [
+        "6486c252-6dd4-41bc-9eeb-88b482301585@f43f7"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

@@ -1,10 +1,10 @@
 import {
-  Component, CylinderCollider, DirectionalLight, Event, ICollisionEvent, ITriggerEvent, lerp, Node, PhysicsSystem, Prefab, quat, Quat,
+  Component, CylinderCollider, DirectionalLight, Event, ICollisionEvent, ITriggerEvent, lerp, Node, Prefab, quat, Quat,
   RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Texture2D,
   tween, v2, v3, Vec2, Vec3, _decorator
 } from 'cc'
 import BattleService from '../BattleService'
-import IslandAssetMgr, { PhyEnvGroup } from '../IslandAssetMgr'
+import IslandAssetMgr from '../IslandAssetMgr'
 import { isDebug } from '../misc/Utils'
 import { Game, User } from '../model'
 import LadderMgr from '../prop/LadderMgr'
@@ -165,8 +165,10 @@ export default class PlayerMgr extends Component implements RockerTarget {
     switch (this._state) {
       case Game.CharacterState.JumpUp:
       case Game.CharacterState.Climb:
+      case Game.CharacterState.JumpLand:
         break
-
+      case Game.CharacterState.Idle:
+        if (event.otherCollider.node.name == 'airWall') break
       // case Game.CharacterState.Run:
       // if (event.otherCollider.node.getComponent(RigidBody) == this.fixedConstraint.connectedBody) {
       //   console.log('add dice contraint')
@@ -234,7 +236,7 @@ export default class PlayerMgr extends Component implements RockerTarget {
 
     if (this.dstPos.equals(this.node.position, 0.06)) {
       this.dstPos.set(Vec3.NEG_ONE)
-      this.state = Game.CharacterState.Idle
+      // this.state = Game.CharacterState.Idle
     }
 
     if (!this.dstPos.equals(Vec3.NEG_ONE)) {

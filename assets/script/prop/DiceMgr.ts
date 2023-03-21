@@ -22,9 +22,7 @@ export default class DiceMgr extends TerrainItemMgr {
   }
 
   private onTriggerEnter(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'player') {
-      // emit can climb event
-
+    if (event.otherCollider.node.name == 'myself') {
       DiceMgr.ShowInteractEvent.propIndex = this.index
       this.node.dispatchEvent(DiceMgr.ShowInteractEvent)
 
@@ -32,8 +30,7 @@ export default class DiceMgr extends TerrainItemMgr {
   }
 
   private onTriggerExit(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'player') {
-      // emit can climb event
+    if (event.otherCollider.node.name == 'myself') {
       this.node.dispatchEvent(DiceMgr.HideInteractEvent)
     }
   }

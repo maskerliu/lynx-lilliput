@@ -32,14 +32,13 @@ export default class LadderMgr extends TerrainItemMgr {
 
 
   private onTriggerEnter(event: ITriggerEvent) {
-    console.log(event.otherCollider.node.name, event.selfCollider.node.name)
-    if (event.otherCollider.node.name == 'player') {
+    if (event.otherCollider.node.name == 'myself') {
       this.node.dispatchEvent(LadderMgr.ShowInteractEvent)
     }
   }
 
   private onTriggerExit(event: ICollisionEvent) {
-    if (event.otherCollider.node.name == 'player') {
+    if (event.otherCollider.node.name == 'myself') {
       this.node.dispatchEvent(LadderMgr.HideInteractEvent)
     }
   }

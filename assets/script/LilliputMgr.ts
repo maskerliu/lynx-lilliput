@@ -1,4 +1,4 @@
-import { AmbientInfo, Camera, Component, DirectionalLight, director, geometry, instantiate, Node, PhysicsSystem, Prefab, quat, Quat, SkyboxInfo, v3, _decorator } from 'cc'
+import { AmbientInfo, Camera, Component, DirectionalLight, director, instantiate, Node, PhysicsSystem, Prefab, quat, Quat, SkyboxInfo, v3, _decorator } from 'cc'
 const { ccclass, property } = _decorator
 
 import BattleService from './BattleService'
@@ -6,15 +6,15 @@ import IslandAssetMgr from './IslandAssetMgr'
 import IslandMgr, { IslandEvent } from './IslandMgr'
 import { Game } from './model'
 import OrbitCamera from './OrbitCamera'
-import { MessageHandler } from './PahoMsgClient'
-import PlayerMgr, { PlayerEvent } from './player/PlayerMgr'
+import MyselfMgr from './player/MySelfMgr'
+import { PlayerEvent } from './player/PlayerMgr'
 import TerrainItemMgr, { PropEvent } from './TerrainItemMgr'
 import RockerMgr from './ui/RockerMgr'
 import UIMgr, { UIEvent } from './ui/UIMgr'
 import UserService from './UserService'
 
 @ccclass('LilliputMgr')
-export default class LilliputMgr extends Component implements MessageHandler {
+export default class LilliputMgr extends Component {
 
   @property(Camera)
   private mainCamera: Camera
@@ -33,6 +33,9 @@ export default class LilliputMgr extends Component implements MessageHandler {
 
   @property(Node)
   test: Node
+
+  @property(Prefab)
+  terrain: Prefab
 
   private skyboxInfo: SkyboxInfo
   private ambientInfo: AmbientInfo
@@ -53,12 +56,14 @@ export default class LilliputMgr extends Component implements MessageHandler {
 
   private worldTime: number = 0
   private isDay: boolean = false
+  private timecost: number = 0
 
   onLoad() {
     this.rockerMgr = this.getComponentInChildren(RockerMgr)
     this.orbitCamera = this.mainCamera.getComponent(OrbitCamera)
     this.uiMgr = this.getComponentInChildren(UIMgr)
     IslandAssetMgr.preload()
+    this.timecost = new Date().getTime()
 
     this.node.on(UIEvent.Type.TerrainEdit, () => { this.onEditTerrain() }, this)
     this.node.on(UIEvent.Type.UserInfoBind, (event: UIEvent) => { this.onUserInfoBind(event.customData) }, this)
@@ -88,14 +93,7 @@ export default class LilliputMgr extends Component implements MessageHandler {
   start() {
     this.updateEditMode(this.isEidtEnv, true)
 
-    let ray = new geometry.Ray()
-    geometry.Ray.fromPoints(ray, v3(0, 0, 0), v3(1, 0, 1))
-    console.log(ray)
-
-
     this.orbitCamera.target = this.bornNode
-
-
     this.bornNode.getChildByName('fences').children.forEach(it => {
       let angle = Quat.getAxisAngle(this.v3_0, it.rotation)
       angle = angle * 180 / Math.PI * this.v3_0.y
@@ -119,6 +117,7 @@ export default class LilliputMgr extends Component implements MessageHandler {
         this.once = false
         this.uiMgr.updateLoading(false)
 
+        console.log('resouce load cost:', new Date().getTime() - this.timecost)
         this.generateBornTerrain()
       }
     }
@@ -143,7 +142,7 @@ export default class LilliputMgr extends Component implements MessageHandler {
       this.skyboxInfo.rotationAngle += dt * 2
     }
 
-    if (this.frameCount < 10) {
+    if (this.frameCount < 2) {
       this.frameCount++
     } else {
       this.frameCount = 0
@@ -154,39 +153,6 @@ export default class LilliputMgr extends Component implements MessageHandler {
 
   onDestroy() {
     console.log('destroy')
-  }
-
-  async onMessageArrived(msgs: Array<Game.Msg>) {
-    let myself = await UserService.profile()
-    msgs.forEach(async (it) => {
-      // if (myself.uid == it.uid) return
-      switch (it.type) {
-        case Game.MsgType.Enter:
-          let uid = myself.uid == it.uid ? 'shadow' : it.uid
-          let island = BattleService.island(BattleService.curIsland._id)
-          let mgr = BattleService.player(uid)
-          let profile = await UserService.profile(it.uid)
-          profile.uid = uid
-          if (mgr == null) {
-            let player = instantiate(this.playerPrefab)
-            player.position = v3(0, 0, 0)
-            this.node.addChild(player)
-            mgr = player.getComponent(PlayerMgr)
-            mgr.init(profile)
-            BattleService.addPlayer(uid, mgr)
-          }
-          mgr.node.removeFromParent()
-          island.node.addChild(mgr.node)
-          mgr.node.position = v3(it.pos.x, it.pos.y, it.pos.z)
-          break
-        case Game.MsgType.Cmd:
-          BattleService.pushGameFrame(it)
-          break
-        case Game.MsgType.Leave:
-          BattleService.removePlayer(it.uid)
-          break
-      }
-    })
   }
 
   onEditTerrain() {
@@ -205,9 +171,11 @@ export default class LilliputMgr extends Component implements MessageHandler {
     if (player == null) {
       let player = instantiate(this.playerPrefab)
       player.position = v3(1, 3, 1)
+      player.name = 'myself'
       this.node.addChild(player)
-      player.getComponent(PlayerMgr).init(profile)
-      let mgr = player.getComponent(PlayerMgr)
+      player.addComponent(MyselfMgr)
+      player.getComponent(MyselfMgr).init(profile)
+      let mgr = player.getComponent(MyselfMgr)
       mgr.followCamera = this.orbitCamera.node
       mgr.followLight = this.mainLight
 
@@ -239,9 +207,7 @@ export default class LilliputMgr extends Component implements MessageHandler {
 
     timestamp = new Date().getTime()
     await BattleService.enter(BattleService.player(), island)
-    console.log('player enter:', new Date().getTime() - timestamp)
     this.uiMgr.canEdit(BattleService.canEdit())
-    console.log(PhysicsSystem.instance.physicsWorld)
   }
 
   async onLeaveIsland() {

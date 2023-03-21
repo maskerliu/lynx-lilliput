@@ -42,7 +42,7 @@ export default class LeverMgr extends TerrainItemMgr {
   private onTriggerEnter(event: ICollisionEvent) {
     console.log(event.otherCollider.node.name)
 
-    if (event.otherCollider.name == 'player') {
+    if (event.otherCollider.name == 'myself') {
       // emit can climb event
     }
   }
@@ -50,7 +50,7 @@ export default class LeverMgr extends TerrainItemMgr {
   private onTriggerExit(event: ICollisionEvent) {
     console.log(event.otherCollider.node.name)
 
-    if (event.otherCollider.name == 'player') {
+    if (event.otherCollider.name == 'myself') {
       // emit can climb event
     }
   }

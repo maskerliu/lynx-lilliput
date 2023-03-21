@@ -2,6 +2,7 @@
 import { instantiate, Prefab, v3, Vec3 } from 'cc'
 import IslandMgr from './IslandMgr'
 import { Game, User } from './model'
+import OtherMgr from './player/OtherMgr'
 import PlayerMgr from './player/PlayerMgr'
 import UserService from './UserService'
 
@@ -50,6 +51,8 @@ class BattleService implements MessageHandler {
   private playerPrefab: Prefab = null
   private islandPrefab: Prefab = null
 
+  private lstFrameState: Game.CharacterState = Game.CharacterState.None
+
 
   static instance() {
 
@@ -78,7 +81,9 @@ class BattleService implements MessageHandler {
   }
 
   sendGameMsg(msg: Game.Msg) {
-    if (this._curIsland == null || this.player() == null) return
+    if (this._curIsland == null || this.player() == null || !this.player().canSync) return
+    if (msg.type == Game.MsgType.Cmd && this.lstFrameState == Game.CharacterState.Idle && this.player().state == this.lstFrameState) return
+
     if (msg.state == null &&
       this.player().state != Game.CharacterState.Idle &&
       this.player().state != Game.CharacterState.Run &&
@@ -86,17 +91,21 @@ class BattleService implements MessageHandler {
       this.player().state != Game.CharacterState.BoxWalk)
       return
 
+
     msg.uid = this.myself.uid
     msg.seq = this.gameFrame++
     msg.state = msg.state ? msg.state : this.player().state
     msg.pos = this.v3ToXYZ(this.player()?.node.position)
 
+
+    if (msg.state == Game.CharacterState.Idle) { console.log(msg.pos) }
+
     if (this.player().state == Game.CharacterState.Idle) {
-      msg.dir = this.v3ToXYZ(this.player()?.node.forward)
+      msg.dir = this.v3ToXYZ(this.player()?.node.forward.negative())
     }
 
-    // console.log(msg)
     this.gameMsgs.push(msg)
+    this.lstFrameState = msg.state
   }
 
   async init(playerPrefab: Prefab, islandPrefab: Prefab) {
@@ -174,7 +183,6 @@ class BattleService implements MessageHandler {
     this.islands.delete(id)
   }
 
-
   async enter(player: PlayerMgr, island: IslandMgr) {
     if (this._curIsland) {
       if (this._curIsland._id == island.senceInfo._id) { } else {
@@ -183,10 +191,12 @@ class BattleService implements MessageHandler {
     }
     await this.start(island.senceInfo)
     player.node.removeFromParent()
-    player.sleep()
+    player.node.active = false
+    this.gameFrames.delete(player.userProfile.uid)
 
-    player.node.position.set(Vec3.UNIT_Y)
+    player.node.position.set(Vec3.ONE)
     island.node.addChild(player.node)
+    player.node.active = true
     player.resume()
     this.sendGameMsg({ type: Game.MsgType.Enter, state: Game.CharacterState.Idle })
   }
@@ -214,14 +224,14 @@ class BattleService implements MessageHandler {
       }
 
       this.gameMsgs.splice(0, this.gameMsgs.length)
-    }, 50)
+    }, 100)
 
     this._isStart = true
   }
 
   async onMessageArrived(msgs: Array<Game.Msg>) {
     msgs.forEach(async (it) => {
-      if (this.myself.uid == it.uid) return
+      // if (this.myself.uid == it.uid) return
 
       switch (it.type) {
         case Game.MsgType.Enter:
@@ -232,11 +242,15 @@ class BattleService implements MessageHandler {
           profile.uid = uid
           if (mgr == null) {
             let player = instantiate(this.playerPrefab)
-            player.position = v3(0, 0, 0)
+            player.addComponent(OtherMgr)
             island.node.addChild(player)
-            mgr = player.getComponent(PlayerMgr)
+            mgr = player.getComponent(OtherMgr)
             mgr.init(profile)
             this.addPlayer(uid, mgr)
+          } else {
+            mgr.node.removeFromParent()
+            mgr.node.position = Vec3.ZERO
+            mgr.resume()
           }
           island.node.addChild(mgr.node)
           mgr.node.position = v3(it.pos.x, it.pos.y, it.pos.z)

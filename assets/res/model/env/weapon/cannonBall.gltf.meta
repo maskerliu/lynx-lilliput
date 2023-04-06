@@ -1,0 +1,75 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6",
+  "files": [],
+  "subMetas": {
+    "c4527": {
+      "importer": "gltf-mesh",
+      "uuid": "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@c4527",
+      "displayName": "",
+      "id": "c4527",
+      "name": "cannonBall.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "861c9": {
+      "importer": "gltf-material",
+      "uuid": "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@861c9",
+      "displayName": "",
+      "id": "861c9",
+      "name": "iron.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "eec72": {
+      "importer": "gltf-scene",
+      "uuid": "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@eec72",
+      "displayName": "",
+      "id": "eec72",
+      "name": "cannonBall.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@eec72",
+    "assetFinder": {
+      "meshes": [
+        "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@c4527"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@861c9"
+      ],
+      "scenes": [
+        "6c3ffed5-0455-4f5b-b1aa-7890eaef88d6@eec72"
+      ]
+    }
+  }
+}

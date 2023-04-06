@@ -2,7 +2,7 @@
   "ver": "1.0.25",
   "importer": "image",
   "imported": true,
-  "uuid": "ce82e739-5ee6-4bf1-bb83-be52faf8af37",
+  "uuid": "ba401ffc-9144-4296-adf0-543751a24d97",
   "files": [
     ".json",
     ".png"
@@ -10,7 +10,7 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "ce82e739-5ee6-4bf1-bb83-be52faf8af37@6c48a",
+      "uuid": "ba401ffc-9144-4296-adf0-543751a24d97@6c48a",
       "displayName": "TerrainItemSnaps",
       "id": "6c48a",
       "name": "texture",
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "ce82e739-5ee6-4bf1-bb83-be52faf8af37",
+        "imageUuidOrDatabaseUri": "ba401ffc-9144-4296-adf0-543751a24d97",
         "visible": true
       },
       "ver": "1.0.22",
@@ -37,6 +37,6 @@
     "fixAlphaTransparencyArtifacts": true,
     "hasAlpha": true,
     "type": "texture",
-    "redirect": "ce82e739-5ee6-4bf1-bb83-be52faf8af37@6c48a"
+    "redirect": "ba401ffc-9144-4296-adf0-543751a24d97@6c48a"
   }
 }

@@ -1,4 +1,4 @@
-import { Component, instantiate, Node, Prefab, ScrollView, size, Sprite, SpriteAtlas, Toggle, ToggleContainer, tween, UITransform, v3, Vec3, view, _decorator } from 'cc'
+import { Component, instantiate, Node, Prefab, screen, ScrollView, size, Sprite, SpriteAtlas, Toggle, ToggleContainer, tween, UITransform, v3, Vec3, _decorator } from 'cc'
 const { ccclass, property } = _decorator
 
 import { TerrainEditHandler } from '../EnvEditHandler'
@@ -35,10 +35,11 @@ export default class TerrainItemBarMgr extends Component {
     this.scrollView = this.getComponent(ScrollView)
     this.selectedPropSnap = this.selectedProp.getComponentInChildren(Sprite)
     this.dstPos = v3(this.node.position)
+    this.dstPos.x = screen.windowSize.width / 2 - 30
   }
 
   show(show: boolean) {
-    this.dstPos.y = show ? 160 : -160
+    this.dstPos.y = show ? 280 : -160
     tween(this.node).to(0.5, { position: this.dstPos }, {
       easing: 'bounceOut', onComplete: () => {
         if (show) {
@@ -70,6 +71,8 @@ export default class TerrainItemBarMgr extends Component {
       case 'Props':
         this.modelType = Terrain.ModelType.Prop
         break
+      case 'Weapon':
+        this.modelType = Terrain.ModelType.Weapon
     }
 
     this.loadTrrainScrollBarItems()

@@ -5,6 +5,8 @@ import TerrainSnowConfigs from './config/terrain.snow.config.json'
 import TerrainDirtConfigs from './config/terrain.dirt.config.json'
 import TerrainSkinnableConfigs from './config/trrain.skinnable.config.json'
 import PropConfigs from './config/terrain.prop.config.json'
+import WeaponConfigs from './config/terrain.weapon.config.json'
+import MiscConfigs from './config/terrain.mis.config.json'
 import { Game, Terrain } from './model'
 import TextureConfigs from './config/textures.config.json'
 export enum PhyEnvGroup {
@@ -22,13 +24,13 @@ class IslandAssetMgr {
   private static _instance: IslandAssetMgr
 
   private configs: Map<string, Terrain.ModelConfig> = new Map()
-  private prefabs: Map<string, Node> = new Map()
   private materials: Map<string, Material> = new Map()
   private textures: Map<string, Asset> = new Map()
   private mtlNames: Set<string> = new Set()
 
   private terrain: Node
   private props: Node
+  private characters: Node
 
   static instance() {
     if (IslandAssetMgr._instance == null) return new IslandAssetMgr()
@@ -57,16 +59,21 @@ class IslandAssetMgr {
       this.configs.set(it.name, it)
       it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
+    WeaponConfigs.forEach(it => {
+      this.configs.set(it.name, it)
+    })
+
+    MiscConfigs.forEach(it => { this.configs.set(it.name, it) })
 
     IslandAssetMgr._instance = this
   }
 
   get resouceCount() {
-    return 2 + this.mtlNames.size * 2 //+ TextureConfigs.length
+    return 2 + this.mtlNames.size * 2 + TextureConfigs.length
   }
 
   get preloadCount() {
-    return this.materials.size + (this.props ? 1 : 0) + (this.terrain ? 1 : 0)//+ this.textures.size
+    return this.materials.size + (this.props ? 1 : 0) + (this.terrain ? 1 : 0) + this.textures.size
   }
 
   get isPreloaded() { return this.preloadCount >= this.resouceCount }
@@ -87,16 +94,19 @@ class IslandAssetMgr {
         return TerrainSkinnableConfigs
       case Terrain.ModelType.Prop:
         return PropConfigs
+      case Terrain.ModelType.Weapon:
+        return WeaponConfigs
     }
   }
 
-  hasPrefab(name: string) { return this.prefabs.has(name) }
+  hasPrefab(name: string) { return this.configs.has(name) }
   getPrefab(name: string) {
     if (!this.configs.has(name)) return null
 
     let config = this.configs.get(name)
     switch (config.type) {
       case Terrain.ModelType.Prop:
+      case Terrain.ModelType.Weapon:
         return this.props.getChildByName(name)
       case Terrain.ModelType.BlockDirt:
       case Terrain.ModelType.BlockGrass:
@@ -106,6 +116,8 @@ class IslandAssetMgr {
     }
   }
 
+  getCharacter(name: string) { return this.characters.getChildByName(name) }
+
   hasMaterial(name: string) { return this.materials.has(name) }
   addMaterial(name: string, material: Material) { this.materials.set(name, material) }
   getMaterial(name: string) { return this.materials.get(name) }
@@ -113,7 +125,6 @@ class IslandAssetMgr {
   hasTexture(name: string) { return this.textures.has(name) }
   getTexture(name: string) { return this.textures.get(name) }
   addTexture(name: string, asset: Asset) { this.textures.set(name, asset) }
-
 
   preload() {
     TextureConfigs.forEach(it => {
@@ -145,6 +156,11 @@ class IslandAssetMgr {
     resources.load('prefab/terrain/terrain', Prefab, (err, prefab) => {
       this.terrain = instantiate(prefab)
       console.log(`terrain cost:`, new Date().getTime() - timestamp)
+    })
+
+    resources.load('prefab/character/characters', Prefab, (err, prefab) => {
+      this.characters = instantiate(prefab)
+      console.log(`characters cost:`, new Date().getTime() - timestamp)
     })
 
     resources.loadDir('material/env', Material, (err, assets) => {

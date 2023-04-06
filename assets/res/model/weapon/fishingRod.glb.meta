@@ -1,0 +1,75 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29",
+  "files": [],
+  "subMetas": {
+    "76122": {
+      "importer": "gltf-material",
+      "uuid": "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@76122",
+      "displayName": "",
+      "id": "76122",
+      "name": "default.003.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b05e6": {
+      "importer": "gltf-mesh",
+      "uuid": "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@b05e6",
+      "displayName": "",
+      "id": "b05e6",
+      "name": "Mesh.003.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e9edf": {
+      "importer": "gltf-scene",
+      "uuid": "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@e9edf",
+      "displayName": "",
+      "id": "e9edf",
+      "name": "fishingRod.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@e9edf",
+    "assetFinder": {
+      "meshes": [
+        "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@b05e6"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@76122"
+      ],
+      "scenes": [
+        "7984ba41-4bb9-4c55-aff3-cf68e5eb5b29@e9edf"
+      ]
+    }
+  }
+}

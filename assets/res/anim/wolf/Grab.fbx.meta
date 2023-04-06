@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "a794559f-ad50-411a-ab04-8e719bd4ae4e",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "1ae6d": {
+      "importer": "gltf-animation",
+      "uuid": "a794559f-ad50-411a-ab04-8e719bd4ae4e@1ae6d",
+      "displayName": "",
+      "id": "1ae6d",
+      "name": "Grab.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 7.099999904632568
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "ce95f": {
+      "importer": "gltf-scene",
+      "uuid": "a794559f-ad50-411a-ab04-8e719bd4ae4e@ce95f",
+      "displayName": "",
+      "id": "ce95f",
+      "name": "Grab.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 7.099999904632568,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Grab",
+            "from": 0,
+            "to": 7.099999904632568,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "a794559f-ad50-411a-ab04-8e719bd4ae4e@ce95f",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "a794559f-ad50-411a-ab04-8e719bd4ae4e@ce95f"
+      ]
+    }
+  }
+}

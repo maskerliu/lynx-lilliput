@@ -1,4 +1,4 @@
-import { BoxCollider, ITriggerEvent, _decorator,physics, v3 } from 'cc'
+import { BoxCollider, ITriggerEvent, _decorator, physics, v3, tween } from 'cc'
 import { Game, Terrain } from '../model'
 const { ccclass, property } = _decorator
 
@@ -22,13 +22,14 @@ export default class MushroomMgr extends TerrainItemMgr {
   }
 
   private onTriggerEnter(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'player') {
+    if (event.otherCollider.node.name == 'myself') {
+      MushroomMgr.ShowInteractEvent.propIndex = this.index
       this.node.dispatchEvent(MushroomMgr.ShowInteractEvent)
     }
   }
 
   private onTriggerExit(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'player') {
+    if (event.otherCollider.node.name == 'myself') {
       this.node.dispatchEvent(MushroomMgr.HideInteractEvent)
     }
   }
@@ -36,10 +37,7 @@ export default class MushroomMgr extends TerrainItemMgr {
   interact(action: Game.CharacterState) {
     switch (action) {
       case Game.CharacterState.Grab:
-        setTimeout(() => {
-          this.rigidBody.applyImpulse(v3(0, 80, 0))
-          this.rigidBody.applyTorque(v3(120, 80, 163))
-        }, 400)
+        tween(this.node).to(0.5, { scale: v3(0.5, 0.5, 0.5) }, { easing: 'backInOut' }).start()
         break
     }
   }

@@ -10,12 +10,52 @@
     "type": 0
   },
   {
+    "name": "humanFemaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "humanMaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
     "name": "skaterFemaleA",
     "path": "texture/character/skin/",
     "type": 0
   },
   {
     "name": "skaterMaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "survivorFemaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "survivorMaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "zombieA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "zombieB",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "zombieFemaleA",
+    "path": "texture/character/skin/",
+    "type": 0
+  },
+  {
+    "name": "zombieMaleA",
     "path": "texture/character/skin/",
     "type": 0
   }

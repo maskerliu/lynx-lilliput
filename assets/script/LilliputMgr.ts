@@ -1,4 +1,4 @@
-import { AmbientInfo, Camera, Component, DirectionalLight, director, instantiate, Node, PhysicsSystem, Prefab, quat, Quat, SkyboxInfo, v3, _decorator } from 'cc'
+import { AmbientInfo, Camera, Component, DirectionalLight, director, instantiate, Node, PhysicsSystem, Prefab, quat, Quat, SkyboxInfo, v3, Vec2, Vec3, view, _decorator } from 'cc'
 const { ccclass, property } = _decorator
 
 import BattleService from './BattleService'
@@ -12,6 +12,7 @@ import TerrainItemMgr, { PropEvent } from './TerrainItemMgr'
 import RockerMgr from './ui/RockerMgr'
 import UIMgr, { UIEvent } from './ui/UIMgr'
 import UserService from './UserService'
+
 
 @ccclass('LilliputMgr')
 export default class LilliputMgr extends Component {
@@ -34,8 +35,6 @@ export default class LilliputMgr extends Component {
   @property(Node)
   test: Node
 
-  @property(Prefab)
-  terrain: Prefab
 
   private skyboxInfo: SkyboxInfo
   private ambientInfo: AmbientInfo
@@ -46,9 +45,6 @@ export default class LilliputMgr extends Component {
   private uiMgr: UIMgr
   private once: boolean = true
   private frameCount = 0
-
-  private curInteractProp: number = -1
-
   private bornTerrainInfos: Array<Game.MapItem> = []
 
   private q_rotation = quat()
@@ -70,19 +66,12 @@ export default class LilliputMgr extends Component {
     this.node.on(UIEvent.Type.EnterIsland, (event: UIEvent) => { this.onEnterIsland(event.customData) }, this)
     this.node.on(IslandEvent.Type.SkinMenu, (event: IslandEvent) => { this.uiMgr.showSkinMenu(event.customData) }, this)
     this.node.on(PropEvent.Type.ShowInteraction, (event: PropEvent) => {
-      this.curInteractProp = event.propIndex
       this.uiMgr.updateActions(event.interactions)
     }, this)
 
     this.node.on(PlayerEvent.Type.OnAction, (event: PlayerEvent) => {
-      BattleService.island()?.handleInteract(this.curInteractProp, event.action)
-
-      let msg: Game.Msg = { type: Game.MsgType.Cmd, state: event.action }
-      if (msg.state == Game.CharacterState.Run) {
-        msg.pos = { x: 1, y: 1, z: 2 }
-      }
+      let msg: Game.PlayerMsg = { cmd: Game.PlayerMsgType.Sync, state: event.action }
       BattleService.player().onAction(msg)
-      BattleService.sendGameMsg(msg)
     }, this)
 
     this.ambientInfo = director.getScene().globals.ambient
@@ -109,7 +98,7 @@ export default class LilliputMgr extends Component {
     })
   }
 
-  update(dt: number) {
+  async update(dt: number) {
     if (!IslandAssetMgr.isPreloaded) {
       this.uiMgr.updateLoading(true, `资源（${IslandAssetMgr.preloadCount}/${IslandAssetMgr.resouceCount}）加载中。。。`)
     } else {
@@ -119,6 +108,7 @@ export default class LilliputMgr extends Component {
 
         console.log('resouce load cost:', new Date().getTime() - this.timecost)
         this.generateBornTerrain()
+        await this.preload()
       }
     }
 
@@ -142,12 +132,12 @@ export default class LilliputMgr extends Component {
       this.skyboxInfo.rotationAngle += dt * 2
     }
 
-    if (this.frameCount < 2) {
+    if (this.frameCount < 4) {
       this.frameCount++
     } else {
       this.frameCount = 0
       if (BattleService.started)
-        BattleService.sendGameMsg({ type: Game.MsgType.Cmd })
+        BattleService.sendPlayerMsg({ cmd: Game.PlayerMsgType.Sync })
     }
   }
 
@@ -233,15 +223,45 @@ export default class LilliputMgr extends Component {
     if (isEdit) {
       let myIsland = BattleService.userIsland()
       if (myIsland == null) return
-
-      let rotation = v3(this.orbitCamera.targetRotation)
-      rotation.x = 30
-      this.orbitCamera.updateTargetRotation(rotation)
+      
       this.orbitCamera.reactArea = this.uiMgr.editCameraReactArea
       this.uiMgr.editHandler = myIsland
     } else {
       this.orbitCamera.reactArea = this.uiMgr.cameraReactArea
     }
     this.uiMgr.updateEditMode(isEdit)
+  }
+
+
+  private async onReload() {
+    BattleService.removeAllIsland()
+
+    await this.preload()
+  }
+
+  private async preload() {
+    let uids = [
+      // '8f4e7438-4285-4268-910c-3898fb8d6d96',
+      'f947ed55-7e34-4a82-a9db-8a9cf6f2e608',
+      // '5ee13634-340c-4741-b075-7fe169e38a13',
+      // '4e6434d1-5910-46c3-879d-733c33ded257',
+      // 'b09272b8-d6a4-438b-96c3-df50ac206706'
+    ]
+
+    for (let uid of uids) {
+      let island = BattleService.userIsland(uid)
+      if (island == null) {
+        let node = instantiate(this.islandPrefab)
+
+        node.position = BattleService.randomPos()
+        this.node.addChild(node)
+        let mgr = node.getComponent(IslandMgr)
+        let islandId = await mgr.loadMap(uid)
+
+        mgr.camera = this.mainCamera
+        mgr.editReactArea = this.uiMgr.editReactArea
+        BattleService.addIsland(islandId, mgr)
+      }
+    }
   }
 }

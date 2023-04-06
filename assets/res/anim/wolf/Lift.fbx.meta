@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "f801f44f-f2ad-4ef1-81bf-00a33f6fdaf4",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "43757": {
+      "importer": "gltf-animation",
+      "uuid": "f801f44f-f2ad-4ef1-81bf-00a33f6fdaf4@43757",
+      "displayName": "",
+      "id": "43757",
+      "name": "Lift.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 7.199999809265137
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "d1716": {
+      "importer": "gltf-scene",
+      "uuid": "f801f44f-f2ad-4ef1-81bf-00a33f6fdaf4@d1716",
+      "displayName": "",
+      "id": "d1716",
+      "name": "Lift.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 7.199999809265137,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Lift",
+            "from": 0,
+            "to": 7.199999809265137,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "f801f44f-f2ad-4ef1-81bf-00a33f6fdaf4@d1716",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "f801f44f-f2ad-4ef1-81bf-00a33f6fdaf4@d1716"
+      ]
+    }
+  }
+}

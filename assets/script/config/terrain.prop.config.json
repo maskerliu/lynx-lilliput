@@ -257,6 +257,15 @@
     ]
   },
   {
+    "name": "fishpond",
+    "x": 2,
+    "y": 1,
+    "z": 2,
+    "anchor": 0,
+    "type": 4,
+    "material": []
+  },
+  {
     "name": "heart",
     "x": 0.42,
     "y": 0.4,

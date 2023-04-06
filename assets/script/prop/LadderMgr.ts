@@ -12,6 +12,7 @@ export default class LadderMgr extends TerrainItemMgr {
 
   private static v3_rotation = v3()
   private point: Node
+  
   onLoad() {
     super.onLoad()
     this.getComponent(BoxCollider).on('onTriggerEnter', this.onTriggerEnter, this)

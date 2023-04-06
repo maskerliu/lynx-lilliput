@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "Glass",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,17 +9,39 @@
   },
   "_techIdx": 0,
   "_defines": [
+    {
+      "USE_INSTANCING": true
+    },
+    {},
     {}
   ],
   "_states": [
     {
       "rasterizerState": {},
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
@@ -30,15 +52,9 @@
         "y": 0.901961,
         "z": 0.94902
       },
-      "metallic": 0,
-      "roughness": 1,
-      "emissive": {
-        "__type__": "cc.Color",
-        "r": 0,
-        "g": 0,
-        "b": 0,
-        "a": 255
-      }
-    }
+      "roughness": 1
+    },
+    {},
+    {}
   ]
 }

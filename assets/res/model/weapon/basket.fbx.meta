@@ -1,0 +1,80 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "14d864b6-7524-41f1-9ca4-8c39ec0df7be",
+  "files": [],
+  "subMetas": {
+    "99380": {
+      "importer": "gltf-material",
+      "uuid": "14d864b6-7524-41f1-9ca4-8c39ec0df7be@99380",
+      "displayName": "",
+      "id": "99380",
+      "name": "Material.001.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fd4a2": {
+      "importer": "gltf-mesh",
+      "uuid": "14d864b6-7524-41f1-9ca4-8c39ec0df7be@fd4a2",
+      "displayName": "",
+      "id": "fd4a2",
+      "name": "Cube.004.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "6e15b": {
+      "importer": "gltf-scene",
+      "uuid": "14d864b6-7524-41f1-9ca4-8c39ec0df7be@6e15b",
+      "displayName": "",
+      "id": "6e15b",
+      "name": "basket.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "redirect": "14d864b6-7524-41f1-9ca4-8c39ec0df7be@6e15b",
+    "assetFinder": {
+      "meshes": [
+        "14d864b6-7524-41f1-9ca4-8c39ec0df7be@fd4a2"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "14d864b6-7524-41f1-9ca4-8c39ec0df7be@99380"
+      ],
+      "scenes": [
+        "14d864b6-7524-41f1-9ca4-8c39ec0df7be@6e15b"
+      ]
+    },
+    "dumpMaterials": false,
+    "materialDumpDir": "db://assets/res/model/weapon/Materials_basket"
+  }
+}

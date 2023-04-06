@@ -1,6 +1,7 @@
 import {
-  Button, Component, EditBox, Event, Label, Node, Toggle, ToggleContainer, tween, v3, view, Widget, _decorator
+  Button, Color, Component, EditBox, Event, Label, Node, Sprite, Toggle, ToggleContainer, tween, v3, view, Widget, _decorator, director
 } from 'cc'
+import BattleService from '../BattleService'
 import { TerrainEditActionType, TerrainEditHandler } from '../EnvEditHandler'
 import { Game, Terrain } from '../model'
 import { PlayerEvent } from '../player/PlayerMgr'
@@ -47,6 +48,9 @@ export default class UIMgr extends Component {
   actions: Node
 
   @property(Node)
+  profileBtn: Node
+
+  @property(Node)
   terrainEditBtn: Node
 
   @property(Node)
@@ -79,6 +83,12 @@ export default class UIMgr extends Component {
   @property(Node)
   loading: Node
 
+  @property(Node)
+  network: Node
+
+  private networkSprite: Sprite
+  private networkLabel: Label
+
   private actionsMgr: ActionsMgr
   private _editHandler: TerrainEditHandler
 
@@ -100,6 +110,9 @@ export default class UIMgr extends Component {
   onLoad() {
     this.actionsMgr = this.actions.getComponent(ActionsMgr)
 
+    this.networkSprite = this.network.getComponent(Sprite)
+    this.networkLabel = this.network.getComponentInChildren(Label)
+
     let wid = this.node.getComponent(Widget)
     wid.top = -view.getViewportRect().y
     wid.bottom = -view.getViewportRect().y
@@ -107,6 +120,17 @@ export default class UIMgr extends Component {
     wid.right = -view.getViewportRect().x
 
     // screen.requestFullScreen()
+  }
+
+  update(dt: number) {
+    if (BattleService.delay < 50) {
+      this.networkSprite.color = this.networkLabel.color = Color.GREEN
+    } else if (BattleService.delay < 70) {
+      this.networkSprite.color = this.networkLabel.color = Color.YELLOW
+    } else {
+      this.networkSprite.color = this.networkLabel.color = Color.RED
+    }
+    this.networkLabel.string = `${BattleService.delay}ms`
   }
 
   onEdit() {
@@ -124,6 +148,11 @@ export default class UIMgr extends Component {
   onAction(event: Event, data: string) {
     let action = Number.parseInt(data) as Game.CharacterState
     this.node.dispatchEvent(new PlayerEvent(PlayerEvent.Type.OnAction, action))
+  }
+
+  onProfile() {
+    director.loadScene('profile')
+    BattleService.leave()
   }
 
   canEdit(edit: boolean) {
@@ -180,6 +209,7 @@ export default class UIMgr extends Component {
   updateEditMode(isEdit: boolean) {
     this.terrainEditBtn.getComponent(Button)
 
+    this.profileBtn.active = !isEdit
     this.userInfoPanel.active = !isEdit
     this.actions.active = !isEdit
     this.cameraReactArea.active = !isEdit

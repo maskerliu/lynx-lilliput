@@ -13,6 +13,7 @@ export namespace Terrain {
     BlockDirt,
     Skinnable,
     Prop,
+    Weapon
   }
 
   export enum ModelInteraction {
@@ -25,6 +26,7 @@ export namespace Terrain {
     Climb, // 可攀爬
     Sit, // 可坐下
     Attack, // 可攻击
+    Fire, // 开火
   }
 
   export interface ModelConfig {

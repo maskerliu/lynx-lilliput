@@ -12,7 +12,6 @@ import UserService from './UserService'
 interface MessageHandler {
   onMessageArrived(msg: Array<Game.Msg>): void
 }
-
 class LocalMsgClient {
   isLocal: boolean = true
   msgHanlder: MessageHandler
@@ -22,7 +21,6 @@ class LocalMsgClient {
   unsubscribe(topic: string) { }
   send(topic: string, messages: string) { }
 }
-
 let msgClient = new LocalMsgClient()
 
 const offset = 20
@@ -37,10 +35,11 @@ class BattleService implements MessageHandler {
   private _isStart: boolean = false
   get started() { return this._isStart }
 
-  private gameMsgs: Array<Game.Msg>
+  private gameMsgs: Array<Game.PlayerMsg>
   private timer: any = null
   private gameFrame: number
-  private gameFrames: Map<string, Array<Game.Msg>> = new Map()
+  private playerRemoteFrames: Map<string, Array<Game.PlayerMsg>> = new Map()
+  private playerLocalFrames: Map<string, Array<Game.PlayerMsg>> = new Map()
   private myself: User.Profile
 
   private players: Map<string, PlayerMgr> = new Map()
@@ -53,6 +52,8 @@ class BattleService implements MessageHandler {
 
   private lstFrameState: Game.CharacterState = Game.CharacterState.None
 
+  private _delay: number = 0
+  get delay() { return this._delay }
 
   static instance() {
 
@@ -80,9 +81,10 @@ class BattleService implements MessageHandler {
     this.positions.push({ pos: v3(-offset, 0, 0), existed: false })
   }
 
-  sendGameMsg(msg: Game.Msg) {
-    if (this._curIsland == null || this.player() == null || !this.player().canSync) return
-    if (msg.type == Game.MsgType.Cmd && this.lstFrameState == Game.CharacterState.Idle && this.player().state == this.lstFrameState) return
+  sendPlayerMsg(msg: Game.PlayerMsg) {
+    msg.type = Game.MsgType.Player
+    if (this._curIsland == null || this.island().isEdit || this.player() == null || !this.player().canSync) return
+    if (msg.cmd == Game.PlayerMsgType.Sync && this.lstFrameState == Game.CharacterState.Idle && this.player().state == this.lstFrameState) return
 
     if (msg.state == null &&
       this.player().state != Game.CharacterState.Idle &&
@@ -98,10 +100,8 @@ class BattleService implements MessageHandler {
     msg.pos = this.v3ToXYZ(this.player()?.node.position)
 
 
-    if (msg.state == Game.CharacterState.Idle) { console.log(msg.pos) }
-
     if (this.player().state == Game.CharacterState.Idle) {
-      msg.dir = this.v3ToXYZ(this.player()?.node.forward.negative())
+      msg.dir = this.v3ToXYZ(this.player()?.node.forward)
     }
 
     this.gameMsgs.push(msg)
@@ -116,15 +116,20 @@ class BattleService implements MessageHandler {
   }
 
   player(uid?: string) {
-    if (uid == null)
-      return this.players.get(this.myself.uid)
-    else
-      return this.players.get(uid)
+    try {
+      if (uid == null)
+        return this.players.get(this.myself.uid)
+      else
+        return this.players.get(uid)
+    } catch (err) {
+      return null
+    }
+
   }
 
   addPlayer(uid: string, mgr: PlayerMgr) {
     this.players.set(uid, mgr)
-    this.gameFrames.delete(uid)
+    this.playerRemoteFrames.delete(uid)
   }
 
   isMyself(uid: string) {
@@ -139,7 +144,7 @@ class BattleService implements MessageHandler {
   removePlayer(uid: string) {
     this.players.get(uid)?.node.destroy()
     this.players.delete(uid)
-    this.gameFrames.delete(uid)
+    this.playerRemoteFrames.delete(uid)
   }
 
   userIsland(uid?: string) {
@@ -154,9 +159,11 @@ class BattleService implements MessageHandler {
   }
 
   randomPos() {
+    // return v3(0, 0, 0)
     let ps = this.positions.filter(it => { return !it.existed })
     let idx = Math.ceil(Math.random() * (ps.length - 1))
     return ps[idx].pos
+
   }
 
   island(id?: string) {
@@ -172,7 +179,6 @@ class BattleService implements MessageHandler {
     let idx = this.positions.findIndex(it => {
       return mgr.node.position.equals(it.pos)
     })
-
     if (idx != -1) {
       this.positions[idx].existed = true
     }
@@ -181,6 +187,15 @@ class BattleService implements MessageHandler {
   removeIsland(id: string) {
     this.islands.get(id)?.node.destroy()
     this.islands.delete(id)
+
+  }
+
+  removeAllIsland() {
+    this.positions.forEach(it => { it.existed = false })
+    for (let key of this.islands.keys()) {
+      this.islands.get(key)?.node.destroy()
+      this.islands.delete(key)
+    }
   }
 
   async enter(player: PlayerMgr, island: IslandMgr) {
@@ -192,20 +207,22 @@ class BattleService implements MessageHandler {
     await this.start(island.senceInfo)
     player.node.removeFromParent()
     player.node.active = false
-    this.gameFrames.delete(player.userProfile.uid)
+    this.playerRemoteFrames.delete(player.userProfile.uid)
 
     player.node.position.set(Vec3.ONE)
     island.node.addChild(player.node)
     player.node.active = true
     player.resume()
-    this.sendGameMsg({ type: Game.MsgType.Enter, state: Game.CharacterState.Idle })
+    this.sendPlayerMsg({ cmd: Game.PlayerMsgType.Enter, state: Game.CharacterState.Idle })
   }
 
   leave() {
     this.player().node.removeFromParent()
-    this.sendGameMsg({ type: Game.MsgType.Leave, state: Game.CharacterState.Idle })
+    this.sendPlayerMsg({ cmd: Game.PlayerMsgType.Leave, state: Game.CharacterState.Idle })
     this.stop()
   }
+
+
 
   private async start(island: Game.Island) {
     this._curIsland = island
@@ -218,53 +235,84 @@ class BattleService implements MessageHandler {
       if (this.gameMsgs.length == 0) return
 
       if (msgClient.isLocal) {
-        msgClient.msgHanlder.onMessageArrived(this.gameMsgs)
+        // this.mockTimer()
       } else {
         msgClient.send(`_game/island/${this.curIsland._id}`, JSON.stringify(this.gameMsgs))
+        this.gameMsgs.splice(0, this.gameMsgs.length)
       }
-
-      this.gameMsgs.splice(0, this.gameMsgs.length)
-    }, 100)
+    }, 70)
 
     this._isStart = true
+
+    if (msgClient.isLocal) {
+      this.mockTimer()
+    }
+  }
+
+  private mockTimer() {
+    this._delay = Math.floor(30 + Math.random() * 400)
+    setTimeout(() => {
+      msgClient.msgHanlder.onMessageArrived(this.gameMsgs)
+      this.gameMsgs.splice(0, this.gameMsgs.length)
+      this.mockTimer()
+    }, this._delay)
+
+    // setInterval(()=>{
+    //   msgClient.msgHanlder.onMessageArrived(this.gameMsgs)
+    //   this.gameMsgs.splice(0, this.gameMsgs.length)
+    // }, 400)
   }
 
   async onMessageArrived(msgs: Array<Game.Msg>) {
     msgs.forEach(async (it) => {
       // if (this.myself.uid == it.uid) return
-
       switch (it.type) {
-        case Game.MsgType.Enter:
-          let uid = this.myself.uid == it.uid ? 'shadow' : it.uid
-          let island = this.island(this.curIsland._id)
-          let mgr = this.player(uid)
-          let profile = await UserService.profile(it.uid)
-          profile.uid = uid
-          if (mgr == null) {
-            let player = instantiate(this.playerPrefab)
-            player.addComponent(OtherMgr)
-            island.node.addChild(player)
-            mgr = player.getComponent(OtherMgr)
-            mgr.init(profile)
-            this.addPlayer(uid, mgr)
-          } else {
-            mgr.node.removeFromParent()
-            mgr.node.position = Vec3.ZERO
-            mgr.resume()
-          }
-          island.node.addChild(mgr.node)
-          mgr.node.position = v3(it.pos.x, it.pos.y, it.pos.z)
+        case Game.MsgType.Player:
+          await this.handlePlayerMsg(it as Game.PlayerMsg)
           break
-        case Game.MsgType.Cmd:
-          if (it.uid == this.myself.uid) it.uid = 'shadow'
-          this.pushGameFrame(it)
-          break
-        case Game.MsgType.Leave:
-          if (it.uid == this.myself.uid) it.uid = 'shadow'
-          this.removePlayer(it.uid)
+        case Game.MsgType.Prop:
+          await this.handlePropMsg(it as Game.PropMsg)
           break
       }
     })
+  }
+
+
+  private async handlePlayerMsg(msg: Game.PlayerMsg) {
+    switch (msg.cmd) {
+      case Game.PlayerMsgType.Enter:
+        let uid = this.myself.uid == msg.uid ? 'shadow' : msg.uid
+        let island = this.island(this.curIsland._id)
+        let mgr = this.player(uid)
+        let profile = await UserService.profile(msg.uid)
+        profile.uid = uid
+        if (mgr == null) {
+          let player = instantiate(this.playerPrefab)
+          player.addComponent(OtherMgr)
+          island.node.addChild(player)
+          mgr = player.getComponent(OtherMgr)
+          mgr.init(profile)
+          this.addPlayer(uid, mgr)
+        } else {
+          mgr.node.removeFromParent()
+          mgr.node.position = Vec3.ZERO
+          mgr.resume()
+        }
+        island.node.addChild(mgr.node)
+        mgr.node.position = v3(msg.pos.x, msg.pos.y, msg.pos.z)
+        break
+      case Game.PlayerMsgType.Sync:
+        if (msg.uid == this.myself.uid) msg.uid = 'shadow'
+        this.pushPlayerFrame(msg)
+        break
+      case Game.PlayerMsgType.Leave:
+        if (msg.uid == this.myself.uid) msg.uid = 'shadow'
+        this.removePlayer(msg.uid)
+        break
+    }
+  }
+
+  private async handlePropMsg(msg: Game.PropMsg) {
 
   }
 
@@ -275,16 +323,28 @@ class BattleService implements MessageHandler {
     this._isStart = false
   }
 
-  pushGameFrame(msg: Game.Msg) {
-    if (!this.gameFrames.has(msg.uid)) this.gameFrames.set(msg.uid, [])
-    let arr = this.gameFrames.get(msg.uid)
+  pushPlayerFrame(msg: Game.PlayerMsg) {
+    if (!this.playerRemoteFrames.has(msg.uid)) this.playerRemoteFrames.set(msg.uid, [])
+    let arr = this.playerRemoteFrames.get(msg.uid)
     arr.push(msg)
   }
 
-  popGameFrame(uid: string) {
-    if (uid != this.myself.uid && this.gameFrames.has(uid))
-      return this.gameFrames.get(uid).shift()
+  popPlayerFrame(uid: string) {
+    if (uid != this.myself.uid && this.playerRemoteFrames.has(uid))
+      return this.playerRemoteFrames.get(uid).shift()
     return null
+  }
+
+  playerFrameCount(uid: string) {
+    return this.playerRemoteFrames.get(uid)?.length
+  }
+
+  pushPropFrame(msg: Game.PropMsg) {
+
+  }
+
+  popPropFrame(propId: number) {
+
   }
 
   private v3ToXYZ(pos: Vec3) {

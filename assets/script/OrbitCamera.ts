@@ -1,9 +1,6 @@
-import { Component, director, EventMouse, EventTouch, lerp, Node, quat, Quat, v2, v3, Vec2, Vec3, _decorator } from 'cc'
+import { Component, EventMouse, EventTouch, Node, Quat, Vec2, Vec3, _decorator, director, lerp, quat, v2, v3 } from 'cc'
 const { ccclass, property, type } = _decorator
 
-let tempVec3 = v3()
-let tempVec3_2 = v3()
-let tempQuat = quat()
 const DeltaFactor = 1 / 200
 
 @ccclass('OrbitCamera')
@@ -12,10 +9,6 @@ export default class OrbitCamera extends Component {
   enableTouch = true
   @property
   enableScaleRadius = false
-  @property
-  autoRotate = false
-  @property
-  autoRotateSpeed = 90
   @property
   rotateSpeed = 1
   @property
@@ -39,17 +32,19 @@ export default class OrbitCamera extends Component {
   @property
   maxRadius = 10
   @property
-  targetRotation = v3(0, 0, 0)
-  @property
   followTargetRotationY = true
   @property
   private _targetRadius = 10
 
+  private _v3_0 = v3()
+  private _q_tmp = quat()
 
-  private _startRotation = v3()
   private _center = v3()
   private _targetCenter = v3()
-  private _targetRotation = v3()
+  private _targetDir = v3()
+  private _targetRotation = quat()
+  private _needUpdate = false
+
   private _rotation = quat()
   private _radius = 10
   private _lastTouchDis = 0
@@ -63,17 +58,19 @@ export default class OrbitCamera extends Component {
   }
   set target(node: Node) {
     this._target = node
-    this._targetRotation.set(this._startRotation)
+    this._targetDir.set(node!.forward.x, this._targetDir.y, node.forward.z)
     this._targetCenter.set(node!.worldPosition)
   }
 
   start() {
-    // this.updateReactArea(this.reactArea)
-    this.targetRotation = v3(30, -145, 0)
-    this._targetRotation.set(this.targetRotation)
-    this._startRotation.set(this.targetRotation)
-    this.resetTargetRotation()
-    Quat.fromEuler(this._rotation, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
+    this._targetDir.set(45, -145, 0)
+    if (this.followTargetRotationY) {
+      this._v3_0.set(this._targetDir)
+      Quat.toEuler(this._v3_0, this.target!.worldRotation)
+      this._targetDir.y += this._v3_0.y
+    }
+
+    Quat.fromEuler(this._rotation, this._targetDir.x, this._targetDir.y, this._targetDir.z)
 
     if (this.target) {
       this._targetCenter.set(this.target.worldPosition)
@@ -85,35 +82,43 @@ export default class OrbitCamera extends Component {
   }
 
   update(dt: number) {
-    dt = 1 / 30
-    let targetRotation = this._targetRotation
-    if (this.autoRotate) {
-      targetRotation.y += this.autoRotateSpeed * dt
+    if (this.target == null) return
+
+    this._targetCenter.set(this.target.worldPosition)
+
+    if (this.followTargetRotationY) {
+      this._v3_0.set(this._targetDir)
+      Quat.toEuler(this._v3_0, this.target.worldRotation)
+      this._targetDir.y += this._v3_0.y
     }
 
-    if (this.target) {
-      this._targetCenter.set(this.target.worldPosition)
+    this._needUpdate = false
 
-      if (this.followTargetRotationY) {
-        targetRotation = tempVec3_2.set(targetRotation)
-        Quat.toEuler(tempVec3, this.target.worldRotation)
-        targetRotation.y += tempVec3.y
-      }
+    Quat.fromEuler(this._targetRotation, this._targetDir.x, this._targetDir.y, this._targetDir.z)
+
+    if (!this._rotation.equals(this._targetRotation, 0.01)) {
+      Quat.slerp(this._rotation, this._rotation, this._targetRotation, dt * 7 * this.rotateSpeed)
+      this._needUpdate = true
     }
 
-    Quat.fromEuler(tempQuat, targetRotation.x, targetRotation.y, targetRotation.z)
+    if (!this._center.equals(this._targetCenter, 0.01)) {
+      Vec3.lerp(this._center, this._center, this._targetCenter, dt * 5 * this.followSpeed)
+      this._needUpdate = true
+    }
 
-    Quat.slerp(this._rotation, this._rotation, tempQuat, dt * 7 * this.rotateSpeed)
-    Vec3.lerp(this._center, this._center, this._targetCenter, dt * 5 * this.followSpeed)
+    if (Math.abs(this._radius - this._targetRadius) > 0.01) {
+      this._radius = lerp(this._radius, this._targetRadius, dt * 15)
+      this._needUpdate = true
+    }
 
-    this._radius = lerp(this._radius, this._targetRadius, dt * 15)
+    if (this._needUpdate) {
+      Vec3.transformQuat(this._v3_0, Vec3.FORWARD, this._rotation)
+      Vec3.multiplyScalar(this._v3_0, this._v3_0, this._radius)
+      this._v3_0.add(this._center)
 
-    Vec3.transformQuat(tempVec3, Vec3.FORWARD, this._rotation)
-    Vec3.multiplyScalar(tempVec3, tempVec3, this._radius)
-    tempVec3.add(this._center)
-
-    this.node.position = tempVec3
-    this.node.lookAt(this._center)
+      this.node.position = this._v3_0
+      this.node.lookAt(this._center)
+    }
   }
 
   set reactArea(node: Node) {
@@ -139,29 +144,10 @@ export default class OrbitCamera extends Component {
     }
   }
 
-  updateTargetRotation(rot: Vec3) {
-    this.targetRotation.set(rot)
-    this._targetRotation.set(rot)
-    this._startRotation.set(rot)
-    this.resetTargetRotation()
-    Quat.fromEuler(this._rotation, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
-  }
-
-  private resetTargetRotation() {
-    let targetRotation = this._targetRotation.set(this._startRotation)
-    if (this.followTargetRotationY) {
-      targetRotation = tempVec3_2.set(targetRotation)
-      Quat.toEuler(tempVec3, this.target!.worldRotation)
-      targetRotation.y += tempVec3.y
-    }
-  }
-
   private onTouchStart(event: EventTouch) {
     let touchs = event.getAllTouches()
     if (touchs.length >= 2) {
-      let p1 = touchs[0].getUIStartLocation()
-      let p2 = touchs[1].getUIStartLocation()
-      this._lastTouchDis = Vec2.distance(p1, p2)
+      this._lastTouchDis = Vec2.distance(touchs[0].getUIStartLocation(), touchs[1].getUIStartLocation())
     }
     else {
       this._moveDis = 0
@@ -171,28 +157,19 @@ export default class OrbitCamera extends Component {
   private onTouchMove(event: EventTouch) {
     let touchs = event.getAllTouches()
     if (touchs.length >= 2) {
-      let p1 = touchs[0].getUILocation()
-      let p2 = touchs[1].getUILocation()
-      let dis = Vec2.distance(p1, p2)
+      let dis = Vec2.distance(touchs[0].getUILocation(), touchs[1].getUILocation())
 
       // this._targetRadius += this.radiusScaleSpeed * -Math.sign(dis - this._lastTouchDis)
-      let m = this.maxRadius / 750
-      this._targetRadius -= (dis - this._lastTouchDis) * m
+      this._targetRadius -= (dis - this._lastTouchDis) * this.maxRadius / 750
       this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
-
       this._lastTouchDis = dis
     } else {
-      let delta = event!.getDelta()
-      Quat.fromEuler(tempQuat, this._targetRotation.x, this._targetRotation.y, this._targetRotation.z)
-
-      Quat.rotateX(tempQuat, tempQuat, -delta.y * DeltaFactor)
-      Quat.rotateAround(tempQuat, tempQuat, Vec3.UP, -delta.x * DeltaFactor)
-
-      Quat.toEuler(this._targetRotation, tempQuat)
-
+      Quat.fromEuler(this._q_tmp, this._targetDir.x, this._targetDir.y, this._targetDir.z)
+      Quat.rotateX(this._q_tmp, this._q_tmp, -event!.getDelta().y * DeltaFactor)
+      Quat.rotateAround(this._q_tmp, this._q_tmp, Vec3.UP, -event!.getDelta().x * DeltaFactor)
+      Quat.toEuler(this._targetDir, this._q_tmp)
       this.limitRotation()
-
-      this._moveDis += (Math.abs(delta.x) + Math.abs(delta.y))
+      this._moveDis += (Math.abs(event!.getDelta().x) + Math.abs(event!.getDelta().y))
     }
   }
 
@@ -213,23 +190,13 @@ export default class OrbitCamera extends Component {
   }
 
   private limitRotation() {
-    let rotation = this._targetRotation
+    this._targetDir.x = Math.max(this.xRotationRange.x, this._targetDir.x)
+    this._targetDir.x = Math.min(this.xRotationRange.y, this._targetDir.x)
 
-    if (rotation.x < this.xRotationRange.x) {
-      rotation.x = this.xRotationRange.x
-    }
-    else if (rotation.x > this.xRotationRange.y) {
-      rotation.x = this.xRotationRange.y
-    }
+    this._targetDir.y = Math.max(this.yRotationRange.x, this._targetDir.y)
+    this._targetDir.y = Math.min(this.yRotationRange.y, this._targetDir.y)
 
-    if (rotation.y < this.yRotationRange.x) {
-      rotation.y = this.yRotationRange.x
-    }
-    else if (rotation.y > this.yRotationRange.y) {
-      rotation.y = this.yRotationRange.y
-    }
-
-    rotation.z = 0
+    this._targetDir.z = 0
   }
 
 

@@ -54,6 +54,9 @@ export default class ActionsMgr extends Component {
       case Terrain.ModelInteraction.Climb:
         action = Game.CharacterState.Climb
         break
+      case Terrain.ModelInteraction.Fire:
+        action = Game.CharacterState.Attack
+        break
     }
     if (action != Game.CharacterState.None)
       this.node.dispatchEvent(new PlayerEvent(PlayerEvent.Type.OnAction, action))
@@ -83,7 +86,7 @@ export default class ActionsMgr extends Component {
       case Terrain.ModelInteraction.Sit:
         icon = 'ic_props'
         break
-      case Terrain.ModelInteraction.Attack:
+      case Terrain.ModelInteraction.Fire:
         icon = 'ic_throw'
         break
       default:

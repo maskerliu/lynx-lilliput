@@ -1,4 +1,4 @@
-import { BoxCollider, ICollisionEvent, ITriggerEvent, RigidBody, SphereCollider, tween, v3, _decorator } from 'cc'
+import { BoxCollider, ICollisionEvent, ITriggerEvent, RigidBody, SphereCollider, tween, v3, Vec3, _decorator } from 'cc'
 import { Game, Terrain } from '../model'
 const { ccclass, property } = _decorator
 
@@ -12,6 +12,9 @@ export default class DiceMgr extends TerrainItemMgr {
   private static ShowInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, true, [Terrain.ModelInteraction.Push, Terrain.ModelInteraction.Shake])
   private static HideInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, false)
 
+  private v3_speed = v3()
+  private needSync = false
+
   onLoad() {
     super.onLoad()
 
@@ -19,6 +22,16 @@ export default class DiceMgr extends TerrainItemMgr {
 
     this.getComponent(SphereCollider).on('onTriggerEnter', this.onTriggerEnter, this)
     this.getComponent(SphereCollider).on('onTriggerExit', this.onTriggerExit, this)
+  }
+
+  update(dt: number) {
+    this.rigidBody.getLinearVelocity(this.v3_speed)
+    if (this.v3_speed.equals(Vec3.ZERO, 0.01) && this.needSync) {
+      this.rigidBody.clearState()
+      this.rigidBody.sleep()
+      console.log(this.node.forward)
+      this.needSync = false
+    }
   }
 
   private onTriggerEnter(event: ITriggerEvent) {
@@ -39,8 +52,9 @@ export default class DiceMgr extends TerrainItemMgr {
     switch (action) {
       case Game.CharacterState.Kick:
         setTimeout(() => {
-          this.rigidBody.applyImpulse(v3(0, 18, 0))
-          this.rigidBody.applyTorque(v3(22, 30, 26))
+          this.rigidBody.applyImpulse(v3(0, 14, 0))
+          this.rigidBody.applyTorque(v3(44, 40, 53))
+          this.needSync = true
         }, 400)
         break
     }

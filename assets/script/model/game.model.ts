@@ -57,20 +57,34 @@ export namespace Game {
     skin?: string
   }
 
-  export enum MsgType {
-    Sys, // 系统消息，预留
-    Cmd, // 指令动作
-    Enter, // 进入
-    Leave, // 离开
-    Sync, // 同步坐标
+  export interface Msg {
+    type?: MsgType
+    seq?: number // 消息序列
   }
 
-  export interface Msg {
+  export enum MsgType {
+    Sys, // 系统消息，预留
+    Prop,
+    Player,
+  }
+
+  export enum PlayerMsgType {
+    Sync, // 指令动作
+    Enter, // 进入
+    Leave, // 离开
+  }
+
+  export interface PlayerMsg extends Msg {
     uid?: string
-    type: MsgType
+    cmd: PlayerMsgType
     state?: CharacterState
     pos?: { x: number, y: number, z: number }
     dir?: { x: number, y: number, z: number }
-    seq?: number // 消息序列
+  }
+
+  export interface PropMsg extends Msg {
+    idx?: string
+    pos?: { x: number, y: number, z: number }
+    action?: CharacterState // None: 位置同步
   }
 }

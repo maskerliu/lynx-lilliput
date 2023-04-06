@@ -11,7 +11,6 @@
   "_defines": [
     {
       "USE_INSTANCING": true,
-      "USE_VERTEX_COLOR": true,
       "HAS_SECOND_UV": true,
       "USE_ALBEDO_MAP": true
     },

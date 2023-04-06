@@ -1,4 +1,4 @@
-import { BoxCollider, ITriggerEvent, RigidBody, _decorator } from 'cc'
+import { BoxCollider, ITriggerEvent, RigidBody, SphereCollider, _decorator } from 'cc'
 import { Game, Terrain } from '../model'
 const { ccclass, property } = _decorator
 
@@ -7,8 +7,8 @@ import TerrainItemMgr, { PropEvent } from '../TerrainItemMgr'
 @ccclass('CrateMgr')
 export default class CrateMgr extends TerrainItemMgr {
 
-  private static ShowInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, true, [Terrain.ModelInteraction.Lift, Terrain.ModelInteraction.Push])
-  private static HideInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, false)
+  protected static ShowInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, true, [Terrain.ModelInteraction.Lift, Terrain.ModelInteraction.Push])
+  protected static HideInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, false)
 
 
   onLoad() {
@@ -16,24 +16,20 @@ export default class CrateMgr extends TerrainItemMgr {
 
     this.rigidBody = this.getComponent(RigidBody)
 
-    this.getComponent(BoxCollider).on('onTriggerEnter', this.onTriggerEnter, this)
-    this.getComponent(BoxCollider).on('onTriggerExit', this.onTriggerExit, this)
+    this.getComponent(SphereCollider).on('onTriggerEnter', this.onTriggerEnter, this)
+    this.getComponent(SphereCollider).on('onTriggerExit', this.onTriggerExit, this)
   }
 
 
   private onTriggerEnter(event: ITriggerEvent) {
-
-    if (event.otherCollider.node.name == 'player') {
-      // emit can climb event
+    if (event.otherCollider.node.name == 'myself') {
       CrateMgr.ShowInteractEvent.propIndex = this.index
       this.node.dispatchEvent(CrateMgr.ShowInteractEvent)
-
     }
   }
 
   private onTriggerExit(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'player') {
-      // emit can climb event
+    if (event.otherCollider.node.name == 'myself') {
       this.node.dispatchEvent(CrateMgr.HideInteractEvent)
     }
   }
@@ -43,7 +39,11 @@ export default class CrateMgr extends TerrainItemMgr {
   }
 
   interact(action: Game.CharacterState) {
-
+    switch(action) {
+      case Game.CharacterState.Lift:
+        
+        break
+    }
   }
 
   // translucent(did: boolean) {

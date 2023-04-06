@@ -1,5 +1,4 @@
-import { Component, Event, MeshCollider, MeshRenderer, PhysicMaterial, RigidBody, tween, v3, Vec3, _decorator } from 'cc'
-// import IslandMgr from './IslandMgr'
+import { Component, Event, MeshCollider, MeshRenderer, RigidBody, Vec3, _decorator, tween, v3 } from 'cc'
 import { isDebug, terrainItemIdx } from './misc/Utils'
 const { ccclass, property } = _decorator
 
@@ -9,13 +8,6 @@ import { Game, Terrain } from './model'
 const DROP_Height = 0.4
 const DropPos: Vec3 = v3()
 const PreviewScale = v3(0.8, 1, 0.8)
-
-const PhyMtl = new PhysicMaterial()
-PhyMtl.friction = 0.6
-PhyMtl.rollingFriction = 0
-PhyMtl.spinningFriction = 0
-PhyMtl.restitution = 0.2
-
 
 export class PropEvent extends Event {
   static Name = 'PropEvent'
@@ -39,38 +31,38 @@ export class PropEvent extends Event {
 @ccclass('TerrainItemMgr')
 export default class TerrainItemMgr extends Component {
   static ItemName: string
-  protected _config: Terrain.ModelConfig
-  protected _info: Game.MapItem
 
-  public isSelected: boolean = false
+  protected _isSleep: boolean = false
+  private isDroping: boolean = false
+  private _isSelected = false
+  private _index: number = -1
+
+
+  protected _info: Game.MapItem
   protected isTranslucent: boolean = false
   protected meshRenderer: MeshRenderer
-  private isDroping: boolean = false
-
   protected rigidBody: RigidBody
 
-  get config() { return this._config }
+  get config() { return IslandAssetMgr.getModelConfig(this._info.prefab) }
   get info() { return this._info }
-
-  private _index: number = -1
+  get isSelected(): boolean { return this._isSelected }
   get index() { return this._index }
 
   get skinnable() {
-    return this._config.skin != null
+    return this.config.skin != null
   }
 
   onLoad() {
     this.meshRenderer = this.node.getComponentInChildren(MeshRenderer)
     this.rigidBody = this.getComponent(RigidBody)
-
-    let debugNode = this.node.getChildByName('Debug')
-    if (debugNode) debugNode.active = isDebug
   }
 
   init(info: Game.MapItem) {
     this._info = info
-    this._config = IslandAssetMgr.getModelConfig(info.prefab)
     this._index = terrainItemIdx(this.info.x, this.info.y, this.info.z)
+
+    let debugNode = this.node.getChildByName('Debug')
+    if (debugNode) debugNode.active = isDebug
 
     switch (this.config.type) {
       case Terrain.ModelType.BlockGrass:
@@ -90,7 +82,6 @@ export default class TerrainItemMgr extends Component {
           let collider = this.node.getComponent(MeshCollider)
           collider.convex = true
           collider.mesh = this.meshRenderer.mesh
-          collider.material = PhyMtl
         }
 
         break
@@ -116,7 +107,7 @@ export default class TerrainItemMgr extends Component {
     this.node.position = tmp
 
     this.node.scale = v3(0.8, 1, 0.8)
-    this.isSelected = true
+    this._isSelected = true
     this.onSelected(false)
   }
 
@@ -137,13 +128,14 @@ export default class TerrainItemMgr extends Component {
 
     tween(this.node).to(0.5, { position: DropPos }, {
       easing: 'bounceOut', onComplete: () => {
-        this.isSelected = selected
+        this._isSelected = selected
         this.isDroping = false
       }
     }).start()
   }
 
   preview() {
+    this._isSleep = true
     tween(this.node).to(0.5, { scale: PreviewScale }, { easing: 'bounceOut' }).start()
   }
 
@@ -158,32 +150,25 @@ export default class TerrainItemMgr extends Component {
     this.isTranslucent = did
   }
 
+  transparent() {
+    this.isTranslucent = true
+    for (let i = 0; i < this.config.material.length; ++i) {
+      this.meshRenderer.setMaterial(IslandAssetMgr.getMaterial('_defaultMat-translucent'), i)
+    }
+  }
+
   apply() {
-    this.onSelected(false)
-    this.translucent(false)
-    tween(this.node).to(0.5, { scale: Vec3.ONE }, { easing: 'bounceIn' }).start()
-  }
-
-  interact(action: Game.CharacterState) {
-    // default do nothing, u can implement this func to apply interact 
-    console.log(action)
-  }
-
-  shake(dir: Vec3) {
-    let origin = v3(this.node.position)
-    let pos = v3(this.node.position)
-    pos.x += dir.x / 8
-    pos.z += dir.z / 8
-    tween(this.node).delay(0.3).to(0.5, { position: pos }, {
+    tween(this.node).to(0.5, { scale: Vec3.ONE }, {
       easing: 'bounceIn', onComplete: () => {
-        this.node.position = origin
+        this._isSleep = false
+        this.onSelected(false)
+        this.translucent(false)
       }
     }).start()
   }
 
-  beenCollected() {
-    let info = Object.assign(this.info)
-    info.prefab = null
-    // this.node.parent.getComponent(IslandMgr).updateMap(info)
+  interact(action: Game.CharacterState) {
+    // default do nothing, u can implement this func to apply interact 
+    // console.log(action)
   }
 }

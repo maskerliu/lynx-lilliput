@@ -22,21 +22,30 @@
       },
       {
         "__id__": 120
+      },
+      {
+        "__id__": 125
+      },
+      {
+        "__id__": 129
+      },
+      {
+        "__id__": 133
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 125
+        "__id__": 137
       }
     ],
     "_prefab": {
-      "__id__": 127
+      "__id__": 142
     },
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 1,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -3667,6 +3676,348 @@
     "nestedPrefabInstanceRoots": null
   },
   {
+    "__type__": "cc.Node",
+    "_name": "HeadTop_End Socket",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [
+      {
+        "__id__": 126
+      }
+    ],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 128
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0.000015390991488595496,
+      "y": 0.7255350537191775,
+      "z": 0.07437929264462849
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": -2.1387555316767968e-8,
+      "y": 2.7579321630467184e-11,
+      "z": 1.5084661126328746e-13,
+      "w": 0.9999999999999998
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 0.9999999999999999,
+      "y": 0.9999999999999999,
+      "z": 0.9999999999999999
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": -0.000002450833307506779,
+      "y": 3.1603574628889588e-9,
+      "z": 1.7285680766153864e-11
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "HeadProp",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 125
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 127
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "09oP8j9JpGuajAv07HVfl2",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "9cmTTX0R5IWJqRTVqPop3n",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "LeftHand Socket",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [
+      {
+        "__id__": 130
+      }
+    ],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 132
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0.29913959793466915,
+      "y": 0.4724131235842402,
+      "z": -0.032698533344579034
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0.5619193495692626,
+      "y": 0.4292391750956889,
+      "z": -0.42923976411480336,
+      "w": 0.5619195936664252
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 0.9999998732865844,
+      "y": 0.9999998256449626,
+      "z": 0.9999995858127652
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 90.00001495622344,
+      "y": 74.75102794308177,
+      "z": -0.000049934125118463306
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "LeftHandProp",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 129
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 131
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "c2y/Xq/+NNIa+F1DmXM4j0",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "fanly+w0VMOKNjWpdnNyuP",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "RightHand Socket",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [
+      {
+        "__id__": 134
+      }
+    ],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 136
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": -0.29909634787193257,
+      "y": 0.47240894719802395,
+      "z": -0.03250607794983923
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0.5562423523053585,
+      "y": -0.4365704089342028,
+      "z": 0.43657839353459965,
+      "w": 0.5562373984047247
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 0.9999997512680464,
+      "y": 0.9999998329290614,
+      "z": 0.9999996409425186
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 90.00071599090646,
+      "y": -76.25440776693416,
+      "z": 0.00026110912012629903
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "RighthandProp",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 133
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": {
+      "__id__": 135
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "0cUlabUQxJB5rkzJIFJKmc",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "15cJtsAwpBCpMy8kOFlSf2",
+    "instance": null,
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": null
+  },
+  {
     "__type__": "cc.SkeletalAnimation",
     "_name": "",
     "_objFlags": 0,
@@ -3675,18 +4026,105 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 126
+      "__id__": 138
     },
-    "playOnLoad": false,
-    "_clips": [],
-    "_defaultClip": null,
+    "playOnLoad": true,
+    "_clips": [
+      {
+        "__uuid__": "3f406bf9-621a-4583-b1b2-54dd111dbfdc@d5fbc",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "30f7da21-0676-4788-afc8-aa052a69b679@2df6c",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "5e79b48a-3acb-496d-8d7d-d64323f9485a@91622",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "a517d1e5-b23b-45da-91c9-494cea42c27f@49bfd",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "a794559f-ad50-411a-ab04-8e719bd4ae4e@1ae6d",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "cda191b2-28fa-4007-b7c3-17a2f0b68c2b@c2696",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "cbe205aa-056e-4a4a-b44c-25ccb4e31972@db140",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "d5c0ff01-bf50-470e-9374-694f52489936@3965f",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "85897d68-fbd4-4bb1-946a-4496807f8f9e@5c7d9",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "f801f44f-f2ad-4ef1-81bf-00a33f6fdaf4@43757",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "1bead1f7-0bfe-483e-a08b-b3f2a8a0c3da@9292d",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "c8dd6d40-7fcb-4cd4-85cd-b50ffb822445@2875d",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "c63e6e10-a935-4332-9bf6-ed0ec24150d0@6395e",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": {
+      "__uuid__": "cda191b2-28fa-4007-b7c3-17a2f0b68c2b@c2696",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "_useBakedAnimation": true,
-    "_sockets": [],
+    "_sockets": [
+      {
+        "__id__": 139
+      },
+      {
+        "__id__": 140
+      },
+      {
+        "__id__": 141
+      }
+    ],
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "54Kit8E+9eeq6Xfs4ocHIf"
+  },
+  {
+    "__type__": "cc.SkeletalAnimation.Socket",
+    "path": "Armature/Hips/Spine/Spine1/Spine2/Neck/Head/HeadTop_End",
+    "target": {
+      "__id__": 125
+    }
+  },
+  {
+    "__type__": "cc.SkeletalAnimation.Socket",
+    "path": "Armature/Hips/Spine/Spine1/Spine2/LeftShoulder/LeftArm/LeftForeArm/LeftHand",
+    "target": {
+      "__id__": 129
+    }
+  },
+  {
+    "__type__": "cc.SkeletalAnimation.Socket",
+    "path": "Armature/Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand",
+    "target": {
+      "__id__": 133
+    }
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -3697,6 +4135,7 @@
       "__id__": 0
     },
     "fileId": "f9rvkgvaNUD5JceGf6eKHZ",
+    "instance": null,
     "targetOverrides": null
   }
 ]

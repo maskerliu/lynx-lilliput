@@ -150,7 +150,37 @@ export default class PlayerMgr extends Component {
   init(profile: User.Profile) {
     this.userProfile = profile
 
-    let name = this.userProfile.uid == 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608' ? 'chiken' : 'human'
+    let name = null, skin = null
+
+    switch (this.userProfile.uid) {
+      case '8f4e7438-4285-4268-910c-3898fb8d6d96':
+        name = 'wolf'
+        skin = null
+        // skin = 'cyborgFemaleA'
+        break
+      case 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608':
+        name = 'chiken'
+        skin = null
+        // skin = 'criminalMaleA'
+        break
+      case '5ee13634-340c-4741-b075-7fe169e38a13':
+        name = 'human'
+        skin = 'humanFemaleA'
+        break
+      case '4e6434d1-5910-46c3-879d-733c33ded257':
+        name = 'frog'
+        skin = 'humanMaleA'
+        break
+      case 'b09272b8-d6a4-438b-96c3-df50ac206706':
+        name = 'robot'
+        skin = 'skaterFemaleA'
+        break
+      default:
+        name = 'human'
+        skin = 'zombieA'
+        break
+    }
+
     this.node.addChild(instantiate(IslandAssetMgr.getCharacter(name)))
 
     this.animation = this.getComponentInChildren(SkeletalAnimation)
@@ -163,41 +193,11 @@ export default class PlayerMgr extends Component {
     let debugNode = this.node.getChildByName('Debug')
     if (debugNode) debugNode.active = isDebug
 
-    this.updateSkin()
-
-    return this
-  }
-
-  protected updateSkin() {
-    let skin: string
-
-    switch (this.userProfile.uid) {
-      case '8f4e7438-4285-4268-910c-3898fb8d6d96':
-        skin = 'cyborgFemaleA'
-        break
-      case 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608':
-        // skin = 'criminalMaleA'
-        skin = null
-        break
-      case '5ee13634-340c-4741-b075-7fe169e38a13':
-        skin = 'humanFemaleA'
-        break
-      case '4e6434d1-5910-46c3-879d-733c33ded257':
-        skin = 'humanMaleA'
-        break
-      case 'b09272b8-d6a4-438b-96c3-df50ac206706':
-        skin = 'skaterFemaleA'
-        break
-      default:
-        skin = 'zombieA'
-        break
-    }
-
     if (skin) {
       this.meshRenderer.material.setProperty('mainTexture', IslandAssetMgr.getTexture(skin) as Texture2D)
     }
 
-    console.log(this.meshRenderer.mesh)
+    return this
   }
 
   update(dt: number) {
@@ -295,7 +295,7 @@ export default class PlayerMgr extends Component {
   private onCollisionStay(event: ICollisionEvent) {
 
     if (event.otherCollider.node.name == DiceMgr.ItemName && !this._curDir.equals(Vec2.ZERO)) {
-      this.state = Game.CharacterState.Push
+      // this.state = Game.CharacterState.Push
     }
 
     switch (this._state) {
@@ -307,7 +307,7 @@ export default class PlayerMgr extends Component {
         if (event.otherCollider.node.name == 'airWall') break
       case Game.CharacterState.Run:
         if (event.otherCollider.node.name == DiceMgr.ItemName) {
-          this.state = Game.CharacterState.Push
+          // this.state = Game.CharacterState.Push
         }
       default:
         // this.rigidBody.clearState()

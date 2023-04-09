@@ -42,6 +42,7 @@ export default class OrbitCamera extends Component {
   private _center = v3()
   private _targetCenter = v3()
   private _targetDir = v3()
+  private _startDir = v3()
   private _targetRotation = quat()
   private _needUpdate = false
 
@@ -56,27 +57,16 @@ export default class OrbitCamera extends Component {
   get target() {
     return this._target
   }
+
   set target(node: Node) {
     this._target = node
-    this._targetDir.set(node!.forward.x, this._targetDir.y, node.forward.z)
+    this._targetDir.set(this._startDir)
     this._targetCenter.set(node!.worldPosition)
   }
 
   start() {
     this._targetDir.set(45, -145, 0)
-    if (this.followTargetRotationY) {
-      this._v3_0.set(this._targetDir)
-      Quat.toEuler(this._v3_0, this.target!.worldRotation)
-      this._targetDir.y += this._v3_0.y
-    }
-
-    Quat.fromEuler(this._rotation, this._targetDir.x, this._targetDir.y, this._targetDir.z)
-
-    if (this.target) {
-      this._targetCenter.set(this.target.worldPosition)
-      this._center.set(this._targetCenter)
-    }
-
+    this._startDir.set(this._targetDir)
     this._radius = this.radius
     this.limitRotation()
   }
@@ -86,28 +76,22 @@ export default class OrbitCamera extends Component {
 
     this._targetCenter.set(this.target.worldPosition)
 
-    if (this.followTargetRotationY) {
-      this._v3_0.set(this._targetDir)
-      Quat.toEuler(this._v3_0, this.target.worldRotation)
-      this._targetDir.y += this._v3_0.y
-    }
-
     this._needUpdate = false
 
     Quat.fromEuler(this._targetRotation, this._targetDir.x, this._targetDir.y, this._targetDir.z)
 
     if (!this._rotation.equals(this._targetRotation, 0.01)) {
-      Quat.slerp(this._rotation, this._rotation, this._targetRotation, dt * 7 * this.rotateSpeed)
+      Quat.slerp(this._rotation, this._rotation, this._targetRotation, 0.0167 * 7 * this.rotateSpeed)
       this._needUpdate = true
     }
 
     if (!this._center.equals(this._targetCenter, 0.01)) {
-      Vec3.lerp(this._center, this._center, this._targetCenter, dt * 5 * this.followSpeed)
+      Vec3.lerp(this._center, this._center, this._targetCenter, 0.0167 * 5 * this.followSpeed)
       this._needUpdate = true
     }
 
     if (Math.abs(this._radius - this._targetRadius) > 0.01) {
-      this._radius = lerp(this._radius, this._targetRadius, dt * 15)
+      this._radius = lerp(this._radius, this._targetRadius, 0.0167 * 15)
       this._needUpdate = true
     }
 

@@ -116,33 +116,34 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       this.addTerrainItem(this._senceInfo?.map[this.loadCount])
       this.loadCount++
 
-      let rest = MIN_FRAME_TIME - this.loadCost
-      while (rest > 0.01) {
-        this.addTerrainItem(this._senceInfo?.map[this.loadCount])
-        this.loadCount++
-        rest = rest - this.loadCost
-      }
+      // let rest = MIN_FRAME_TIME - this.loadCost
+      // while (rest > 0.01) {
+      //   this.addTerrainItem(this._senceInfo?.map[this.loadCount])
+      //   this.loadCount++
+      //   rest = rest - this.loadCost
+      // }
     }
 
-    if (BattleService.curIsland == null || this._senceInfo == null) return
+    if (BattleService.curIsland == null ||
+      this._senceInfo == null ||
+      BattleService.curIsland?._id != this._senceInfo?._id)
+      return
 
-    if (BattleService.curIsland?._id == this._senceInfo?._id) {
-      this.v3_0.set(BattleService.player().node.position)
-      this.v3_0.x = Math.round(this.v3_0.x)
-      this.v3_0.y = Math.round(this.v3_0.y)
-      this.v3_0.z = Math.round(this.v3_0.z)
+    this.v3_0.set(BattleService.player().node.position)
+    this.v3_0.x = Math.round(this.v3_0.x)
+    this.v3_0.y = Math.round(this.v3_0.y)
+    this.v3_0.z = Math.round(this.v3_0.z)
 
-      if (BattleService.player() != null && !this.v3_0.equals(this.airWall.position)) {
-        this.updateAirWall(this.v3_0)
-      }
+    if (BattleService.player() != null && !this.v3_0.equals(this.airWall.position)) {
+      this.updateAirWall(this.v3_0)
+    }
 
-      if (!this._isEdit) {
-        if (this.frequency < 4) {
-          this.frequency++
-        } else {
-          this.frequency = 0
-          this.occlusion()
-        }
+    if (!this._isEdit) {
+      if (this.frequency < 4) {
+        this.frequency++
+      } else {
+        this.frequency = 0
+        this.occlusion()
       }
     }
   }

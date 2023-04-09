@@ -1,5 +1,5 @@
 import {
-  Button, Color, Component, EditBox, Event, Label, Node, Sprite, Toggle, ToggleContainer, tween, v3, view, Widget, _decorator, director
+  Button, Color, Component, EditBox, Event, Label, Node, Sprite, Toggle, ToggleContainer, tween, v3, view, Widget, _decorator, director, profiler, game, Director
 } from 'cc'
 import BattleService from '../BattleService'
 import { TerrainEditActionType, TerrainEditHandler } from '../EnvEditHandler'
@@ -86,8 +86,13 @@ export default class UIMgr extends Component {
   @property(Node)
   network: Node
 
+  @property(Label)
+  fpsLabel: Label
+
   private networkSprite: Sprite
   private networkLabel: Label
+  private frameCount: number = 0
+  private frameTime: number = new Date().getTime()
 
   private actionsMgr: ActionsMgr
   private _editHandler: TerrainEditHandler
@@ -108,6 +113,18 @@ export default class UIMgr extends Component {
   }
 
   onLoad() {
+    // TODO not work 
+    this.frameTime = new Date().getTime()
+    this.node.on(Director.EVENT_AFTER_DRAW, () => {
+      if (new Date().getTime() - this.frameTime >= 1000) {
+        this.fpsLabel.string = `FPS:\t ${this.frameCount}`
+        this.frameTime = new Date().getTime()
+        this.frameCount = 0
+      } else {
+        this.frameCount++
+      }
+    }, this)
+
     this.actionsMgr = this.actions.getComponent(ActionsMgr)
 
     this.networkSprite = this.network.getComponent(Sprite)
@@ -131,6 +148,8 @@ export default class UIMgr extends Component {
       this.networkSprite.color = this.networkLabel.color = Color.RED
     }
     this.networkLabel.string = `${BattleService.delay}ms`
+
+    // this.fpsLabel.string = `FPS: ${Math.round(1 / game.deltaTime)}`
   }
 
   onEdit() {
@@ -152,7 +171,9 @@ export default class UIMgr extends Component {
 
   onProfile() {
     director.loadScene('profile')
+
     BattleService.leave()
+    BattleService.removeAllIsland()
   }
 
   canEdit(edit: boolean) {

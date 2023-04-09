@@ -1,4 +1,5 @@
 import { Camera, Component, Node, RenderTexture, EventTouch, Sprite, SpriteFrame, Widget, _decorator, view, Vec2, Quat, quat, Vec3, director } from "cc"
+import IslandAssetMgr from "./IslandAssetMgr"
 const { ccclass, property } = _decorator
 
 @ccclass('ProfileMgr')
@@ -27,42 +28,43 @@ export default class ProfileMgr extends Component {
     wid.bottom = -view.getViewportRect().y
     wid.left = -view.getViewportRect().x
     wid.right = -view.getViewportRect().x
-
-    // screen.requestFullScreen()
-    this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
-    this.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-    this.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-    this.node.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+    
+    this.preview.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this.preview.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+    this.preview.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+    this.preview.node.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
 
     this._rotation.set(this.character.rotation)
+
+    // IslandAssetMgr.getCharacter()
   }
 
   start() {
-    const spriteFrame = this.preview.spriteFrame!
-    const sp = new SpriteFrame()
-    sp.reset({
-      originalSize: spriteFrame.originalSize,
-      rect: spriteFrame.rect,
-      offset: spriteFrame.offset,
-      isRotate: spriteFrame.rotated,
-      borderTop: spriteFrame.insetTop,
-      borderLeft: spriteFrame.insetLeft,
-      borderBottom: spriteFrame.insetBottom,
-      borderRight: spriteFrame.insetRight,
-    })
+    // const spriteFrame = this.preview.spriteFrame!
+    // const sp = new SpriteFrame()
+    // sp.reset({
+    //   originalSize: spriteFrame.originalSize,
+    //   rect: spriteFrame.rect,
+    //   offset: spriteFrame.offset,
+    //   isRotate: spriteFrame.rotated,
+    //   borderTop: spriteFrame.insetTop,
+    //   borderLeft: spriteFrame.insetLeft,
+    //   borderBottom: spriteFrame.insetBottom,
+    //   borderRight: spriteFrame.insetRight,
+    // })
 
-    const renderTex = this._renderTex = new RenderTexture()
-    renderTex.reset({
-      width: 128,
-      height: 128,
-    })
-    this.camera.targetTexture = renderTex
-    sp.texture = renderTex
-    this.preview.spriteFrame = sp
-    this.preview.updateMaterial()
-    this.scheduleOnce(() => {
-      renderTex.resize(512, 512)
-    }, 2)
+    // const renderTex = this._renderTex = new RenderTexture()
+    // renderTex.reset({
+    //   width: 128,
+    //   height: 128,
+    // })
+    // this.camera.targetTexture = renderTex
+    // sp.texture = renderTex
+    // this.preview.spriteFrame = sp
+    // // this.preview.updateMaterial()
+    // this.scheduleOnce(() => {
+    //   renderTex.resize(512, 512)
+    // }, 2)
   }
 
   onDestroy() {

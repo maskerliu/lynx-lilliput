@@ -27,23 +27,23 @@
         "__id__": 69
       },
       {
-        "__id__": 73
-      },
-      {
-        "__id__": 77
-      },
-      {
         "__id__": 81
+      },
+      {
+        "__id__": 85
+      },
+      {
+        "__id__": 89
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 88
+        "__id__": 96
       }
     ],
     "_prefab": {
-      "__id__": 93
+      "__id__": 101
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2033,7 +2033,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 72
+      "__id__": 80
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2071,24 +2071,28 @@
     "_parent": {
       "__id__": 69
     },
-    "_children": [],
+    "_children": [
+      {
+        "__id__": 71
+      }
+    ],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 71
+      "__id__": 79
     },
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": -0.062,
       "z": 0
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": 0,
+      "x": 0.08829452602280347,
       "y": 0,
       "z": 0,
-      "w": 1
+      "w": 0.9960944115265422
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -2100,11 +2104,122 @@
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": 10.131,
       "y": 0,
       "z": 0
     },
     "_id": ""
+  },
+  {
+    "__type__": "cc.Node",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 70
+    },
+    "_prefab": {
+      "__id__": 72
+    }
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 71
+    },
+    "asset": {
+      "__uuid__": "997a691b-3f65-413a-9e21-c5d0592dba31@ca77c",
+      "__expectedType__": "cc.Prefab"
+    },
+    "fileId": "95MFymsaJUyq/ghxVrHrVs",
+    "instance": {
+      "__id__": 73
+    },
+    "targetOverrides": null
+  },
+  {
+    "__type__": "cc.PrefabInstance",
+    "fileId": "08Fp5J0nlJ7oCIQrHrK1zo",
+    "prefabRootNode": {
+      "__id__": 1
+    },
+    "mountedChildren": [],
+    "mountedComponents": [],
+    "propertyOverrides": [
+      {
+        "__id__": 74
+      },
+      {
+        "__id__": 76
+      },
+      {
+        "__id__": 77
+      },
+      {
+        "__id__": 78
+      }
+    ],
+    "removedComponents": []
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 75
+    },
+    "propertyPath": [
+      "_name"
+    ],
+    "value": "hat"
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "95MFymsaJUyq/ghxVrHrVs"
+    ]
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 75
+    },
+    "propertyPath": [
+      "_lpos"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 75
+    },
+    "propertyPath": [
+      "_lrot"
+    ],
+    "value": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 75
+    },
+    "propertyPath": [
+      "_euler"
+    ],
+    "value": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -2141,13 +2256,13 @@
     },
     "_children": [
       {
-        "__id__": 74
+        "__id__": 82
       }
     ],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 76
+      "__id__": 84
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2183,13 +2298,13 @@
     "_name": "LeftHandProp",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 73
+      "__id__": 81
     },
     "_children": [],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 75
+      "__id__": 83
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2255,13 +2370,13 @@
     },
     "_children": [
       {
-        "__id__": 78
+        "__id__": 86
       }
     ],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 80
+      "__id__": 88
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2297,13 +2412,13 @@
     "_name": "RightHandProp",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 77
+      "__id__": 85
     },
     "_children": [],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 79
+      "__id__": 87
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2369,13 +2484,13 @@
     },
     "_children": [
       {
-        "__id__": 82
+        "__id__": 90
       }
     ],
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 87
+      "__id__": 95
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2411,17 +2526,17 @@
     "_name": "Cube",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 81
+      "__id__": 89
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 83
+        "__id__": 91
       }
     ],
     "_prefab": {
-      "__id__": 86
+      "__id__": 94
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2457,11 +2572,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 82
+      "__id__": 90
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 84
+      "__id__": 92
     },
     "_materials": [
       {
@@ -2471,7 +2586,7 @@
     ],
     "_visFlags": 0,
     "bakeSettings": {
-      "__id__": 85
+      "__id__": 93
     },
     "_mesh": {
       "__uuid__": "14d864b6-7524-41f1-9ca4-8c39ec0df7be@fd4a2",
@@ -2544,7 +2659,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 89
+      "__id__": 97
     },
     "playOnLoad": true,
     "_clips": [
@@ -2608,13 +2723,13 @@
     "_useBakedAnimation": true,
     "_sockets": [
       {
-        "__id__": 90
+        "__id__": 98
       },
       {
-        "__id__": 91
+        "__id__": 99
       },
       {
-        "__id__": 92
+        "__id__": 100
       }
     ],
     "_id": ""
@@ -2634,14 +2749,14 @@
     "__type__": "cc.SkeletalAnimation.Socket",
     "path": "Armature/Hips/Spine/Spine1/Spine2/LeftShoulder/LeftArm/LeftForeArm/LeftHand",
     "target": {
-      "__id__": 73
+      "__id__": 81
     }
   },
   {
     "__type__": "cc.SkeletalAnimation.Socket",
     "path": "Armature/Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand",
     "target": {
-      "__id__": 77
+      "__id__": 85
     }
   },
   {
@@ -2654,6 +2769,11 @@
     },
     "fileId": "b3f9RCJ3tdmo0LzHGdHLbx",
     "instance": null,
-    "targetOverrides": null
+    "targetOverrides": null,
+    "nestedPrefabInstanceRoots": [
+      {
+        "__id__": 71
+      }
+    ]
   }
 ]

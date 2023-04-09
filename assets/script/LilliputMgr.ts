@@ -178,25 +178,26 @@ export default class LilliputMgr extends Component {
   async onEnterIsland(uid: string) {
     let islandId: string = null
     let timestamp: number = 0
-    let island = BattleService.userIsland(uid)
-    if (island == null) {
+    let mgr = BattleService.userIsland(uid)
+    if (mgr == null) {
       let node = instantiate(this.islandPrefab)
 
       node.position = BattleService.randomPos()
       this.node.addChild(node)
-      let mgr = node.getComponent(IslandMgr)
+      mgr = node.getComponent(IslandMgr)
       timestamp = new Date().getTime()
       islandId = await mgr.loadMap(uid)
       console.log('island render:', new Date().getTime() - timestamp)
 
-      mgr.camera = this.mainCamera
-      mgr.editReactArea = this.uiMgr.editReactArea
       BattleService.addIsland(islandId, mgr)
-      island = BattleService.island(islandId)
+      mgr = BattleService.island(islandId)
     }
 
+    mgr.camera = this.mainCamera
+    mgr.editReactArea = this.uiMgr.editReactArea
+
     timestamp = new Date().getTime()
-    await BattleService.enter(BattleService.player(), island)
+    await BattleService.enter(BattleService.player(), mgr)
     this.uiMgr.canEdit(BattleService.canEdit())
   }
 
@@ -223,7 +224,7 @@ export default class LilliputMgr extends Component {
     if (isEdit) {
       let myIsland = BattleService.userIsland()
       if (myIsland == null) return
-      
+
       this.orbitCamera.reactArea = this.uiMgr.editCameraReactArea
       this.uiMgr.editHandler = myIsland
     } else {
@@ -241,11 +242,11 @@ export default class LilliputMgr extends Component {
 
   private async preload() {
     let uids = [
-      // '8f4e7438-4285-4268-910c-3898fb8d6d96',
+      '8f4e7438-4285-4268-910c-3898fb8d6d96',
       'f947ed55-7e34-4a82-a9db-8a9cf6f2e608',
-      // '5ee13634-340c-4741-b075-7fe169e38a13',
-      // '4e6434d1-5910-46c3-879d-733c33ded257',
-      // 'b09272b8-d6a4-438b-96c3-df50ac206706'
+      '5ee13634-340c-4741-b075-7fe169e38a13',
+      '4e6434d1-5910-46c3-879d-733c33ded257',
+      'b09272b8-d6a4-438b-96c3-df50ac206706'
     ]
 
     for (let uid of uids) {
@@ -258,8 +259,8 @@ export default class LilliputMgr extends Component {
         let mgr = node.getComponent(IslandMgr)
         let islandId = await mgr.loadMap(uid)
 
-        mgr.camera = this.mainCamera
-        mgr.editReactArea = this.uiMgr.editReactArea
+        // mgr.camera = this.mainCamera
+        // mgr.editReactArea = this.uiMgr.editReactArea
         BattleService.addIsland(islandId, mgr)
       }
     }

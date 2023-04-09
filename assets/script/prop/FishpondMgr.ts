@@ -53,12 +53,7 @@ export default class FishpondMgr extends TerrainItemMgr {
   private onTriggerEnter(event: ITriggerEvent) {
     let fish = event.selfCollider.node
 
-    // this.v3_pos.set(fish.position)
-    // this.v3_pos.subtract(fish.forward.multiplyScalar(0.5))
-    // this.v3_pos.y = fish.position.y
-
     if (event.otherCollider.node.name == 'buoy') {
-      console.log('hit')
       this.v3_pos = v3(Math.random() * 3, 0.06 + Math.random() * 0.4, Math.random() * 3)
       event.selfCollider.node.position = this.v3_pos
     }

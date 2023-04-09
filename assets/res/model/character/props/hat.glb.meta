@@ -1,0 +1,126 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31",
+  "files": [],
+  "subMetas": {
+    "99380": {
+      "importer": "gltf-material",
+      "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31@99380",
+      "displayName": "",
+      "id": "99380",
+      "name": "Material.001.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fe6ae": {
+      "importer": "gltf-mesh",
+      "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31@fe6ae",
+      "displayName": "",
+      "id": "fe6ae",
+      "name": "Cone.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1043e": {
+      "importer": "gltf-material",
+      "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31@1043e",
+      "displayName": "",
+      "id": "1043e",
+      "name": "Material.002.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a9549": {
+      "importer": "gltf-material",
+      "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31@a9549",
+      "displayName": "",
+      "id": "a9549",
+      "name": "Material.003.material",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e736c": {
+      "importer": "gltf-material",
+      "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31@e736c",
+      "displayName": "",
+      "id": "e736c",
+      "name": "Material.004.material",
+      "userData": {
+        "gltfIndex": 3
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ca77c": {
+      "importer": "gltf-scene",
+      "uuid": "997a691b-3f65-413a-9e21-c5d0592dba31@ca77c",
+      "displayName": "",
+      "id": "ca77c",
+      "name": "hat.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "997a691b-3f65-413a-9e21-c5d0592dba31@ca77c",
+    "assetFinder": {
+      "meshes": [
+        "997a691b-3f65-413a-9e21-c5d0592dba31@fe6ae"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "997a691b-3f65-413a-9e21-c5d0592dba31@99380",
+        "997a691b-3f65-413a-9e21-c5d0592dba31@1043e",
+        "997a691b-3f65-413a-9e21-c5d0592dba31@a9549",
+        "997a691b-3f65-413a-9e21-c5d0592dba31@e736c"
+      ],
+      "scenes": [
+        "997a691b-3f65-413a-9e21-c5d0592dba31@ca77c"
+      ]
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.2",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "2600aea5-33d3-45f6-aa0e-0fd8ece4ab1f",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "db140": {
+      "importer": "gltf-animation",
+      "uuid": "2600aea5-33d3-45f6-aa0e-0fd8ece4ab1f@db140",
+      "displayName": "",
+      "id": "db140",
+      "name": "JumpLand.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.0666667222976685
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "05cfd": {
+      "importer": "gltf-scene",
+      "uuid": "2600aea5-33d3-45f6-aa0e-0fd8ece4ab1f@05cfd",
+      "displayName": "",
+      "id": "05cfd",
+      "name": "JumpLand.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 1.0666667222976685,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "JumpLand",
+            "from": 0,
+            "to": 1.0666667222976685,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "2600aea5-33d3-45f6-aa0e-0fd8ece4ab1f@05cfd",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "2600aea5-33d3-45f6-aa0e-0fd8ece4ab1f@05cfd"
+      ]
+    }
+  }
+}

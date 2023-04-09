@@ -217,12 +217,10 @@ class BattleService implements MessageHandler {
   }
 
   leave() {
-    this.player().node.removeFromParent()
+    this.player()?.node.removeFromParent()
     this.sendPlayerMsg({ cmd: Game.PlayerMsgType.Leave, state: Game.CharacterState.Idle })
     this.stop()
   }
-
-
 
   private async start(island: Game.Island) {
     this._curIsland = island
@@ -317,7 +315,7 @@ class BattleService implements MessageHandler {
   }
 
   private stop() {
-    msgClient.unsubscribe(`_game/island/${this.curIsland._id}`)
+    msgClient.unsubscribe(`_game/island/${this.curIsland?._id}`)
     this._curIsland = null
     if (this.timer) clearInterval(this.timer)
     this._isStart = false

@@ -1,0 +1,110 @@
+{
+  "ver": "2.3.2",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "216310e2-6289-4f94-96c4-97be25b427f5",
+  "files": [],
+  "subMetas": {
+    "9883f": {
+      "importer": "gltf-mesh",
+      "uuid": "216310e2-6289-4f94-96c4-97be25b427f5@9883f",
+      "displayName": "",
+      "id": "9883f",
+      "name": "Sphere.013.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fe6ae": {
+      "importer": "gltf-mesh",
+      "uuid": "216310e2-6289-4f94-96c4-97be25b427f5@fe6ae",
+      "displayName": "",
+      "id": "fe6ae",
+      "name": "Cone.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "764fc": {
+      "importer": "gltf-material",
+      "uuid": "216310e2-6289-4f94-96c4-97be25b427f5@764fc",
+      "displayName": "",
+      "id": "764fc",
+      "name": "YeLlOw Oh YeAh.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3a72a": {
+      "importer": "gltf-material",
+      "uuid": "216310e2-6289-4f94-96c4-97be25b427f5@3a72a",
+      "displayName": "",
+      "id": "3a72a",
+      "name": "bLuE oH yEaH.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "cc465": {
+      "importer": "gltf-scene",
+      "uuid": "216310e2-6289-4f94-96c4-97be25b427f5@cc465",
+      "displayName": "",
+      "id": "cc465",
+      "name": "hat1.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "216310e2-6289-4f94-96c4-97be25b427f5@cc465",
+    "assetFinder": {
+      "meshes": [
+        "216310e2-6289-4f94-96c4-97be25b427f5@9883f",
+        "216310e2-6289-4f94-96c4-97be25b427f5@fe6ae"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "216310e2-6289-4f94-96c4-97be25b427f5@764fc",
+        "216310e2-6289-4f94-96c4-97be25b427f5@3a72a"
+      ],
+      "scenes": [
+        "216310e2-6289-4f94-96c4-97be25b427f5@cc465"
+      ]
+    }
+  }
+}

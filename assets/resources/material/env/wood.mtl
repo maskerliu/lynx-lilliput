@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "",
+  "_name": "wood",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,61 +9,29 @@
   },
   "_techIdx": 0,
   "_defines": [
-    {
-      "USE_INSTANCING": true
-    },
-    {},
     {}
   ],
   "_states": [
     {
       "rasterizerState": {},
-      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
+      },
+      "depthStencilState": {}
     }
   ],
   "_props": [
     {
-      "mainColor": {
-        "__type__": "cc.Color",
-        "r": 102,
-        "g": 70,
-        "b": 29,
-        "a": 255
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.4154600501060486,
+        "y": 0.14464817941188812,
+        "z": 0.04766399785876274
       },
-      "roughness": 1,
-      "specularIntensity": 0,
-      "emissive": {
-        "__type__": "cc.Color",
-        "r": 48,
-        "g": 42,
-        "b": 33,
-        "a": 255
-      }
-    },
-    {},
-    {}
+      "metallic": 0,
+      "roughness": 0.800000011920929
+    }
   ]
 }

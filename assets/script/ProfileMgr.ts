@@ -1,5 +1,9 @@
-import { Camera, Component, Node, RenderTexture, EventTouch, Sprite, SpriteFrame, Widget, _decorator, view, Vec2, Quat, quat, Vec3, director } from "cc"
-import IslandAssetMgr from "./IslandAssetMgr"
+import {
+  Camera, Component, EventTouch, Node, Quat,
+  RenderTexture, Sprite, Vec2, Vec3, Widget, _decorator, director, quat, view
+} from "cc"
+
+
 const { ccclass, property } = _decorator
 
 @ccclass('ProfileMgr')
@@ -28,7 +32,7 @@ export default class ProfileMgr extends Component {
     wid.bottom = -view.getViewportRect().y
     wid.left = -view.getViewportRect().x
     wid.right = -view.getViewportRect().x
-    
+
     this.preview.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
     this.preview.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
     this.preview.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)

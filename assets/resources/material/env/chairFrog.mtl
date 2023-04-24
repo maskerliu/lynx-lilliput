@@ -1,0 +1,45 @@
+{
+  "__type__": "cc.Material",
+  "_name": "chairFrog",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "1baf0fc9-befa-459c-8bdd-af1a450a0319",
+    "__expectedType__": "cc.EffectAsset"
+  },
+  "_techIdx": 0,
+  "_defines": [
+    {
+      "HAS_SECOND_UV": true,
+      "USE_ALBEDO_MAP": true,
+      "USE_NORMAL_MAP": true
+    }
+  ],
+  "_states": [
+    {
+      "rasterizerState": {
+        "cullMode": 0
+      },
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      },
+      "depthStencilState": {}
+    }
+  ],
+  "_props": [
+    {
+      "mainTexture": {
+        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@50743",
+        "__expectedType__": "cc.Texture2D"
+      },
+      "metallic": 0,
+      "roughness": 0.9588096141815186,
+      "normalMap": {
+        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@9b782",
+        "__expectedType__": "cc.Texture2D"
+      }
+    }
+  ]
+}

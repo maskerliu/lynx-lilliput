@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "",
+  "_name": "heart",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,55 +10,29 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_INSTANCING": true
-    },
-    {},
-    {}
+      "HAS_SECOND_UV": true
+    }
   ],
   "_states": [
     {
       "rasterizerState": {},
-      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
+      },
+      "depthStencilState": {}
     }
   ],
   "_props": [
     {
-      "mainColor": {
-        "__type__": "cc.Color",
-        "r": 156,
-        "g": 67,
-        "b": 67,
-        "a": 255
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.5759431719779968,
+        "y": 0.04424659162759781,
+        "z": 0.07266246527433395
       },
-      "occlusion": 0.5,
-      "roughness": 1,
-      "metallic": 0.5,
-      "specularIntensity": 0
-    },
-    {},
-    {}
+      "metallic": 0
+    }
   ]
 }

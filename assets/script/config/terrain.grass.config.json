@@ -7,8 +7,9 @@
     "anchor": 1,
     "type": 0,
     "material": [
-      "grass",
-      "dirt"
+      "dirt",
+      "grass"
+      
     ]
   },
   {
@@ -19,8 +20,9 @@
     "anchor": 1,
     "type": 0,
     "material": [
-      "grass",
-      "dirt"
+      "dirt",
+      "grass"
+     
     ]
   },
   {
@@ -43,8 +45,8 @@
     "anchor": 1,
     "type": 0,
     "material": [
-      "grass",
-      "dirt"
+      "dirt",
+      "grass"      
     ]
   },
   {
@@ -55,8 +57,9 @@
     "anchor": 1,
     "type": 0,
     "material": [
-      "grass",
-      "dirt"
+      "dirt",
+      "grass"
+      
     ]
   },
   
@@ -67,9 +70,9 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
-    "material": [
-      "grass",
-      "dirt"
+    "material": [ "dirt",
+      "grass"
+     
     ]
   },
   {
@@ -79,9 +82,9 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
-    "material": [
-      "grass",
-      "dirt"
+    "material": ["dirt",
+      "grass"
+      
     ]
   },
   {
@@ -91,9 +94,9 @@
     "z": 1,
     "anchor": 1,
     "type": 0,
-    "material": [
-      "grass",
-      "dirt"
+    "material": ["dirt",
+      "grass"
+      
     ]
   },
   {
@@ -116,8 +119,8 @@
     "anchor": 1,
     "type": 0,
     "material": [
-      "grass",
-      "dirt"
+      "dirt", "grass"
+      
     ]
   },
   {
@@ -128,8 +131,8 @@
     "anchor": 1,
     "type": 0,
     "material": [
-      "grass",
-      "dirt"
+      "dirt", "grass"
+     
     ]
   },
   {

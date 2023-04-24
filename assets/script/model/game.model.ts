@@ -11,7 +11,6 @@ export namespace Game {
     BoxWalk,
     Sit,
     Climb,
-    Jump,
     JumpUp,
     JumpLand,
     Lift,
@@ -23,6 +22,11 @@ export namespace Game {
     Watering,
     Attack,
     Dance,
+    GunIdle,
+    GunFire,
+    BwolingThrow,
+    FrisbeeThrow,
+    TreadWater,
   }
 
   export enum IslandStatus {

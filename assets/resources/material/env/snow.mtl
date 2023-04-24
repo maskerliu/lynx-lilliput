@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "",
+  "_name": "snow",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,60 +10,29 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_INSTANCING": true,
-      "USE_ALBEDO_MAP": true
-    },
-    {},
-    {}
+      "HAS_SECOND_UV": true
+    }
   ],
   "_states": [
     {
       "rasterizerState": {},
-      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
+      },
+      "depthStencilState": {}
     }
   ],
   "_props": [
     {
-      "mainColor": {
-        "__type__": "cc.Color",
-        "r": 197,
-        "g": 188,
-        "b": 179,
-        "a": 255
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.8271865844726562,
+        "y": 0.9536552429199219,
+        "z": 1
       },
-      "occlusion": 0.5,
-      "roughness": 1,
-      "metallic": 0.5,
-      "specularIntensity": 0,
-      "mainTexture": {
-        "__uuid__": "71921a5e-7f25-4767-8bad-f7e3517d4585@6c48a",
-        "__expectedType__": "cc.Texture2D"
-      }
-    },
-    {},
-    {}
+      "metallic": 0
+    }
   ]
 }

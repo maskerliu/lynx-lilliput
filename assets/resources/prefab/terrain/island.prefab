@@ -136,7 +136,7 @@
     },
     "_materials": [
       {
-        "__uuid__": "d3c7820c-2a98-4429-8bc7-b8453bc9ac41",
+        "__uuid__": "a22dcfe6-f275-4b27-ba1f-d6da3c024987",
         "__expectedType__": "cc.Material"
       }
     ],
@@ -152,6 +152,7 @@
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
+    "_reflectionProbeId": -1,
     "_enableMorph": true,
     "_id": ""
   },
@@ -304,7 +305,7 @@
     },
     "_materials": [
       {
-        "__uuid__": "bc3f5eb3-daa7-4d77-8db7-5477f909eee3",
+        "__uuid__": "a22dcfe6-f275-4b27-ba1f-d6da3c024987",
         "__expectedType__": "cc.Material"
       }
     ],
@@ -320,6 +321,7 @@
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
+    "_reflectionProbeId": -1,
     "_enableMorph": true,
     "_id": ""
   },
@@ -467,6 +469,7 @@
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
+    "_reflectionProbeId": -1,
     "_enableMorph": true,
     "_id": ""
   },
@@ -642,6 +645,7 @@
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
+    "_reflectionProbeId": -1,
     "_enableMorph": true,
     "_id": ""
   },
@@ -1690,7 +1694,7 @@
     "fileId": "36ug49AQlE657/pbqfI30d"
   },
   {
-    "__type__": "990236CKLtPCLXwXRDRETYW",
+    "__type__": "f4c3cZ2oX9N1bUSi9hhhMo5",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1719,7 +1723,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "b9+VStI15C5IUYjCDfYGBO"
+    "fileId": "67rKHppF9OLo7YfHOd5C+Z"
   },
   {
     "__type__": "cc.PrefabInfo",

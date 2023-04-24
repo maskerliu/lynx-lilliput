@@ -63,8 +63,8 @@
     "anchor": 1,
     "type": 2,
     "material": [
-      "gold",
-      "blue"
+      "blue",
+      "gold"
     ]
   },
   {
@@ -99,8 +99,8 @@
     "anchor": 1,
     "type": 2,
     "material": [
-      "woodDark",
-      "wood"
+      "wood",
+      "woodDark"      
     ]
   },
   {

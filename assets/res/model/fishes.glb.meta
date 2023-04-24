@@ -1,0 +1,506 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580",
+  "files": [
+    "__original-animation-0.cconb",
+    "__original-animation-1.cconb",
+    "__original-animation-2.cconb",
+    "__original-animation-3.cconb"
+  ],
+  "subMetas": {
+    "14719": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@14719",
+      "displayName": "",
+      "id": "14719",
+      "name": "RedPart.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "72853": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@72853",
+      "displayName": "",
+      "id": "72853",
+      "name": "ClownFishWhite.material",
+      "userData": {
+        "gltfIndex": 3
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d6d5d": {
+      "importer": "gltf-mesh",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@d6d5d",
+      "displayName": "",
+      "id": "d6d5d",
+      "name": "BrownFish.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "936af": {
+      "importer": "gltf-mesh",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@936af",
+      "displayName": "",
+      "id": "936af",
+      "name": "ClownFish.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "63fe8": {
+      "importer": "gltf-mesh",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@63fe8",
+      "displayName": "",
+      "id": "63fe8",
+      "name": "Tuna.mesh",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "440b6": {
+      "importer": "gltf-mesh",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@440b6",
+      "displayName": "",
+      "id": "440b6",
+      "name": "DoryRoot.mesh",
+      "userData": {
+        "gltfIndex": 3
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b67ff": {
+      "importer": "gltf-animation",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@b67ff",
+      "displayName": "",
+      "id": "b67ff",
+      "name": "BrownFish.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.3333333730697632
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "fc722": {
+      "importer": "gltf-animation",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@fc722",
+      "displayName": "",
+      "id": "fc722",
+      "name": "ClownFish.animation",
+      "userData": {
+        "gltfIndex": 1,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.3333333730697632
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "a3bc5": {
+      "importer": "gltf-animation",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@a3bc5",
+      "displayName": "",
+      "id": "a3bc5",
+      "name": "TunaSwim.animation",
+      "userData": {
+        "gltfIndex": 2,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.3333333730697632
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "23b31": {
+      "importer": "gltf-animation",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@23b31",
+      "displayName": "",
+      "id": "23b31",
+      "name": "DorySwim.animation",
+      "userData": {
+        "gltfIndex": 3,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.3333333730697632
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "0e156": {
+      "importer": "gltf-skeleton",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@0e156",
+      "displayName": "",
+      "id": "0e156",
+      "name": "BrownFish.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 12
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "16eb8": {
+      "importer": "gltf-skeleton",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@16eb8",
+      "displayName": "",
+      "id": "16eb8",
+      "name": "ClownFish.skeleton",
+      "userData": {
+        "gltfIndex": 1,
+        "jointsLength": 8
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "34bc0": {
+      "importer": "gltf-skeleton",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@34bc0",
+      "displayName": "",
+      "id": "34bc0",
+      "name": "Tuna.skeleton",
+      "userData": {
+        "gltfIndex": 2,
+        "jointsLength": 8
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "5ae2c": {
+      "importer": "gltf-skeleton",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@5ae2c",
+      "displayName": "",
+      "id": "5ae2c",
+      "name": "Dory.skeleton",
+      "userData": {
+        "gltfIndex": 3,
+        "jointsLength": 12
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "fb3e6": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@fb3e6",
+      "displayName": "",
+      "id": "fb3e6",
+      "name": "BrownFish.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a09be": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@a09be",
+      "displayName": "",
+      "id": "a09be",
+      "name": "ClownFishOrange.material",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b3df7": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@b3df7",
+      "displayName": "",
+      "id": "b3df7",
+      "name": "ClownFishBlack.material",
+      "userData": {
+        "gltfIndex": 4
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f644a": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@f644a",
+      "displayName": "",
+      "id": "f644a",
+      "name": "Fish.material",
+      "userData": {
+        "gltfIndex": 5
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "185b6": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@185b6",
+      "displayName": "",
+      "id": "185b6",
+      "name": "FishUnderside.material",
+      "userData": {
+        "gltfIndex": 6
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "deb27": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@deb27",
+      "displayName": "",
+      "id": "deb27",
+      "name": "DoryBlue.material",
+      "userData": {
+        "gltfIndex": 7
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ac9ba": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@ac9ba",
+      "displayName": "",
+      "id": "ac9ba",
+      "name": "DoryYellow.material",
+      "userData": {
+        "gltfIndex": 8
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b089b": {
+      "importer": "gltf-material",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@b089b",
+      "displayName": "",
+      "id": "b089b",
+      "name": "DoryBlack.material",
+      "userData": {
+        "gltfIndex": 9
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e267f": {
+      "importer": "gltf-scene",
+      "uuid": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@e267f",
+      "displayName": "",
+      "id": "e267f",
+      "name": "fishes.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "animationImportSettings": [
+      {
+        "name": "BrownFish",
+        "duration": 1.3333333730697632,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "BrownFish",
+            "from": 0,
+            "to": 1.3333333730697632,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "ClownFish",
+        "duration": 1.3333333730697632,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "ClownFish",
+            "from": 0,
+            "to": 1.3333333730697632,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "TunaSwim",
+        "duration": 1.3333333730697632,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "TunaSwim",
+            "from": 0,
+            "to": 1.3333333730697632,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "DorySwim",
+        "duration": 1.3333333730697632,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "DorySwim",
+            "from": 0,
+            "to": 1.3333333730697632,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ],
+    "redirect": "5b9b9b9a-aa98-428b-80d0-0bea323c2580@e267f",
+    "assetFinder": {
+      "meshes": [
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@d6d5d",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@936af",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@63fe8",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@440b6"
+      ],
+      "skeletons": [
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@0e156",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@16eb8",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@34bc0",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@5ae2c"
+      ],
+      "textures": [],
+      "materials": [
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@fb3e6",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@14719",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@a09be",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@72853",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@b3df7",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@f644a",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@185b6",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@deb27",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@ac9ba",
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@b089b"
+      ],
+      "scenes": [
+        "5b9b9b9a-aa98-428b-80d0-0bea323c2580@e267f"
+      ]
+    }
+  }
+}

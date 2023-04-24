@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "",
+  "_name": "rock",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,56 +9,27 @@
   },
   "_techIdx": 0,
   "_defines": [
-    {
-      "USE_INSTANCING": true
-    },
-    {},
     {}
   ],
   "_states": [
     {
       "rasterizerState": {},
-      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
+      },
+      "depthStencilState": {}
     }
   ],
   "_props": [
     {
-      "mainColor": {
-        "__type__": "cc.Color",
-        "r": 105,
-        "g": 107,
-        "b": 111,
-        "a": 255
-      },
-      "occlusion": 0.5,
-      "roughness": 1,
-      "metallic": 0.5,
-      "specularIntensity": 0
-    },
-    {},
-    {}
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.40197786688804626,
+        "y": 0.42869046330451965,
+        "z": 0.5332764983177185
+      }
+    }
   ]
 }

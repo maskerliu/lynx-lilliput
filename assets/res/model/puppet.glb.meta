@@ -1,0 +1,618 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e",
+  "files": [
+    "__original-animation-0.cconb",
+    "__original-animation-1.cconb",
+    "__original-animation-10.cconb",
+    "__original-animation-11.cconb",
+    "__original-animation-12.cconb",
+    "__original-animation-2.cconb",
+    "__original-animation-3.cconb",
+    "__original-animation-4.cconb",
+    "__original-animation-5.cconb",
+    "__original-animation-6.cconb",
+    "__original-animation-7.cconb",
+    "__original-animation-8.cconb",
+    "__original-animation-9.cconb"
+  ],
+  "subMetas": {
+    "43757": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@43757",
+      "displayName": "",
+      "id": "43757",
+      "name": "Lift.animation",
+      "userData": {
+        "gltfIndex": 9,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 7.233333110809326
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "91622": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@91622",
+      "displayName": "",
+      "id": "91622",
+      "name": "BoxRun.animation",
+      "userData": {
+        "gltfIndex": 2,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.2999999523162842
+        },
+        "events": [],
+        "speed": 0.5
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "512fc": {
+      "importer": "gltf-mesh",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@512fc",
+      "displayName": "",
+      "id": "512fc",
+      "name": "puppet.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d5fbc": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@d5fbc",
+      "displayName": "",
+      "id": "d5fbc",
+      "name": "AttackDownward.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.299999952316284
+        },
+        "events": [],
+        "speed": 1
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "2df6c": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@2df6c",
+      "displayName": "",
+      "id": "2df6c",
+      "name": "BoxIdle.animation",
+      "userData": {
+        "gltfIndex": 1,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.0333333015441895
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "49bfd": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@49bfd",
+      "displayName": "",
+      "id": "49bfd",
+      "name": "Climb.animation",
+      "userData": {
+        "gltfIndex": 3,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.0333333015441895
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "1ae6d": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@1ae6d",
+      "displayName": "",
+      "id": "1ae6d",
+      "name": "Grab.animation",
+      "userData": {
+        "gltfIndex": 4,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 7.133333206176758
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "c2696": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@c2696",
+      "displayName": "",
+      "id": "c2696",
+      "name": "Idle.animation",
+      "userData": {
+        "gltfIndex": 5,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "db140": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@db140",
+      "displayName": "",
+      "id": "db140",
+      "name": "JumpLand.animation",
+      "userData": {
+        "gltfIndex": 6,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.100000023841858
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "3965f": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@3965f",
+      "displayName": "",
+      "id": "3965f",
+      "name": "JumpUp.animation",
+      "userData": {
+        "gltfIndex": 7,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 0.8666666746139526
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "5c7d9": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@5c7d9",
+      "displayName": "",
+      "id": "5c7d9",
+      "name": "Kick.animation",
+      "userData": {
+        "gltfIndex": 8,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.899999976158142
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "9292d": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@9292d",
+      "displayName": "",
+      "id": "9292d",
+      "name": "Run.animation",
+      "userData": {
+        "gltfIndex": 10,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 0.7333333492279053
+        },
+        "events": [],
+        "speed": 0.8
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "2875d": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@2875d",
+      "displayName": "",
+      "id": "2875d",
+      "name": "Sit.animation",
+      "userData": {
+        "gltfIndex": 11,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.2000000476837158
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "6395e": {
+      "importer": "gltf-animation",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@6395e",
+      "displayName": "",
+      "id": "6395e",
+      "name": "Throw.animation",
+      "userData": {
+        "gltfIndex": 12,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.2333333492279053
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "6f362": {
+      "importer": "gltf-skeleton",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@6f362",
+      "displayName": "",
+      "id": "6f362",
+      "name": "puppet.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 25
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ad03e": {
+      "importer": "gltf-material",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@ad03e",
+      "displayName": "",
+      "id": "ad03e",
+      "name": "puppet.005.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "591c0": {
+      "importer": "gltf-material",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@591c0",
+      "displayName": "",
+      "id": "591c0",
+      "name": "puppet.006.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f2ecf": {
+      "importer": "gltf-material",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@f2ecf",
+      "displayName": "",
+      "id": "f2ecf",
+      "name": "puppet.007.material",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "9f8c6": {
+      "importer": "gltf-scene",
+      "uuid": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@9f8c6",
+      "displayName": "",
+      "id": "9f8c6",
+      "name": "puppet.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "animationImportSettings": [
+      {
+        "name": "AttackDownward",
+        "duration": 2.299999952316284,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "AttackDownward",
+            "from": 0,
+            "to": 2.299999952316284,
+            "wrapMode": 1,
+            "speed": 1
+          }
+        ]
+      },
+      {
+        "name": "BoxIdle",
+        "duration": 2.0333333015441895,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "BoxIdle",
+            "from": 0,
+            "to": 2.0333333015441895,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "BoxRun",
+        "duration": 1.2999999523162842,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "BoxRun",
+            "from": 0,
+            "to": 1.2999999523162842,
+            "wrapMode": 2,
+            "speed": 0.5
+          }
+        ]
+      },
+      {
+        "name": "Climb",
+        "duration": 2.0333333015441895,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Climb",
+            "from": 0,
+            "to": 2.0333333015441895,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "Grab",
+        "duration": 7.133333206176758,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Grab",
+            "from": 0,
+            "to": 7.133333206176758,
+            "wrapMode": 1
+          }
+        ]
+      },
+      {
+        "name": "Idle",
+        "duration": 2,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Idle",
+            "from": 0,
+            "to": 2,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "JumpLand",
+        "duration": 1.100000023841858,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "JumpLand",
+            "from": 0,
+            "to": 1.100000023841858,
+            "wrapMode": 1
+          }
+        ]
+      },
+      {
+        "name": "JumpUp",
+        "duration": 0.8666666746139526,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "JumpUp",
+            "from": 0,
+            "to": 0.8666666746139526,
+            "wrapMode": 1
+          }
+        ]
+      },
+      {
+        "name": "Kick",
+        "duration": 1.899999976158142,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Kick",
+            "from": 0,
+            "to": 1.899999976158142,
+            "wrapMode": 1
+          }
+        ]
+      },
+      {
+        "name": "Lift",
+        "duration": 7.233333110809326,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Lift",
+            "from": 0,
+            "to": 7.233333110809326,
+            "wrapMode": 1
+          }
+        ]
+      },
+      {
+        "name": "Run",
+        "duration": 0.7333333492279053,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Run",
+            "from": 0,
+            "to": 0.7333333492279053,
+            "wrapMode": 2,
+            "speed": 0.8
+          }
+        ]
+      },
+      {
+        "name": "Sit",
+        "duration": 1.2000000476837158,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Sit",
+            "from": 0,
+            "to": 1.2000000476837158,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "Throw",
+        "duration": 2.2333333492279053,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Throw",
+            "from": 0,
+            "to": 2.2333333492279053,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "c84d9fd0-d037-46ba-a778-3fda3e80a39e@9f8c6",
+    "assetFinder": {
+      "meshes": [
+        "c84d9fd0-d037-46ba-a778-3fda3e80a39e@512fc"
+      ],
+      "skeletons": [
+        "c84d9fd0-d037-46ba-a778-3fda3e80a39e@6f362"
+      ],
+      "textures": [],
+      "materials": [
+        "c84d9fd0-d037-46ba-a778-3fda3e80a39e@ad03e",
+        "c84d9fd0-d037-46ba-a778-3fda3e80a39e@591c0",
+        "c84d9fd0-d037-46ba-a778-3fda3e80a39e@f2ecf"
+      ],
+      "scenes": [
+        "c84d9fd0-d037-46ba-a778-3fda3e80a39e@9f8c6"
+      ]
+    }
+  }
+}

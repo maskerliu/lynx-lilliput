@@ -34,10 +34,10 @@
     "type": 4,
     "react": 0,
     "material": [
-      "wood",
+      "metal",
       "rock",
-      "woodDark",
-      "metal"
+      "wood",
+      "woodDark"
     ]
   },
   {
@@ -49,8 +49,8 @@
     "type": 4,
     "react": 0,
     "material": [
-      "metalDark",
       "metal",
+      "metalDark",
       "wood"
     ]
   },
@@ -125,8 +125,8 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "woodDark",
-      "wood"
+      "wood",
+      "woodDark"
     ]
   },
   {
@@ -137,8 +137,8 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "metal",
       "gold",
+      "metal",
       "wood"
     ]
   },
@@ -174,8 +174,8 @@
     "type": 4,
     "material": [
       "metal",
-      "woodDark",
-      "wood"
+      "wood",
+      "woodDark"
     ]
   },
   {
@@ -197,8 +197,8 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "woodDark",
-      "wood"
+      "wood",
+      "woodDark"
     ],
     "action": [
       10
@@ -212,8 +212,8 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "woodDark",
-      "wood"
+      "wood",
+      "woodDark"
     ]
   },
   {
@@ -224,9 +224,8 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "woodDark",
-      "_defaultMat",
-      "heart"
+      "heart",
+      "woodDark"
     ]
   },
   {
@@ -238,7 +237,6 @@
     "type": 4,
     "material": [
       "grass",
-      "_defaultMat",
       "heart",
       "snow"
     ]
@@ -251,13 +249,13 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "heart",
       "grass",
+      "heart",
       "snow"
     ]
   },
   {
-    "name": "fishpond",
+    "name": "fishPond",
     "x": 2,
     "y": 1,
     "z": 2,
@@ -384,7 +382,7 @@
     "anchor": 1,
     "type": 4,
     "material": [
-      "metal"
+      "rock"
     ]
   },
   {
@@ -418,8 +416,8 @@
     "anchor": 0,
     "type": 4,
     "material": [
-      "metal",
-      "blue"
+      "blue",
+      "metal"
     ]
   },
   {
@@ -435,6 +433,18 @@
   },
   {
     "name": "tent",
+    "x": 1.75,
+    "y": 1.12,
+    "z": 1.3,
+    "anchor": 0,
+    "type": 4,
+    "material": [
+      "heart",
+      "wood"
+    ]
+  },
+  {
+    "name": "tentLarge",
     "x": 1.75,
     "y": 1.12,
     "z": 1.3,

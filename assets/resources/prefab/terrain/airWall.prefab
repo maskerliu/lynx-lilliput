@@ -137,6 +137,7 @@
     "_shadowReceivingMode": 1,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
+    "_reflectionProbeId": -1,
     "_enableMorph": true,
     "_id": ""
   },

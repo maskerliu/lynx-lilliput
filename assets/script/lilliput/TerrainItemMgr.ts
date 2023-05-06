@@ -61,7 +61,7 @@ export default class TerrainItemMgr extends Component {
     this.rigidBody = this.getComponent(RigidBody)
   }
 
-  init(info: Game.MapItem) {
+  init(info: Game.MapItem): TerrainItemMgr {
     this._info = info
     this._index = terrainItemIdx(this.info.x, this.info.y, this.info.z)
 
@@ -95,6 +95,8 @@ export default class TerrainItemMgr extends Component {
         break
       }
     }
+
+    return this
   }
 
   updatePosition(pos: Vec3) {
@@ -138,8 +140,10 @@ export default class TerrainItemMgr extends Component {
     }).start()
   }
 
-  preview() {
+  preview(translucent: boolean) {
     this._isSleep = true
+
+    this.translucent(translucent)
     tween(this.node).to(0.5, { scale: PreviewScale }, { easing: 'bounceOut' }).start()
   }
 

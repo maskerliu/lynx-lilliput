@@ -11,9 +11,7 @@
   "_defines": [
     {
       "USE_VERTEX_COLOR": true,
-      "HAS_SECOND_UV": true,
-      "USE_ALBEDO_MAP": true,
-      "USE_NORMAL_MAP": true
+      "HAS_SECOND_UV": true
     }
   ],
   "_states": [
@@ -31,22 +29,14 @@
   ],
   "_props": [
     {
-      "mainTexture": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@a2905",
-        "__expectedType__": "cc.Texture2D"
-      },
       "albedoScale": {
         "__type__": "cc.Vec3",
-        "x": 0.39084112644195557,
-        "y": 0.39084112644195557,
-        "z": 0.39084112644195557
+        "x": 0.800000011920929,
+        "y": 0.800000011920929,
+        "z": 0.800000011920929
       },
       "metallic": 0,
-      "roughness": 0.2813980281352997,
-      "normalMap": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@f7e17",
-        "__expectedType__": "cc.Texture2D"
-      }
+      "roughness": 0.2813980281352997
     }
   ]
 }

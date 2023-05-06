@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator
 export default class MafiaUIMgr extends Component {
 
   @property(Node)
-  private rocker: Node
+  rocker: Node
 
   @property(Node)
   reactArea: Node
@@ -20,7 +20,7 @@ export default class MafiaUIMgr extends Component {
     wid.right = -view.getViewportRect().x
   }
 
-  setRockerTarget(target: RockerTarget) {
+  set rockerTarget(target: RockerTarget) {
     this.rocker.getComponent(RockerMgr).target = target
   }
 

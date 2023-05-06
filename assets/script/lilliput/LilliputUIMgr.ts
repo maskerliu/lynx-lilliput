@@ -7,7 +7,7 @@ import {
   tween, v3, view
 } from 'cc'
 import { PlayerEvent } from '../common/PlayerMgr'
-import RockerMgr from '../common/RockerMgr'
+import RockerMgr, { RockerTarget } from '../common/RockerMgr'
 import { Game, Terrain } from '../model'
 import ActionsMgr from './ActionsMgr'
 import BattleService from './BattleService'
@@ -41,55 +41,53 @@ export class UIEvent extends Event {
 @ccclass('LilliputUIMgr')
 export default class LilliputUIMgr extends Component {
   @property(Node)
-  userInfoPanel: Node
+  private userInfoPanel: Node
 
   @property(Node)
-  rocker: Node
+  private rocker: Node
 
   @property(Node)
-  actions: Node
+  private actions: Node
 
   @property(Node)
-  profileBtn: Node
+  private profileBtn: Node
 
   @property(Node)
-  terrainEditBtn: Node
+  private terrainEditBtn: Node
 
   @property(Node)
-  terrainItemBar: Node
+  private terrainItemBar: Node
 
   @property(Node)
-  cameraReactArea: Node
+  reactArea: Node
+
+  set rockerTarget(target: RockerTarget) {
+    this.rocker.getComponent(RockerMgr).target = target
+  }
 
   @property(Node)
-  editReactArea: Node
+  private selectedTerrainItem: Node
 
   @property(Node)
-  editCameraReactArea: Node
+  private terrainEditToolbar: Node
 
   @property(Node)
-  selectedTerrainItem: Node
+  private layerMenu: Node
 
   @property(Node)
-  terrainEditToolbar: Node
+  private rotateMenu: Node
 
   @property(Node)
-  layerMenu: Node
+  private skinMenu: Node
 
   @property(Node)
-  rotateMenu: Node
+  private loading: Node
 
   @property(Node)
-  skinMenu: Node
-
-  @property(Node)
-  loading: Node
-
-  @property(Node)
-  network: Node
+  private network: Node
 
   @property(Label)
-  fpsLabel: Label
+  private fpsLabel: Label
 
   private networkSprite: Sprite
   private networkLabel: Label
@@ -235,10 +233,10 @@ export default class LilliputUIMgr extends Component {
     this.profileBtn.active = !isEdit
     this.userInfoPanel.active = !isEdit
     this.actions.active = !isEdit
-    this.cameraReactArea.active = !isEdit
+    // this.cameraReactArea.active = !isEdit
 
-    this.editReactArea.active = isEdit
-    this.editCameraReactArea.active = isEdit
+    // this.editReactArea.active = isEdit
+    // this.editCameraReactArea.active = isEdit
     this.selectedTerrainItem.active = isEdit
     this.terrainEditToolbar.active = isEdit
 

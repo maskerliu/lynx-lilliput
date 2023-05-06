@@ -10,9 +10,6 @@
     "__original-animation-11.cconb",
     "__original-animation-12.cconb",
     "__original-animation-13.cconb",
-    "__original-animation-14.cconb",
-    "__original-animation-15.cconb",
-    "__original-animation-16.cconb",
     "__original-animation-2.cconb",
     "__original-animation-3.cconb",
     "__original-animation-4.cconb",
@@ -30,35 +27,12 @@
       "id": "43757",
       "name": "Lift.animation",
       "userData": {
-        "gltfIndex": 12,
+        "gltfIndex": 9,
         "wrapMode": 1,
         "sample": 30,
         "span": {
           "from": 0,
           "to": 7.233333110809326
-        },
-        "events": []
-      },
-      "ver": "1.0.16",
-      "imported": true,
-      "files": [
-        ".cconb"
-      ],
-      "subMetas": {}
-    },
-    "91622": {
-      "importer": "gltf-animation",
-      "uuid": "77f5485a-8837-4879-9102-427c00768f75@91622",
-      "displayName": "",
-      "id": "91622",
-      "name": "BoxRun.animation",
-      "userData": {
-        "gltfIndex": 3,
-        "wrapMode": 2,
-        "sample": 30,
-        "span": {
-          "from": 0,
-          "to": 1.2999999523162842
         },
         "events": []
       },
@@ -86,19 +60,19 @@
       ],
       "subMetas": {}
     },
-    "d5fbc": {
+    "2cd1c": {
       "importer": "gltf-animation",
-      "uuid": "77f5485a-8837-4879-9102-427c00768f75@d5fbc",
+      "uuid": "77f5485a-8837-4879-9102-427c00768f75@2cd1c",
       "displayName": "",
-      "id": "d5fbc",
-      "name": "AttackDownward.animation",
+      "id": "2cd1c",
+      "name": "Attack.animation",
       "userData": {
         "gltfIndex": 0,
         "wrapMode": 1,
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 2.299999952316284
+          "to": 1.1333333253860474
         },
         "events": []
       },
@@ -132,12 +106,12 @@
       ],
       "subMetas": {}
     },
-    "2df6c": {
+    "49bfd": {
       "importer": "gltf-animation",
-      "uuid": "77f5485a-8837-4879-9102-427c00768f75@2df6c",
+      "uuid": "77f5485a-8837-4879-9102-427c00768f75@49bfd",
       "displayName": "",
-      "id": "2df6c",
-      "name": "BoxIdle.animation",
+      "id": "49bfd",
+      "name": "Climb.animation",
       "userData": {
         "gltfIndex": 2,
         "wrapMode": 2,
@@ -155,52 +129,6 @@
       ],
       "subMetas": {}
     },
-    "49bfd": {
-      "importer": "gltf-animation",
-      "uuid": "77f5485a-8837-4879-9102-427c00768f75@49bfd",
-      "displayName": "",
-      "id": "49bfd",
-      "name": "Climb.animation",
-      "userData": {
-        "gltfIndex": 4,
-        "wrapMode": 2,
-        "sample": 30,
-        "span": {
-          "from": 0,
-          "to": 2.0333333015441895
-        },
-        "events": []
-      },
-      "ver": "1.0.16",
-      "imported": true,
-      "files": [
-        ".cconb"
-      ],
-      "subMetas": {}
-    },
-    "d69e7": {
-      "importer": "gltf-animation",
-      "uuid": "77f5485a-8837-4879-9102-427c00768f75@d69e7",
-      "displayName": "",
-      "id": "d69e7",
-      "name": "FrisbeeThrow.animation",
-      "userData": {
-        "gltfIndex": 5,
-        "wrapMode": 1,
-        "sample": 30,
-        "span": {
-          "from": 0,
-          "to": 3.3333332538604736
-        },
-        "events": []
-      },
-      "ver": "1.0.16",
-      "imported": true,
-      "files": [
-        ".cconb"
-      ],
-      "subMetas": {}
-    },
     "1ae6d": {
       "importer": "gltf-animation",
       "uuid": "77f5485a-8837-4879-9102-427c00768f75@1ae6d",
@@ -208,7 +136,7 @@
       "id": "1ae6d",
       "name": "Grab.animation",
       "userData": {
-        "gltfIndex": 6,
+        "gltfIndex": 3,
         "wrapMode": 1,
         "sample": 30,
         "span": {
@@ -231,12 +159,12 @@
       "id": "0fc10",
       "name": "GunFire.animation",
       "userData": {
-        "gltfIndex": 7,
-        "wrapMode": 2,
+        "gltfIndex": 4,
+        "wrapMode": 1,
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 2.566666603088379
+          "to": 1.9333332777023315
         },
         "events": []
       },
@@ -254,7 +182,7 @@
       "id": "c2696",
       "name": "Idle.animation",
       "userData": {
-        "gltfIndex": 8,
+        "gltfIndex": 5,
         "wrapMode": 2,
         "sample": 30,
         "span": {
@@ -277,7 +205,7 @@
       "id": "db140",
       "name": "JumpLand.animation",
       "userData": {
-        "gltfIndex": 9,
+        "gltfIndex": 6,
         "wrapMode": 1,
         "sample": 30,
         "span": {
@@ -300,7 +228,7 @@
       "id": "3965f",
       "name": "JumpUp.animation",
       "userData": {
-        "gltfIndex": 10,
+        "gltfIndex": 7,
         "wrapMode": 1,
         "sample": 30,
         "span": {
@@ -323,7 +251,7 @@
       "id": "5c7d9",
       "name": "Kick.animation",
       "userData": {
-        "gltfIndex": 11,
+        "gltfIndex": 8,
         "wrapMode": 1,
         "sample": 30,
         "span": {
@@ -346,7 +274,7 @@
       "id": "9292d",
       "name": "Run.animation",
       "userData": {
-        "gltfIndex": 13,
+        "gltfIndex": 10,
         "wrapMode": 2,
         "sample": 30,
         "span": {
@@ -369,7 +297,7 @@
       "id": "2875d",
       "name": "Sit.animation",
       "userData": {
-        "gltfIndex": 14,
+        "gltfIndex": 11,
         "wrapMode": 2,
         "sample": 30,
         "span": {
@@ -392,8 +320,8 @@
       "id": "6395e",
       "name": "Throw.animation",
       "userData": {
-        "gltfIndex": 15,
-        "wrapMode": 2,
+        "gltfIndex": 12,
+        "wrapMode": 1,
         "sample": 30,
         "span": {
           "from": 0,
@@ -415,7 +343,7 @@
       "id": "539a9",
       "name": "TreadWater.animation",
       "userData": {
-        "gltfIndex": 16,
+        "gltfIndex": 13,
         "wrapMode": 2,
         "sample": 30,
         "span": {
@@ -448,12 +376,12 @@
       ],
       "subMetas": {}
     },
-    "0946f": {
+    "dc44b": {
       "importer": "gltf-material",
-      "uuid": "77f5485a-8837-4879-9102-427c00768f75@0946f",
+      "uuid": "77f5485a-8837-4879-9102-427c00768f75@dc44b",
       "displayName": "",
-      "id": "0946f",
-      "name": "skin.002.material",
+      "id": "dc44b",
+      "name": "skin.material",
       "userData": {
         "gltfIndex": 0
       },
@@ -485,14 +413,14 @@
     "imageMetas": [],
     "animationImportSettings": [
       {
-        "name": "AttackDownward",
-        "duration": 2.299999952316284,
+        "name": "Attack",
+        "duration": 1.1333333253860474,
         "fps": 30,
         "splits": [
           {
-            "name": "AttackDownward",
+            "name": "Attack",
             "from": 0,
-            "to": 2.299999952316284,
+            "to": 1.1333333253860474,
             "wrapMode": 1
           }
         ]
@@ -511,32 +439,6 @@
         ]
       },
       {
-        "name": "BoxIdle",
-        "duration": 2.0333333015441895,
-        "fps": 30,
-        "splits": [
-          {
-            "name": "BoxIdle",
-            "from": 0,
-            "to": 2.0333333015441895,
-            "wrapMode": 2
-          }
-        ]
-      },
-      {
-        "name": "BoxRun",
-        "duration": 1.2999999523162842,
-        "fps": 30,
-        "splits": [
-          {
-            "name": "BoxRun",
-            "from": 0,
-            "to": 1.2999999523162842,
-            "wrapMode": 2
-          }
-        ]
-      },
-      {
         "name": "Climb",
         "duration": 2.0333333015441895,
         "fps": 30,
@@ -546,19 +448,6 @@
             "from": 0,
             "to": 2.0333333015441895,
             "wrapMode": 2
-          }
-        ]
-      },
-      {
-        "name": "FrisbeeThrow",
-        "duration": 3.3333332538604736,
-        "fps": 30,
-        "splits": [
-          {
-            "name": "FrisbeeThrow",
-            "from": 0,
-            "to": 3.3333332538604736,
-            "wrapMode": 1
           }
         ]
       },
@@ -577,14 +466,14 @@
       },
       {
         "name": "GunFire",
-        "duration": 2.566666603088379,
+        "duration": 1.9333332777023315,
         "fps": 30,
         "splits": [
           {
             "name": "GunFire",
             "from": 0,
-            "to": 2.566666603088379,
-            "wrapMode": 2
+            "to": 1.9333332777023315,
+            "wrapMode": 1
           }
         ]
       },
@@ -688,7 +577,7 @@
             "name": "Throw",
             "from": 0,
             "to": 2.2333333492279053,
-            "wrapMode": 2
+            "wrapMode": 1
           }
         ]
       },
@@ -716,11 +605,20 @@
       ],
       "textures": [],
       "materials": [
-        "77f5485a-8837-4879-9102-427c00768f75@0946f"
+        "77f5485a-8837-4879-9102-427c00768f75@dc44b"
       ],
       "scenes": [
         "77f5485a-8837-4879-9102-427c00768f75@a970a"
       ]
+    },
+    "meshOptimizer": {
+      "enable": true,
+      "simplifyOptions": {
+        "targetRatio": 1,
+        "preserveSurfaceCurvature": false,
+        "preserveBorderEdges": false,
+        "maxIterationCount": 100
+      }
     }
   }
 }

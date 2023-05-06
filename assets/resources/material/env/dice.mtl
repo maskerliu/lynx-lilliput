@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "dice",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,33 +10,62 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_ALBEDO_MAP": true,
-      "USE_NORMAL_MAP": true
-    }
+      "USE_INSTANCING": true,
+      "USE_NORMAL_MAP": true,
+      "USE_ALBEDO_MAP": true
+    },
+    {},
+    {}
   ],
   "_states": [
     {
       "rasterizerState": {
         "cullMode": 0
       },
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
     {
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.800000011920929,
+        "y": 0.800000011920929,
+        "z": 0.800000011920929
+      },
       "mainTexture": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@221a5",
+        "__uuid__": "54df1f19-e6e2-4469-b6d0-27e8cf1e1a03@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
       "normalMap": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@3effa",
+        "__uuid__": "3b6a19ea-bd3e-492c-a973-96d1cb5e4aaf@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
-    }
+    },
+    {},
+    {}
   ]
 }

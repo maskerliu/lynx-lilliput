@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "chairFrog",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,36 +10,64 @@
   "_techIdx": 0,
   "_defines": [
     {
+      "USE_INSTANCING": true,
       "HAS_SECOND_UV": true,
-      "USE_ALBEDO_MAP": true,
-      "USE_NORMAL_MAP": true
-    }
+      "USE_NORMAL_MAP": true,
+      "USE_ALBEDO_MAP": true
+    },
+    {},
+    {}
   ],
   "_states": [
     {
       "rasterizerState": {
         "cullMode": 0
       },
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
     {
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.800000011920929,
+        "y": 0.800000011920929,
+        "z": 0.800000011920929
+      },
+      "roughness": 0.9588096141815186,
       "mainTexture": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@50743",
+        "__uuid__": "2f521279-ebed-45da-bdda-8ed076aad801@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "metallic": 0,
-      "roughness": 0.9588096141815186,
       "normalMap": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@9b782",
+        "__uuid__": "b9e5de3b-2675-435a-80a7-84122b8686b7@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
-    }
+    },
+    {},
+    {}
   ]
 }

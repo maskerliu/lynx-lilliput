@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "metal",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,17 +9,39 @@
   },
   "_techIdx": 0,
   "_defines": [
+    {
+      "USE_INSTANCING": true
+    },
+    {},
     {}
   ],
   "_states": [
     {
       "rasterizerState": {},
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
@@ -29,8 +51,9 @@
         "x": 0.548610270023346,
         "y": 0.5861945748329163,
         "z": 0.7293272614479065
-      },
-      "metallic": 0
-    }
+      }
+    },
+    {},
+    {}
   ]
 }

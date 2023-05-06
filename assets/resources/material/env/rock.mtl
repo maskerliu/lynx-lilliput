@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "rock",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,17 +9,40 @@
   },
   "_techIdx": 0,
   "_defines": [
+    {
+      "USE_INSTANCING": true,
+      "HAS_SECOND_UV": true
+    },
+    {},
     {}
   ],
   "_states": [
     {
       "rasterizerState": {},
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
@@ -30,6 +53,8 @@
         "y": 0.42869046330451965,
         "z": 0.5332764983177185
       }
-    }
+    },
+    {},
+    {}
   ]
 }

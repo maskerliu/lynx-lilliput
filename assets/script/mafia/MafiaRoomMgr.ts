@@ -1,119 +1,109 @@
-import { Camera, Component, MeshCollider, MeshRenderer, Node, RigidBody, _decorator, instantiate, v3 } from "cc"
-import OrbitCamera from "../common/OrbitCamera"
-import RockerMgr from "../common/RockerMgr"
-import MafiaPlayerMgr from "./MafiaPlayerMgr"
+import { Camera, Component, Node, Prefab, RigidBody, _decorator, instantiate, v3 } from "cc"
 import { PhyEnvGroup } from "../common/Misc"
+import OrbitCamera from "../common/OrbitCamera"
+import MafiaBilliardMgr from "./MafiaBilliardMgr"
+import MafiaCheckerMgr from "./MafiaCheckerMgr"
+import MafiaDiceMgr from "./MafiaDiceMgr"
+import MafiaPlayerMgr from "./MafiaPlayerMgr"
+import MafiaPropMgr from "./MafiaPropMgr"
+import MafiaUIMgr from "./MafiaUIMgr"
 
 
 const { ccclass, property } = _decorator
 
+
+const PropMap: Map<string, Object> = new Map()
+
+PropMap.set(MafiaDiceMgr.PropName, MafiaDiceMgr)
+
 @ccclass('MafiaRoomMgr')
 export default class MafiaRoomMgr extends Component {
-  @property(Camera)
-  private mainCamera: Camera
 
-  @property(Node)
-  private reactArea: Node
 
-  @property(Node)
-  private rocker: Node
+  @property(Prefab)
+  private playerPrefab: Prefab
 
+  @property(MafiaUIMgr)
+  private uiMgr: MafiaUIMgr
+
+  @property(OrbitCamera)
   private orbitCamera: OrbitCamera
 
-  private checkers = []
+  @property(Node)
+  private hitNode: Node
 
-  private originX = 5.633
-  private originZ = 1.899
-
-  private originXX = 6.16
-  private originZZ = 2.476
-
-
-  private offsetX = 0
-  private offsetZ = 0
-
-
-  private rockerMgr: RockerMgr
-  private playerMgr: MafiaPlayerMgr
+  private mafiaRoom: Node
 
   onLoad() {
+    this.mafiaRoom = this.node.getChildByName('mafiaRoom')
 
-    this.orbitCamera = this.mainCamera.getComponent(OrbitCamera)
-    this.rockerMgr = this.rocker.getComponent(RockerMgr)
-    this.playerMgr = this.getComponentInChildren(MafiaPlayerMgr)
-    this.playerMgr.init(null)
+    let player = instantiate(this.playerPrefab)
+    player.position = v3(0, 0.5, 0)
+    let playerMgr = player.addComponent(MafiaPlayerMgr)
+    playerMgr.init(null)
+    playerMgr.followCamera = this.orbitCamera.node
 
-    this.orbitCamera.reactArea = this.reactArea
-    this.orbitCamera.target = this.playerMgr.node
-    this.playerMgr.followCamera = this.orbitCamera.node
-    this.rockerMgr.target = this.playerMgr
+    this.mafiaRoom.addChild(player)
 
-    this.offsetX = (this.originXX - this.originX) / 7
-    this.offsetZ = (this.originZZ - this.originZ) / 7
+    this.uiMgr.rockerTarget = playerMgr
 
-    let checker = this.node.getChildByName('checker')
-
-    for (let i = 0; i < 8; i++) {
-      let blackChecker = instantiate(checker)
-      blackChecker.position = v3(i * this.offsetX + this.originX, 0.580319, this.originZ)
-      this.node.addChild(blackChecker)
-      this.checkers.push(blackChecker)
-
-      let redChecker = instantiate(checker)
-      redChecker.position = v3(i * this.offsetX + this.originX, 0.580319, this.originZZ)
-
-      let renderer = redChecker.getComponent(MeshRenderer)
-      // renderer.setMaterial(IslandAssetMgr.getMaterial('heart'), 0)
-      this.node.addChild(redChecker)
-      this.checkers.push(redChecker)
-    }
-
+    this.orbitCamera.reactArea = this.uiMgr.reactArea
+    this.orbitCamera.target = playerMgr.node
   }
 
   protected start(): void {
     this.init()
+    this.initChecker()
+    this.initBilliard()
+    // console.log(this.mafiaRoom.getChildByName('handrail').getComponent(MeshRenderer).model)
+  }
 
-    console.log(this.node.getChildByName('handrail').getComponent(MeshRenderer).model)
+  initChecker() {
+    let checkerBoard = this.mafiaRoom.getChildByName('checkerBoard')
+    let checkerMgr = checkerBoard.addComponent(MafiaCheckerMgr)
+    checkerMgr.camera = this.orbitCamera.getComponent(Camera)
+    checkerMgr.hitNode = this.hitNode
+    checkerMgr.reactArea = this.uiMgr.reactArea
+  }
+
+  initBilliard() {
+    let node = this.mafiaRoom.getChildByName('billiardTable')
+    node.addComponent(MafiaBilliardMgr)
+    let billiardMgr = node.getComponent(MafiaBilliardMgr)
+    billiardMgr.camera = this.orbitCamera.getComponent(Camera)
   }
 
 
   init() {
-    this.addMeshCollider('room')
-    this.addMeshCollider('bar')
-    this.addMeshCollider('cabinet')
+    this.addMeshCollider('room', RigidBody.Type.STATIC, PhyEnvGroup.Terrain)
+    this.addMeshCollider('bar', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('cabinet', RigidBody.Type.STATIC, PhyEnvGroup.Terrain)
 
-    this.addMeshCollider('chair1')
-    this.addMeshCollider('chair2')
-    this.addMeshCollider('chair3')
-    this.addMeshCollider('chair4')
+    this.addMeshCollider('chair1', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('chair2', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('chair3', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('chair4', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
 
-    this.addMeshCollider('billiard')
+    this.addMeshCollider('pokerTable', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('armchair1', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('armchair2', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
 
-    this.addMeshCollider('pokerTable')
-    this.addMeshCollider('armchair1')
-    this.addMeshCollider('armchair2')
+    this.addMeshCollider('dice', RigidBody.Type.DYNAMIC, PhyEnvGroup.Prop)
 
-    this.addMeshCollider('dice')
-
-    this.addMeshCollider('swimmingPool')
+    this.addMeshCollider('swimmingPool', RigidBody.Type.STATIC, PhyEnvGroup.Terrain)
   }
 
 
-  private addMeshCollider(name: string) {
-    let meshNode = this.node.getChildByName(name)
+  private addMeshCollider(name: string, type: RigidBody.Type, group: PhyEnvGroup) {
 
-    meshNode.addComponent(RigidBody)
-    let rigidBody = meshNode.getComponent(RigidBody)
-    rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle)
-
-    meshNode.addComponent(MeshCollider)
-    let collider = meshNode.getComponent(MeshCollider)
-    // collider.convex = true
-    collider.mesh = meshNode.getComponent(MeshRenderer).mesh
-
-    // meshNode.getComponent(MeshRenderer).mesh.struct
+    try {
+      let node = this.mafiaRoom.getChildByName(name)
+      let propMgr = node.addComponent(MafiaPropMgr)
+      propMgr.init(type, group)
+    } catch (err) {
+      console.warn(name)
+      throw err
+    }
 
 
   }

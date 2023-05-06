@@ -9,7 +9,10 @@ import {
   geometry, instantiate,
   quat,
   tween,
-  v3
+  v3,
+  __private,
+  BatchingUtility,
+  Mesh
 } from 'cc'
 import { terrainItemIdx } from '../misc/Utils'
 import { Game, GameApi } from '../model'
@@ -46,7 +49,7 @@ export class IslandEvent extends Event {
   }
 }
 
-export const PropMgrs: Map<string, any> = new Map()
+export const PropMgrs: Map<string, __private._types_globals__Constructor<TerrainItemMgr>> = new Map()
 const MIN_FRAME_TIME = 0.02
 
 PropMgrs.set(CrateMgr.ItemName, CrateMgr)
@@ -79,7 +82,15 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   private airWall: Node
 
   camera: Camera
-  editReactArea: Node
+
+  private _reactArea: Node
+  set reactArea(node: Node) {
+    if (this._reactArea && node != this._reactArea) {
+      this.unRegisterEvent()
+    }
+    this._reactArea = node
+  }
+  // editReactArea: Node
 
   private hitMeshRenderer: MeshRenderer
 
@@ -119,6 +130,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   update(dt: number) {
+
+    PhysicsSystem.instance.enable = !this.isEdit
+
     if (this.loadCount < this._senceInfo?.map.length) {
       if (dt > MIN_FRAME_TIME) return
       this.addTerrainItem(this._senceInfo?.map[this.loadCount])
@@ -139,7 +153,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
 
     this.v3_0.set(BattleService.player().node.position)
     this.v3_0.x = Math.round(this.v3_0.x)
-    this.v3_0.y = Math.round(this.v3_0.y)
+    this.v3_0.y = Math.round(this.v3_0.y - 1)
     this.v3_0.z = Math.round(this.v3_0.z)
 
     if (BattleService.player() != null && !this.v3_0.equals(this.airWall.position)) {
@@ -223,10 +237,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       this.orginPlayerPos.set(BattleService.player().node.position)
       this.waterLayer.position.set(0, this.curLayer + 0.5, 0)
 
-      BattleService.player().onEditModel(isEdit, this.orginPlayerPos.x, this.curLayer + 1, this.orginPlayerPos.z)
+      BattleService.player().onEditModel(isEdit, this.orginPlayerPos.x, this.curLayer + 1.5, this.orginPlayerPos.z)
       for (let mgr of this.mapInfo.values()) {
-        mgr.translucent(mgr.info.y > this.curLayer)
-        mgr.preview()
+        mgr.preview(mgr.info.y > this.curLayer)
       }
       this.registerEvent()
     } else {
@@ -238,8 +251,6 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       await GameApi.saveIsland(this.convert2RemoteData())
 
       this.unRegisterEvent()
-
-      // console.log(world)
     }
   }
 
@@ -304,30 +315,31 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   private registerEvent() {
-    this.editReactArea.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
-    this.editReactArea.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-    this.editReactArea.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
-    this.editReactArea.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-    this.editReactArea.on(Node.EventType.MOUSE_MOVE, this.onTouchMove, this)
+    this._reactArea.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this._reactArea.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+    this._reactArea.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+    this._reactArea.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+    this._reactArea.on(Node.EventType.MOUSE_MOVE, this.onTouchMove, this)
   }
 
   private unRegisterEvent() {
-    this.editReactArea.off(Node.EventType.TOUCH_START, this.onTouchStart, this)
-    this.editReactArea.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-    this.editReactArea.off(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
-    this.editReactArea.off(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-    this.editReactArea.off(Node.EventType.MOUSE_MOVE, this.onTouchMove, this)
+    this._reactArea.off(Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this._reactArea.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+    this._reactArea.off(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+    this._reactArea.off(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+    this._reactArea.off(Node.EventType.MOUSE_MOVE, this.onTouchMove, this)
   }
 
   private onTouchStart(event: EventTouch) {
-
+    if (!this.isEdit) return
   }
 
   private onTouchMove(event: EventTouch) {
-
+    if (!this.isEdit) return
   }
 
   private onTouchEnd(event: EventTouch) {
+    if (!this.isEdit) return
     let selected = this.selectGirdItem(event.touch)
 
     if (selected == TerrainEditActionType.None && this.curAction != TerrainEditActionType.Selected) return
@@ -479,15 +491,12 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
 
     if (PropMgrs.has(config.name)) {
       let clazz = PropMgrs.get(config.name)
-      node.addComponent(clazz)
-      mgr = node.getComponent(clazz)
+      mgr = node.addComponent(clazz)
     } else {
       if (config.skin == 1) {
-        node.addComponent(SkinnedTerrainItemMgr)
-        mgr = node.getComponent(SkinnedTerrainItemMgr)
+        mgr = node.addComponent(SkinnedTerrainItemMgr)
       } else {
-        node.addComponent(TerrainItemMgr)
-        mgr = node.getComponent(TerrainItemMgr)
+        mgr = node.addComponent(TerrainItemMgr)
       }
     }
 
@@ -509,6 +518,10 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       if (item.info == null) continue
       arr.push(item.info)
     }
+
+    arr.sort((a, b) => { return terrainItemIdx(a.x, a.y, a.z) - terrainItemIdx(b.x, b.y, b.z) })
+
+    console.log(arr)
     return arr
   }
 

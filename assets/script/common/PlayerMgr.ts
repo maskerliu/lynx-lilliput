@@ -1,11 +1,11 @@
 import {
   BoxCollider,
-  Collider,
   Component,
   CylinderCollider,
   DirectionalLight, Event, ICollisionEvent,
   ITriggerEvent,
   Node,
+  PhysicMaterial,
   Quat,
   RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Texture2D,
   Vec2, Vec3, _decorator,
@@ -14,10 +14,10 @@ import {
   tween, v2, v3
 } from 'cc'
 import IslandAssetMgr from '../lilliput/IslandAssetMgr'
-import DiceMgr from '../lilliput/prop/DiceMgr'
 import LadderMgr from '../lilliput/prop/LadderMgr'
 import { isDebug } from '../misc/Utils'
 import { Game, User } from '../model'
+import { PhyEnvGroup } from './Misc'
 
 
 const { ccclass, property } = _decorator
@@ -43,13 +43,12 @@ export const Walk_Speed = 1
 export const Push_Speed = 0.8
 export const Climb_Speed = 0.4
 export const Roate_Speed = 8
+export const QuatNeg = new Quat(0, -2, 0, 1)
 
 const StateAnim: Map<Game.CharacterState, string> = new Map()
 
 StateAnim.set(Game.CharacterState.Idle, 'Idle')
 StateAnim.set(Game.CharacterState.Run, 'Run')
-StateAnim.set(Game.CharacterState.BoxIdle, 'BoxIdle')
-StateAnim.set(Game.CharacterState.BoxWalk, 'BoxWalk')
 StateAnim.set(Game.CharacterState.Sit, 'Sit')
 StateAnim.set(Game.CharacterState.Climb, 'Climb')
 StateAnim.set(Game.CharacterState.JumpUp, 'JumpUp')
@@ -57,17 +56,16 @@ StateAnim.set(Game.CharacterState.JumpLand, 'JumpLand')
 StateAnim.set(Game.CharacterState.Lift, 'Lift')
 StateAnim.set(Game.CharacterState.Throw, 'Throw')
 StateAnim.set(Game.CharacterState.Kick, 'Kick')
-StateAnim.set(Game.CharacterState.Push, 'Push')
 StateAnim.set(Game.CharacterState.Grab, 'Grab')
 StateAnim.set(Game.CharacterState.PickUp, 'PickUp')
-StateAnim.set(Game.CharacterState.Watering, 'Watering')
 StateAnim.set(Game.CharacterState.Attack, 'AttackDownward')
-StateAnim.set(Game.CharacterState.Dance, 'Dance')
 StateAnim.set(Game.CharacterState.BwolingThrow, 'BwolingThrow')
 StateAnim.set(Game.CharacterState.FrisbeeThrow, 'FrisbeeThrow')
-StateAnim.set(Game.CharacterState.GunIdle, 'GunIdle')
 StateAnim.set(Game.CharacterState.GunFire, 'GunFire')
 StateAnim.set(Game.CharacterState.TreadWater, 'TreadWater')
+
+const PlayerPhyMtl = new PhysicMaterial()
+PlayerPhyMtl.setValues(0.1, 0, 0, 1)
 
 export default class PlayerMgr extends Component {
 
@@ -89,9 +87,7 @@ export default class PlayerMgr extends Component {
   protected _curDir: Vec2 = v2()
   get curDir() { return this._curDir }
 
-  protected _rotation: Quat = quat()
-  protected _rotateSpeed: number = 0
-  protected _rotationSpeedTo: number = 0
+  protected _rotation: Quat = quat(QuatNeg)
 
   protected v3_pos = v3(Vec3.NEG_ONE)
   protected dstPos = v3(Vec3.NEG_ONE)
@@ -101,11 +97,10 @@ export default class PlayerMgr extends Component {
   protected v3_speed = v3()
 
   protected rigidBody: RigidBody
-  protected collider: Collider
+  protected collider: CylinderCollider
   protected animation: SkeletalAnimation
   protected meshRenderer: SkinnedMeshRenderer
 
-  // protected propNode: Node
   private _tmpTriggers = []
   private _tmpCollisions = []
   protected curInteractProp: Node = null
@@ -116,14 +111,26 @@ export default class PlayerMgr extends Component {
   protected _canSync: boolean = true
   get canSync() { return this._canSync }
 
-  onLoad() {
-    this.rigidBody = this.getComponent(RigidBody)
-    this.collider = this.getComponent(CylinderCollider)
+  protected character: string = 'human'
+  private skin: string = null
 
-    this.rigidBody.useCCD = true
-  }
+  onLoad() { }
 
   start() {
+    this.rigidBody = this.addComponent(RigidBody)
+    this.rigidBody.type = RigidBody.Type.DYNAMIC
+    this.rigidBody.group = PhyEnvGroup.Player
+    this.rigidBody.useGravity = true
+    this.rigidBody.useCCD = true
+    this.rigidBody.mass = 1
+    this.rigidBody.setMask(PhyEnvGroup.Terrain | PhyEnvGroup.Prop | PhyEnvGroup.Vehicle)
+
+    this.collider = this.addComponent(CylinderCollider)
+    this.collider.radius = 0.12
+    this.collider.height = 1
+    this.collider.material = PlayerPhyMtl
+    this.collider.direction = CylinderCollider.Axis.Y_AXIS
+
     this.collider.on('onCollisionEnter', this.onCollisionEnter, this)
     this.collider.on('onCollisionStay', this.onCollisionStay, this)
     this.collider.on('onCollisionExit', this.onCollisionExit, this)
@@ -131,6 +138,20 @@ export default class PlayerMgr extends Component {
     this.collider.on('onTriggerEnter', this.onTriggerEnter, this)
     this.collider.on('onTriggerStay', this.onTriggerStay, this)
     this.collider.on('onTriggerExit', this.onTriggerExit, this)
+
+    this.animation = this.getComponentInChildren(SkeletalAnimation)
+    this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
+
+    this.headProp = this.animation.sockets[0].target.getChildByName('HeadProp')
+    this.leftProp = this.animation.sockets[1].target.getChildByName('LeftHandProp')
+    this.rightProp = this.animation.sockets[2].target.getChildByName('RightHandProp')
+
+    let debugNode = this.node.getChildByName('Debug')
+    if (debugNode) debugNode.active = isDebug
+
+    if (this.skin) {
+      this.meshRenderer.material.setProperty('mainTexture', IslandAssetMgr.getTexture(this.skin) as Texture2D)
+    }
   }
 
   sleep() {
@@ -143,13 +164,10 @@ export default class PlayerMgr extends Component {
     this.rigidBody.clearState()
     this.rigidBody.useGravity = true
 
-    this._curDir.set(Vec2.ZERO)
-    this._rotateSpeed = 0
-    this._rotationSpeedTo = 0
-
     this._state = Game.CharacterState.Idle
     this.animation?.crossFade(StateAnim.get(this._state), 0)
 
+    this._rotation.set(QuatNeg)
     this.v3_dir.set(Vec3.ZERO)
     this.v3_speed.set(Vec3.ZERO)
 
@@ -162,48 +180,36 @@ export default class PlayerMgr extends Component {
   init(profile: User.Profile) {
     this.userProfile = profile
 
-    let name = null, skin = null
-
     switch (this.userProfile.uid) {
       case '8f4e7438-4285-4268-910c-3898fb8d6d96':
-        name = 'puppet'
-        skin = null
+        this.character = 'hoboRat'
+        this.skin = 'hoboRatRed'
         break
       case 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608':
-        name = 'hotdog'
-        skin = null
+        this.character = 'hotdog'
+        this.skin = null
         break
       case '5ee13634-340c-4741-b075-7fe169e38a13':
-        name = 'human'
-        skin = 'cyborgFemaleA'
+        this.character = 'human'
+        this.skin = 'cyborgFemaleA'
         break
       case '4e6434d1-5910-46c3-879d-733c33ded257':
-        name = 'hoboRat'
-        skin = 'hoboRatGreen'
+        this.character = 'hoboRat'
+        this.skin = 'hoboRatGreen'
         break
       case 'b09272b8-d6a4-438b-96c3-df50ac206706':
-        name = 'human'
-        skin = 'skaterMaleA'
+        this.character = 'human'
+        this.skin = 'skaterMaleA'
         break
       default:
-        name = 'human'
-        skin = 'zombieA'
+        this.character = 'human'
+        this.skin = 'zombieA'
         break
     }
 
-    this.animation = this.getComponent(SkeletalAnimation)
-    this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
-
-    this.headProp = this.animation.sockets[0].target.getChildByName('HeadProp')
-    this.leftProp = this.animation.sockets[1].target.getChildByName('LeftHandProp')
-    this.rightProp = this.animation.sockets[2].target.getChildByName('RightHandProp')
-
-    let debugNode = this.node.getChildByName('Debug')
-    if (debugNode) debugNode.active = isDebug
-
-    if (skin) {
-      this.meshRenderer.material.setProperty('mainTexture', IslandAssetMgr.getTexture(skin) as Texture2D)
-    }
+    let character = instantiate(IslandAssetMgr.getCharacter(profile.uid))
+    character.position = v3(0, -0.5, 0)
+    this.node.addChild(character)
 
     return this
   }
@@ -217,34 +223,28 @@ export default class PlayerMgr extends Component {
       this.v3_dir.set(forward.x, 0, forward.z)
       Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
       this.node.rotation = this._rotation
-    }
-
-    this.rigidBody.getLinearVelocity(this.v3_speed)
-    this._canSync = this.v3_speed.y >= 0
-
-    if (this._state == Game.CharacterState.JumpUp && !this.animState()) {
-      this.state = Game.CharacterState.JumpLand
+      this._rotation.set(QuatNeg)
     }
 
     if (!this.animState()) {
-      this.state = Game.CharacterState.Idle
+      if (this._state == Game.CharacterState.JumpUp) {
+        this.state = Game.CharacterState.JumpLand
+      } else {
+        this.state = Game.CharacterState.Idle
+      }
     }
-
-    this.runTo(dt)
   }
 
   onAction(msg: Game.PlayerMsg) {
     this._postState = Game.CharacterState.None
     switch (msg.state) {
       case Game.CharacterState.Run:
-      case Game.CharacterState.BoxWalk:
-      case Game.CharacterState.Push:
         this.dstPos.set(msg.pos.x, msg.pos.y, msg.pos.z)
+        this.dstForward.set(msg.dir.x, msg.dir.y, msg.dir.z)
         this.state = msg.state
         this._postState = msg.state
         break
       case Game.CharacterState.Idle:
-      case Game.CharacterState.BoxIdle:
         this.dstPos.set(msg.pos.x, msg.pos.y, msg.pos.z)
         this.dstForward.set(msg.dir.x, msg.dir.y, msg.dir.z)
         this.state = Game.CharacterState.Run
@@ -290,29 +290,14 @@ export default class PlayerMgr extends Component {
   }
 
   private onCollisionEnter(event: ICollisionEvent) {
-    // switch (this._state) {
-    // case Game.CharacterState.Run:
-    // if (event.otherCollider.node.name == DiceMgr.ItemName && !this._curDir.equals(Vec2.ZERO))
-    // this.state = Game.CharacterState.Push
-    // break
-    // }
     this.rigidBody.clearState()
   }
 
   private onCollisionExit(event: ICollisionEvent) {
-    // switch (this._state) {
-    //   case Game.CharacterState.Push:
-    //     this.state = Game.CharacterState.Run
-    //     break
-    // }
+
   }
 
   private onCollisionStay(event: ICollisionEvent) {
-
-    if (event.otherCollider.node.name == DiceMgr.ItemName && !this._curDir.equals(Vec2.ZERO)) {
-      // this.state = Game.CharacterState.Push
-    }
-
     switch (this._state) {
       case Game.CharacterState.JumpUp:
       case Game.CharacterState.Climb:
@@ -321,12 +306,9 @@ export default class PlayerMgr extends Component {
       case Game.CharacterState.Idle:
         if (event.otherCollider.node.name == 'airWall') break
       case Game.CharacterState.Run:
-        if (event.otherCollider.node.name == DiceMgr.ItemName) {
-          // this.state = Game.CharacterState.Push
-        }
+
       default:
-        // this.rigidBody.clearState()
-        this.rigidBody.clearVelocity()
+        this.rigidBody.clearState()
         break
     }
   }
@@ -337,13 +319,23 @@ export default class PlayerMgr extends Component {
     this._tmpTriggers.push(event.otherCollider.shape['sharedBody'].id)
     // console.log(this._tmpTriggers)
     this.curInteractProp = event.otherCollider.node
-    if (this.curInteractProp.name == LadderMgr.ItemName) { this._canClimb = true }
+    if (this.curInteractProp.name == LadderMgr.ItemName) {
+      this._canClimb = true
+    } else if (event.otherCollider.node.name == 'Water') {
+      this.state = Game.CharacterState.TreadWater
+      this.rigidBody.useGravity = false
+    }
 
   }
 
   private onTriggerStay(event: ITriggerEvent) {
     // this._canClimb = event.otherCollider.node.name == LadderMgr.ItemName
     // // if (event.otherCollider.node.name == LadderMgr.ItemName) { this._canClimb = true }
+
+    if (event.otherCollider.node.name == 'Water') {
+      this.state = Game.CharacterState.TreadWater
+      this.rigidBody.useGravity = false
+    }
   }
 
   private onTriggerExit(event: ITriggerEvent) {
@@ -362,40 +354,7 @@ export default class PlayerMgr extends Component {
     this._canClimb = this.curInteractProp?.name == LadderMgr.ItemName
   }
 
-  protected runTo(dt: number) {
-    if (this.dstPos.equals(Vec3.NEG_ONE)) {
-      this._canSync = true
-      return
-    }
-
-    this._canSync = false
-
-    if (this.dstPos.equals(this.node.position, dt * 1)) {
-      this.dstPos.set(Vec3.NEG_ONE)
-      if (this._postState != Game.CharacterState.None) {
-        this.state = this._postState
-        this._postState = Game.CharacterState.None
-      }
-      return
-    }
-
-    this.v3_pos.set(this.node.position)
-    this.v3_pos.y = this.dstPos.y
-
-    // 当前位置与目标帧出现较大误差，直接跳帧
-    if (Math.abs(this.node.position.y - this.dstPos.y) > 0.1) {
-      this.node.position = this.dstPos
-      this.dstPos.set(Vec3.NEG_ONE)
-      this.state = this._postState
-    } else {
-      this.state = Game.CharacterState.Run
-      Vec3.subtract(this.v3_dir, this.dstPos, this.v3_pos)
-      this._rotationSpeedTo = 0 //Roate_Speed
-      this._rotateSpeed = 0
-      Quat.fromViewUp(this._rotation, this.v3_dir)
-      this.node.rotation = this._rotation
-    }
-  }
+  protected runTo() { }
 
   protected jump() {
     if (this.state == Game.CharacterState.JumpUp) return
@@ -403,7 +362,14 @@ export default class PlayerMgr extends Component {
     if (this._state != Game.CharacterState.JumpUp) return
     setTimeout(() => {
       this.rigidBody.useGravity = true
-      this.rigidBody.applyImpulse(v3(this._curDir.negative().x * 1, 6, this._curDir.negative().y * 1), v3(0, 0, 0))
+      let v3Impluse = v3(0, 6, 0)
+
+      if (!Vec2.ZERO.equals(this._curDir)) {
+        v3Impluse.x = this.node.forward.negative().x * 1
+        v3Impluse.z = this.node.forward.negative().z * 1
+      }
+
+      this.rigidBody.applyImpulse(v3Impluse, Vec3.ZERO)
     }, 500)
   }
 
@@ -421,7 +387,6 @@ export default class PlayerMgr extends Component {
   }
 
   protected throw() {
-    this._rotateSpeed = 0
     this.state = Game.CharacterState.Throw
     setTimeout(() => {
       // let node = instantiate(this.prop)
@@ -437,11 +402,7 @@ export default class PlayerMgr extends Component {
   protected kick() {
     if (this.curInteractProp == null) return
     Vec3.subtract(this.v3_dir, this.curInteractProp.position, this.node.position)
-    this._rotationSpeedTo = 0
-    this._rotateSpeed = 0
-    let rotation = quat()
-    Quat.fromViewUp(rotation, this.v3_dir)
-    this.node.rotation = rotation
+    Quat.fromViewUp(this.node.rotation, this.v3_dir)
 
     this.state = Game.CharacterState.Kick
   }
@@ -451,13 +412,13 @@ export default class PlayerMgr extends Component {
 
     let ladderMgr = this.curInteractProp.getComponent(LadderMgr)
     Vec3.subtract(this.v3_dir, this.node.position, this.curInteractProp.position)
-    this._rotationSpeedTo = 0
-    this._rotateSpeed = 0
     let rotation = quat()
     Quat.rotateY(rotation, rotation, (ladderMgr.info.angle - 180) * Math.PI / 180)
     this.node.rotation = rotation
 
-    this.node.position = ladderMgr.ladderPos
+    this.v3_pos.set(ladderMgr.ladderPos)
+    this.v3_pos.y = this.node.position.y
+    this.node.position = this.v3_pos
     this.state = Game.CharacterState.Climb
   }
 
@@ -487,7 +448,6 @@ export default class PlayerMgr extends Component {
   }
 
   protected sit() {
-    this._rotateSpeed = 0
     this.state = Game.CharacterState.Sit
   }
 
@@ -502,9 +462,6 @@ export default class PlayerMgr extends Component {
     // on action ongoing, can not break except idle or run
     if (this._state != Game.CharacterState.Idle &&
       this._state != Game.CharacterState.Run &&
-      this._state != Game.CharacterState.Push &&
-      this._state != Game.CharacterState.BoxWalk &&
-      this._state != Game.CharacterState.BoxIdle &&
       this._state != Game.CharacterState.Climb &&
       this.animState())
       return

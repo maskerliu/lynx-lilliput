@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "wood",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,17 +9,39 @@
   },
   "_techIdx": 0,
   "_defines": [
+    {
+      "USE_INSTANCING": true
+    },
+    {},
     {}
   ],
   "_states": [
     {
       "rasterizerState": {},
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
@@ -30,8 +52,9 @@
         "y": 0.14464817941188812,
         "z": 0.04766399785876274
       },
-      "metallic": 0,
       "roughness": 0.800000011920929
-    }
+    },
+    {},
+    {}
   ]
 }

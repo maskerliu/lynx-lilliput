@@ -1,4 +1,4 @@
-import { instantiate, v3, Vec3 } from 'cc'
+import { instantiate, Prefab, v3, Vec3 } from 'cc'
 import PlayerMgr from '../common/PlayerMgr'
 import { Game, User } from '../model'
 import IslandAssetMgr from './IslandAssetMgr'
@@ -42,6 +42,9 @@ class BattleService implements MessageHandler {
   private playerLocalFrames: Map<string, Array<Game.PlayerMsg>> = new Map()
   private myself: User.Profile
 
+  private _playerPrefab: Prefab = null
+  set playerPrefab(prefab: Prefab) { this._playerPrefab = prefab }
+
   private players: Map<string, PlayerMgr> = new Map()
   private islands: Map<string, IslandMgr> = new Map()
 
@@ -50,6 +53,7 @@ class BattleService implements MessageHandler {
 
   private lstFrameState: Game.CharacterState = Game.CharacterState.None
 
+  private _interval = 0
   private _delay: number = 0
   get delay() { return this._delay }
 
@@ -81,26 +85,16 @@ class BattleService implements MessageHandler {
 
   sendPlayerMsg(msg: Game.PlayerMsg) {
     msg.type = Game.MsgType.Player
-    if (this._curIsland == null || this.island().isEdit || this.player() == null || !this.player().canSync) return
-    if (msg.cmd == Game.PlayerMsgType.Sync && this.lstFrameState == Game.CharacterState.Idle && this.player().state == this.lstFrameState) return
-
-    if (msg.state == null &&
-      this.player().state != Game.CharacterState.Idle &&
-      this.player().state != Game.CharacterState.Run &&
-      this.player().state != Game.CharacterState.BoxIdle &&
-      this.player().state != Game.CharacterState.BoxWalk)
-      return
-
+    if (this._curIsland == null) return
 
     msg.uid = this.myself.uid
     msg.seq = this.gameFrame++
-    msg.state = msg.state ? msg.state : this.player().state
-    msg.pos = this.v3ToXYZ(this.player()?.node.position)
+    // msg.state = msg.state ? msg.state : this.player().state
+    // msg.pos = this.v3ToXYZ(this.player()?.node.position)
 
-
-    if (this.player().state == Game.CharacterState.Idle) {
-      msg.dir = this.v3ToXYZ(this.player()?.node.forward)
-    }
+    // if (this.player().state == Game.CharacterState.Idle || this.player().state == Game.CharacterState.Run) {
+    //   msg.dir = this.v3ToXYZ(this.player()?.node.forward)
+    // }
 
     this.gameMsgs.push(msg)
     this.lstFrameState = msg.state
@@ -205,11 +199,16 @@ class BattleService implements MessageHandler {
     player.node.active = false
     this.playerRemoteFrames.delete(player.userProfile.uid)
 
-    player.node.position.set(Vec3.ONE)
+    player.node.position = v3(1, 1.5, 1)
     island.node.addChild(player.node)
     player.node.active = true
     player.resume()
-    this.sendPlayerMsg({ cmd: Game.PlayerMsgType.Enter, state: Game.CharacterState.Idle })
+    this.sendPlayerMsg({
+      cmd: Game.PlayerMsgType.Enter,
+      state: Game.CharacterState.Idle,
+      pos: this.v3ToXYZ(player.node.position),
+      dir: this.v3ToXYZ(player.node.forward)
+    })
   }
 
   leave() {
@@ -228,6 +227,13 @@ class BattleService implements MessageHandler {
     this.timer = setInterval(() => {
       if (this.gameMsgs.length == 0) return
 
+      // if (this._interval >= 15) {
+      //   this._interval = 0
+      //   this._delay = Math.floor(30 + Math.random() * 400)
+      // } else {
+      //   this._interval++
+      // }
+
       if (msgClient.isLocal) {
         // this.mockTimer()
       } else {
@@ -239,22 +245,18 @@ class BattleService implements MessageHandler {
     this._isStart = true
 
     if (msgClient.isLocal) {
-      this.mockTimer()
+      this.mockConsume()
     }
   }
 
-  private mockTimer() {
-    this._delay = Math.floor(30 + Math.random() * 400)
+  private mockConsume() {
+
+    let delay = Math.floor(30 + Math.random() * 400)
     setTimeout(() => {
       msgClient.msgHanlder.onMessageArrived(this.gameMsgs)
       this.gameMsgs.splice(0, this.gameMsgs.length)
-      this.mockTimer()
-    }, this._delay)
-
-    // setInterval(()=>{
-    //   msgClient.msgHanlder.onMessageArrived(this.gameMsgs)
-    //   this.gameMsgs.splice(0, this.gameMsgs.length)
-    // }, 400)
+      this.mockConsume()
+    }, delay)
   }
 
   async onMessageArrived(msgs: Array<Game.Msg>) {
@@ -281,11 +283,9 @@ class BattleService implements MessageHandler {
         let profile = await UserService.profile(msg.uid)
         profile.uid = uid
         if (mgr == null) {
-          let player = instantiate(IslandAssetMgr.getCharacter(msg.uid))
-          player.addComponent(OtherMgr)
+          let player = instantiate(this._playerPrefab)
           island.node.addChild(player)
-          mgr = player.getComponent(OtherMgr)
-          mgr.init(profile)
+          mgr = player.addComponent(OtherMgr).init(profile)
           this.addPlayer(uid, mgr)
         } else {
           mgr.node.removeFromParent()

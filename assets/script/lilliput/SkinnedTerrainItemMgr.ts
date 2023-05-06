@@ -24,6 +24,8 @@ export default class SkinnedTerrainItemMgr extends TerrainItemMgr {
     super.init(info)
 
     this.updateSkin(this._info.skin)
+
+    return this
   }
 
   updateSkin(skin?: string) {

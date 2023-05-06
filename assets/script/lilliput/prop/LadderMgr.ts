@@ -32,7 +32,7 @@ export default class LadderMgr extends TerrainItemMgr {
     this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle | PhyEnvGroup.Terrain)
 
     this.node.addComponent(MeshCollider)
-  
+
     let meshCollider = this.node.getComponent(MeshCollider)
     meshCollider.mesh = this.node.getComponent(MeshRenderer).mesh
     meshCollider.material = PropMtl
@@ -40,7 +40,6 @@ export default class LadderMgr extends TerrainItemMgr {
     let minPos = v3(), maxPos = v3()
     this.node.getComponent(MeshRenderer).model.modelBounds.getBoundary(minPos, maxPos)
     maxPos.subtract(minPos)
-    // console.log(this.node.getComponent(MeshRenderer).model.modelBounds.center, maxPos)
 
     this.node.addComponent(BoxCollider)
     let collider = this.node.getComponent(BoxCollider)
@@ -48,13 +47,10 @@ export default class LadderMgr extends TerrainItemMgr {
     collider.size = v3(maxPos.x + 0.2, maxPos.y, 0.5 - maxPos.z)
     collider.isTrigger = true
 
-    console.log(this.node)
-
     collider.on('onTriggerEnter', this.onTriggerEnter, this)
     collider.on('onTriggerExit', this.onTriggerExit, this)
 
-
-    
+    return this
   }
 
   get ladderPos() {
@@ -62,9 +58,6 @@ export default class LadderMgr extends TerrainItemMgr {
     let radius = this.info.angle * Math.PI / 180
     pos.x += -Math.sin(radius) * 0.3
     pos.z += -Math.cos(radius) * 0.3
-
-    console.log(pos)
-    // this.point.position = pos
     return pos
   }
 

@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "darts",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,34 +10,56 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_ALBEDO_MAP": true,
-      "USE_NORMAL_MAP": true
-    }
+      "USE_ALBEDO_MAP": true
+    },
+    {},
+    {}
   ],
   "_states": [
     {
       "rasterizerState": {
         "cullMode": 0
       },
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
     {
-      "mainTexture": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@b4841",
-        "__expectedType__": "cc.Texture2D"
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.800000011920929,
+        "y": 0.800000011920929,
+        "z": 0.800000011920929
       },
-      "metallic": 0,
-      "normalMap": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@809d9",
+      "mainTexture": {
+        "__uuid__": "4abbe326-ff98-4578-8f68-2e300a764d2e@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
-    }
+    },
+    {},
+    {}
   ]
 }

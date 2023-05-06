@@ -8,7 +8,7 @@ export default class OrbitCamera extends Component {
   @property
   enableTouch = true
   @property
-  enableScaleRadius = false
+  enableScaleRadius = true
   @property
   rotateSpeed = 1
   @property
@@ -16,15 +16,14 @@ export default class OrbitCamera extends Component {
   @property
   xRotationRange = v2(5, 70)
   @property
-  yRotationRange = v2(5, 70)
+  yRotationRange = v2(-180, 180)
 
+  
+  private _targetRadius = 10
   @property
-  get radius() {
-    return this._targetRadius
-  }
-  set radius(v) {
-    this._targetRadius = v
-  }
+  get radius() { return this._targetRadius }
+  set radius(r) { this._targetRadius = r }
+
   @property
   radiusScaleSpeed = 1
   @property
@@ -33,10 +32,8 @@ export default class OrbitCamera extends Component {
   maxRadius = 10
   @property
   followTargetRotationY = true
-  @property
-  private _targetRadius = 10
-
-  private _v3_0 = v3()
+ 
+  private _v3Pos= v3()
   private _q_tmp = quat()
 
   private _center = v3()
@@ -79,26 +76,26 @@ export default class OrbitCamera extends Component {
     Quat.fromEuler(this._targetRotation, this._targetDir.x, this._targetDir.y, this._targetDir.z)
 
     if (!this._rotation.equals(this._targetRotation, 0.01)) {
-      Quat.slerp(this._rotation, this._rotation, this._targetRotation, 0.0167 * 7 * this.rotateSpeed)
+      Quat.slerp(this._rotation, this._rotation, this._targetRotation, dt * 7 * this.rotateSpeed)
       this._needUpdate = true
     }
 
     if (!this._center.equals(this._targetCenter, 0.01)) {
-      Vec3.lerp(this._center, this._center, this._targetCenter, 0.0167 * 5 * this.followSpeed)
+      Vec3.lerp(this._center, this._center, this._targetCenter, dt * 5 * this.followSpeed)
       this._needUpdate = true
     }
 
     if (Math.abs(this._radius - this._targetRadius) > 0.01) {
-      this._radius = lerp(this._radius, this._targetRadius, 0.0167 * 15)
+      this._radius = lerp(this._radius, this._targetRadius, dt * 15)
       this._needUpdate = true
     }
 
     if (this._needUpdate) {
-      Vec3.transformQuat(this._v3_0, Vec3.FORWARD, this._rotation)
-      Vec3.multiplyScalar(this._v3_0, this._v3_0, this._radius)
-      this._v3_0.add(this._center)
+      Vec3.transformQuat(this._v3Pos, Vec3.FORWARD, this._rotation)
+      Vec3.multiplyScalar(this._v3Pos, this._v3Pos, this._radius)
+      this._v3Pos.add(this._center)
 
-      this.node.position = this._v3_0
+      this.node.position = this._v3Pos
       this.node.lookAt(this._center)
     }
   }

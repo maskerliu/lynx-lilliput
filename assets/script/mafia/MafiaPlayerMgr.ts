@@ -1,5 +1,5 @@
-import { Quat, SkeletalAnimation, SkinnedMeshRenderer, Vec2, Vec3, _decorator, lerp } from "cc"
-import PlayerMgr, { Climb_Speed, Roate_Speed } from "../common/PlayerMgr"
+import { CylinderCollider, MeshCollider, Quat, RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Vec2, Vec3, _decorator, lerp } from "cc"
+import PlayerMgr, { Climb_Speed, QuatNeg, Roate_Speed } from "../common/PlayerMgr"
 import { Game, User } from "../model"
 
 
@@ -10,8 +10,15 @@ const Move_Speed = 1.5
 @ccclass('MafiaPlayerMgr')
 export default class MafiaPlayerMgr extends PlayerMgr {
 
+  onLoad(): void {
+
+  }
+
   init(profile: User.Profile) {
-    this.animation = this.getComponent(SkeletalAnimation)
+
+    this.node.getChildByName('Debug').active = false
+
+    this.animation = this.getComponentInChildren(SkeletalAnimation)
     this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
     return this
   }
@@ -19,11 +26,16 @@ export default class MafiaPlayerMgr extends PlayerMgr {
   update(dt: number) {
     if (this._isEdit) return
 
-    if (this._rotationSpeedTo != 0) {
-      this._rotateSpeed = lerp(this._rotateSpeed, this._rotationSpeedTo, 30 * dt)
-      this.node.rotation = this.node.rotation.slerp(this._rotation, this._rotateSpeed * dt)
-    }
+    if (QuatNeg.equals(this._rotation)) {
 
+    } else {
+      if (this.node.rotation.equals(this._rotation, 0.12)) {
+        this._rotation.set(QuatNeg)
+      } else {
+        this._rotateSpeed = lerp(this._rotateSpeed, Roate_Speed, 30 * dt)
+        this.node.rotation = this.node.rotation.slerp(this._rotation, Roate_Speed * dt)
+      }
+    }
     super.update(dt)
   }
 
@@ -37,15 +49,9 @@ export default class MafiaPlayerMgr extends PlayerMgr {
   lateUpdate(dt: number) {
     switch (this._state) {
       case Game.CharacterState.Run:
-      case Game.CharacterState.Push:
-
         this.rigidBody.getLinearVelocity(this.v3_speed)
         if (this.v3_speed.equals(Vec3.ZERO)) {
           // console.log('on collision')
-        }
-
-        if (this.curDir.equals(Vec2.ZERO) && this._postState == Game.CharacterState.None) {
-          this.state = Game.CharacterState.Idle
         }
         let dir = this.node.forward.negative()
         this.rigidBody.getLinearVelocity(this.v3_speed)
@@ -73,32 +79,27 @@ export default class MafiaPlayerMgr extends PlayerMgr {
   onDirectionChanged(dir: Vec2) {
     if (this._state != Game.CharacterState.Idle &&
       this._state != Game.CharacterState.Run &&
-      this._state != Game.CharacterState.JumpUp &&
-      this._state != Game.CharacterState.Push) {
+      this._state != Game.CharacterState.JumpUp) {
       return
     }
 
-    this.rigidBody.getLinearVelocity(this.v3_speed)
-    if (this.v3_speed.y != 0) {
+    // this.rigidBody.getLinearVelocity(this.v3_speed)
+    // if (this.v3_speed.y != 0) {
+    //   // this.state = Game.CharacterState.Idle
+    //   return
+    // }
+
+    if ((this._state == Game.CharacterState.Run || this._state == Game.CharacterState.Idle) && Vec2.ZERO.equals(dir)) {
       this.state = Game.CharacterState.Idle
       return
     }
 
-    this._curDir.set(dir)
-    if ((this._state == Game.CharacterState.Run || this._state == Game.CharacterState.Idle) && dir.equals(Vec2.ZERO)) {
-      this.state = Game.CharacterState.Idle
-      return
-    }
-
-    this._rotationSpeedTo = Roate_Speed
-    this._rotateSpeed = 0
     this.state = Game.CharacterState.Run
     this.dstPos.set(Vec3.NEG_ONE)
 
-    let forward = this.followCamera.forward
-    this.v3_dir.set(forward.x, 0, forward.z)
-    if (!Vec2.ZERO.equals(this._curDir)) {
-      Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, this._curDir.signAngle(Vec2.UNIT_Y))
+    this.v3_dir.set(this.followCamera.forward.x, 0, this.followCamera.forward.z)
+    if (!Vec2.ZERO.equals(dir)) {
+      Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, dir.signAngle(Vec2.UNIT_Y))
     }
     Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
   }

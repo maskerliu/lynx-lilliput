@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "grass",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,30 +10,57 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "HAS_SECOND_UV": true
-    }
+      "USE_INSTANCING": true,
+      "USE_ALBEDO_MAP": true
+    },
+    {},
+    {}
   ],
   "_states": [
     {
       "rasterizerState": {},
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
     {
-      "albedoScale": {
-        "__type__": "cc.Vec3",
-        "x": 0.00205302145332098,
-        "y": 0.22978030145168304,
-        "z": 0.06531715393066406
+      "tilingOffset": {
+        "__type__": "cc.Vec4",
+        "x": 0.015,
+        "y": 0.015,
+        "z": 0,
+        "w": 0
       },
-      "metallic": 0,
-      "roughness": 0.800000011920929
-    }
+      "roughness": 0.800000011920929,
+      "mainTexture": {
+        "__uuid__": "7070ce58-f327-4da6-8b10-b02b5a180681@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    },
+    {},
+    {}
   ]
 }

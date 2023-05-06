@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "billiardBall",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,30 +10,58 @@
   "_techIdx": 0,
   "_defines": [
     {
+      "USE_INSTANCING": true,
       "USE_ALBEDO_MAP": true
-    }
+    },
+    {},
+    {}
   ],
   "_states": [
     {
       "rasterizerState": {
         "cullMode": 0
       },
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
     {
-      "mainTexture": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@006bd",
-        "__expectedType__": "cc.Texture2D"
+      "albedoScale": {
+        "__type__": "cc.Vec3",
+        "x": 0.800000011920929,
+        "y": 0.800000011920929,
+        "z": 0.800000011920929
       },
-      "metallic": 0,
-      "roughness": 0.8929713368415833
-    }
+      "roughness": 0.8929713368415833,
+      "mainTexture": {
+        "__uuid__": "ff99eeee-2796-46c6-abd8-73afb14d93dc@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    },
+    {},
+    {}
   ]
 }

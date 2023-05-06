@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "black",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -9,6 +9,10 @@
   },
   "_techIdx": 0,
   "_defines": [
+    {
+      "USE_INSTANCING": true
+    },
+    {},
     {}
   ],
   "_states": [
@@ -16,12 +20,30 @@
       "rasterizerState": {
         "cullMode": 0
       },
+      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      },
-      "depthStencilState": {}
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    },
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
     }
   ],
   "_props": [
@@ -31,9 +53,9 @@
         "x": 0.046961698681116104,
         "y": 0.046961698681116104,
         "z": 0.046961698681116104
-      },
-      "metallic": 0,
-      "roughness": 0.5
-    }
+      }
+    },
+    {},
+    {}
   ]
 }

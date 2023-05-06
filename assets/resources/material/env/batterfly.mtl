@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "batterfly",
+  "_name": "",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -18,6 +18,9 @@
       "rasterizerState": {
         "cullMode": 0
       },
+      "depthStencilState": {
+        "depthWrite": false
+      },
       "blendState": {
         "targets": [
           {
@@ -27,20 +30,15 @@
             "blendDstAlpha": 4
           }
         ]
-      },
-      "depthStencilState": {
-        "depthWrite": false
       }
     }
   ],
   "_props": [
     {
       "mainTexture": {
-        "__uuid__": "bef2fc84-884a-4938-af20-1b5c1999763c@9c3d2",
+        "__uuid__": "12871e85-123b-4a4b-a2c2-570cf63ca655@6c48a",
         "__expectedType__": "cc.Texture2D"
-      },
-      "metallic": 0,
-      "roughness": 0.9
+      }
     }
   ]
 }

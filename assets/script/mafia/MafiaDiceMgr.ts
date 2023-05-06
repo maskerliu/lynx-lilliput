@@ -1,12 +1,10 @@
 import { BoxCollider, Component, Mesh, MeshRenderer, RigidBody, Widget, _decorator, renderer, v3, view } from "cc"
 import { PhyEnvGroup } from "../common/Misc"
+import MafiaPropMgr from "./MafiaPropMgr"
 const { ccclass, property } = _decorator
 
-@ccclass('MachineGunMgr')
-export default class MachineGunMgr extends Component {
-
-  private rigidBody: RigidBody
-  private model: renderer.scene.Model
+@ccclass('MafiaDiceMgr')
+export default class MafiaDiceMgr extends MafiaPropMgr {
 
   onLoad() {
     this.node.getComponent(MeshRenderer).model.worldBounds
@@ -32,3 +30,5 @@ export default class MachineGunMgr extends Component {
 
 
 }
+
+MafiaDiceMgr.PropName = 'dice'

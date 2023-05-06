@@ -1,5 +1,5 @@
 import {
-  AmbientInfo, Camera, Component, DirectionalLight, Node, Prefab, Quat, SkyboxInfo,
+  AmbientInfo, BatchingUtility, Camera, Component, DirectionalLight, MeshCollider, MeshRenderer, Node, Prefab, Quat, RigidBody, SkyboxInfo,
   _decorator, director, instantiate, quat, v3
 } from 'cc'
 import OrbitCamera from '../common/OrbitCamera'
@@ -13,6 +13,9 @@ import LilliputUIMgr, { UIEvent } from './LilliputUIMgr'
 import TerrainItemMgr, { PropEvent } from './TerrainItemMgr'
 import UserService from './UserService'
 import MyselfMgr from './player/MySelfMgr'
+import { PhyEnvGroup } from '../common/Misc'
+import BallonMgr from './BallonMgr'
+import { Vec3 } from 'cc'
 
 
 const { ccclass, property } = _decorator
@@ -20,8 +23,8 @@ const { ccclass, property } = _decorator
 @ccclass('LilliputMgr')
 export default class LilliputMgr extends Component {
 
-  @property(Camera)
-  private mainCamera: Camera
+  @property(OrbitCamera)
+  private orbitCamera: OrbitCamera
 
   @property(DirectionalLight)
   private mainLight: DirectionalLight
@@ -32,6 +35,9 @@ export default class LilliputMgr extends Component {
   @property(Prefab)
   islandPrefab: Prefab
 
+  @property(Prefab)
+  playerPrefab: Prefab
+
   @property(Node)
   test: Node
 
@@ -40,11 +46,8 @@ export default class LilliputMgr extends Component {
   private ambientInfo: AmbientInfo
 
   private isEidtEnv: boolean = false
-  private rockerMgr: RockerMgr
-  private orbitCamera: OrbitCamera
   private uiMgr: LilliputUIMgr
   private once: boolean = true
-  private frameCount = 0
   private bornTerrainInfos: Array<Game.MapItem> = []
 
   private q_rotation = quat()
@@ -54,9 +57,12 @@ export default class LilliputMgr extends Component {
   private isDay: boolean = false
   private timecost: number = 0
 
+  private rotation = quat(0, 1, 1, 1)
+
   onLoad() {
-    this.rockerMgr = this.getComponentInChildren(RockerMgr)
-    this.orbitCamera = this.mainCamera.getComponent(OrbitCamera)
+
+    console.log(Quat.IDENTITY)
+
     this.uiMgr = this.getComponentInChildren(LilliputUIMgr)
     IslandAssetMgr.preload()
     this.timecost = new Date().getTime()
@@ -76,12 +82,16 @@ export default class LilliputMgr extends Component {
 
     this.ambientInfo = director.getScene().globals.ambient
     this.skyboxInfo = director.getScene().globals.skybox
+
+    BattleService.playerPrefab = this.playerPrefab
+
   }
 
 
   start() {
     this.updateEditMode(this.isEidtEnv, true)
 
+    this.orbitCamera.reactArea = this.uiMgr.reactArea
     this.orbitCamera.target = this.bornNode
     this.bornNode.getChildByName('fences').children.forEach(it => {
       let angle = Quat.getAxisAngle(this.v3_0, it.rotation)
@@ -100,11 +110,11 @@ export default class LilliputMgr extends Component {
 
   async update(dt: number) {
     if (!IslandAssetMgr.isPreloaded) {
-      this.uiMgr.updateLoading(true, `资源（${IslandAssetMgr.preloadCount}/${IslandAssetMgr.resouceCount}）加载中。。。`)
+      this.uiMgr?.updateLoading(true, `资源（${IslandAssetMgr.preloadCount}/${IslandAssetMgr.resouceCount}）加载中。。。`)
     } else {
       if (this.once) {
         this.once = false
-        this.uiMgr.updateLoading(false)
+        this.uiMgr?.updateLoading(false)
 
         console.log('resouce load cost:', new Date().getTime() - this.timecost)
         this.generateBornTerrain()
@@ -131,14 +141,6 @@ export default class LilliputMgr extends Component {
     } else {
       this.skyboxInfo.rotationAngle += dt * 2
     }
-
-    if (this.frameCount < 4) {
-      this.frameCount++
-    } else {
-      this.frameCount = 0
-      if (BattleService.started)
-        BattleService.sendPlayerMsg({ cmd: Game.PlayerMsgType.Sync })
-    }
   }
 
   onDestroy() {
@@ -159,19 +161,17 @@ export default class LilliputMgr extends Component {
 
     let player = BattleService.player(profile.uid)
     if (player == null) {
-      let player = instantiate(IslandAssetMgr.getCharacter(profile.uid))
+      let player = instantiate(this.playerPrefab)
       player.position = v3(1, 3, 1)
       player.name = 'myself'
       this.node.addChild(player)
-      player.addComponent(MyselfMgr)
-      player.getComponent(MyselfMgr).init(profile)
-      let mgr = player.getComponent(MyselfMgr)
+      let mgr = player.addComponent(MyselfMgr).init(profile)
       mgr.followCamera = this.orbitCamera.node
       mgr.followLight = this.mainLight
 
       BattleService.addPlayer(profile.uid, mgr)
       this.orbitCamera.target = mgr.node
-      this.rockerMgr.target = mgr
+      this.uiMgr.rockerTarget = mgr
     }
   }
 
@@ -183,8 +183,7 @@ export default class LilliputMgr extends Component {
       let node = instantiate(this.islandPrefab)
 
       node.position = BattleService.randomPos()
-      this.node.addChild(node)
-      mgr = node.getComponent(IslandMgr)
+      mgr = node.addComponent(IslandMgr)
       timestamp = new Date().getTime()
       islandId = await mgr.loadMap(uid)
       console.log('island render:', new Date().getTime() - timestamp)
@@ -193,8 +192,8 @@ export default class LilliputMgr extends Component {
       mgr = BattleService.island(islandId)
     }
 
-    mgr.camera = this.mainCamera
-    mgr.editReactArea = this.uiMgr.editReactArea
+    mgr.camera = this.orbitCamera.getComponent(Camera)
+    mgr.reactArea = this.uiMgr.reactArea
 
     timestamp = new Date().getTime()
     await BattleService.enter(BattleService.player(), mgr)
@@ -214,9 +213,7 @@ export default class LilliputMgr extends Component {
       Quat.rotateY(this.q_rotation, node.rotation, Math.PI / 180 * it.angle)
       node.rotation = this.q_rotation
       this.bornNode.addChild(node)
-      node.addComponent(TerrainItemMgr)
-      let mgr = node.getComponent(TerrainItemMgr)
-      mgr.init(it)
+      node.addComponent(TerrainItemMgr).init(it)
     })
   }
 
@@ -224,11 +221,7 @@ export default class LilliputMgr extends Component {
     if (isEdit) {
       let myIsland = BattleService.userIsland()
       if (myIsland == null) return
-
-      this.orbitCamera.reactArea = this.uiMgr.editCameraReactArea
       this.uiMgr.editHandler = myIsland
-    } else {
-      this.orbitCamera.reactArea = this.uiMgr.cameraReactArea
     }
     this.uiMgr.updateEditMode(isEdit)
   }
@@ -242,17 +235,36 @@ export default class LilliputMgr extends Component {
 
   private async preload() {
 
-    let lobby = instantiate(IslandAssetMgr.getPrefab('gameRoom'))
-    lobby.position = v3(0, 0.6, 0)
-    this.node.addChild(lobby)
+    let island = instantiate(IslandAssetMgr.getPrefab('bornIsland'))
+
+    island.scale = v3(2, 2, 2)
+    island.position = v3(0, 0.6, 0)
+    this.node.addChild(island)
+
+    let rigidBody = island.addComponent(RigidBody)
+    rigidBody.type = RigidBody.Type.STATIC
+    rigidBody.group = PhyEnvGroup.Terrain
+    rigidBody.setMask(PhyEnvGroup.Player | PhyEnvGroup.Prop)
+    let collider = island.addComponent(MeshCollider)
+    collider.mesh = island.getComponent(MeshRenderer).mesh
+    collider.convex = true
+
+    let lighthouse = instantiate(IslandAssetMgr.getPrefab('lighthouse'))
+    lighthouse.position = v3(4, 0.3, -4)
+    this.node.addChild(lighthouse)
+
+    let airBalloon = instantiate(IslandAssetMgr.getPrefab('hotAirBalloon'))
+    airBalloon.position = v3(2, 3, -3)
+    airBalloon.addComponent(BallonMgr)
+    this.node.addChild(airBalloon)
 
 
     let uids = [
       // '8f4e7438-4285-4268-910c-3898fb8d6d96',
       'f947ed55-7e34-4a82-a9db-8a9cf6f2e608',
-      // '5ee13634-340c-4741-b075-7fe169e38a13',
-      // '4e6434d1-5910-46c3-879d-733c33ded257',
-      // 'b09272b8-d6a4-438b-96c3-df50ac206706'
+      '5ee13634-340c-4741-b075-7fe169e38a13',
+      '4e6434d1-5910-46c3-879d-733c33ded257',
+      'b09272b8-d6a4-438b-96c3-df50ac206706'
     ]
 
     for (let uid of uids) {

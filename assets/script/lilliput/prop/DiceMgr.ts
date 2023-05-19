@@ -1,7 +1,7 @@
-import { BoxCollider, ITriggerEvent, MeshCollider, RigidBody, Vec3, _decorator, tween, v3 } from 'cc'
+import { BoxCollider, ITriggerEvent, MeshCollider, MeshRenderer, RigidBody, Vec3, _decorator, tween, v3 } from 'cc'
+import { DynamicPropPhyMtl, PhyEnvGroup } from '../../common/Misc'
 import { Game, Terrain } from '../../model'
 import TerrainItemMgr, { PropEvent } from '../TerrainItemMgr'
-import { DynamicPropMtl } from '../../common/Misc'
 
 const { ccclass, property } = _decorator
 
@@ -18,21 +18,7 @@ export default class DiceMgr extends TerrainItemMgr {
 
   onLoad() {
     super.onLoad()
-
-    this.rigidBody = this.getComponent(RigidBody)
-
-    this.node.addComponent(MeshCollider)
-    let meshCollider = this.node.getComponent(MeshCollider)
-    meshCollider.convex = true
-    meshCollider.material = DynamicPropMtl
-
-    this.node.addComponent(BoxCollider)
-    let collider = this.node.getComponent(BoxCollider)
-    collider.isTrigger = true
-    collider.size = v3(1.5, 1.5, 1.5)
-
-    this.getComponent(BoxCollider)?.on('onTriggerEnter', this.onTriggerEnter, this)
-    this.getComponent(BoxCollider)?.on('onTriggerExit', this.onTriggerExit, this)
+    
   }
 
   update(dt: number) {
@@ -42,6 +28,33 @@ export default class DiceMgr extends TerrainItemMgr {
       this.rigidBody?.sleep()
       this.needSync = false
     }
+  }
+
+  init(info: Game.MapItem): DiceMgr {
+    super.init(info)
+
+    this.meshRenderer = this.node.getComponent(MeshRenderer)
+
+    this.rigidBody = this.node.addComponent(RigidBody)
+    this.rigidBody.type = RigidBody.Type.DYNAMIC
+    this.rigidBody.mass = 2
+    this.rigidBody.useGravity = true
+    this.rigidBody.group = PhyEnvGroup.Prop
+    this.rigidBody.setMask(PhyEnvGroup.Terrain | PhyEnvGroup.Prop | PhyEnvGroup.Player)
+
+    let meshCollider = this.node.addComponent(MeshCollider)
+    meshCollider.convex = true
+    meshCollider.mesh = this.meshRenderer.mesh
+    meshCollider.material = DynamicPropPhyMtl
+
+    let collider = this.node.addComponent(BoxCollider)
+    collider.isTrigger = true
+    collider.size = v3(1.5, 1.5, 1.5)
+
+    collider.on('onTriggerEnter', this.onTriggerEnter, this)
+    collider.on('onTriggerExit', this.onTriggerExit, this)
+
+    return this
   }
 
   private onTriggerEnter(event: ITriggerEvent) {
@@ -63,7 +76,7 @@ export default class DiceMgr extends TerrainItemMgr {
       case Game.CharacterState.Kick:
         setTimeout(() => {
           this.rigidBody?.applyImpulse(v3(0, 14, 0))
-          this.rigidBody?.applyTorque(v3(44, 40, 53))
+          this.rigidBody?.applyTorque(v3(88, 70, 100))
           this.needSync = true
         }, 400)
         break

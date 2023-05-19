@@ -11,7 +11,7 @@ axios.defaults.headers.common = {
 
 let clientUID: string = null
 let accessToken: string = '5c2c44f25096b201d0c5a716704f4029'
-let BASE_DOMAIN: string = 'http://192.168.24.77:8884'
+let BASE_DOMAIN: string = 'http://192.168.24.77:3000'
 
 async function request<T>(method: string, url: string, baseURL?: string, headers?: any, params?: {}, data?: any) {
   let reqOpt = {

@@ -1,7 +1,7 @@
 import {
   Button, Color, Component,
   Director,
-  EditBox, Event, Label, Node, Sprite, Toggle,
+  EditBox, Event, EventHandler, Label, Node, Sprite, Toggle,
   ToggleContainer,
   Widget, _decorator, director,
   tween, v3, view
@@ -13,11 +13,13 @@ import ActionsMgr from './ActionsMgr'
 import BattleService from './BattleService'
 import { TerrainEditActionType, TerrainEditHandler } from './EnvEditHandler'
 import TerrainItemBarMgr from './TerrainItemBarMgr'
+import LilliputLoginMgr from './LilliputLoginMgr'
+import LocalPrefs from '../misc/LocalPrefs'
 
 
 const { ccclass, property } = _decorator
 
-export class UIEvent extends Event {
+export class LilliputUIEvent extends Event {
 
   static Name = 'UIEvent'
 
@@ -32,7 +34,7 @@ export class UIEvent extends Event {
   customData: any
 
   constructor(type: string, data?: any) {
-    super(UIEvent.Name, true)
+    super(LilliputUIEvent.Name, true)
     this.type = type
     this.customData = data
   }
@@ -40,8 +42,6 @@ export class UIEvent extends Event {
 
 @ccclass('LilliputUIMgr')
 export default class LilliputUIMgr extends Component {
-  @property(Node)
-  private userInfoPanel: Node
 
   @property(Node)
   private rocker: Node
@@ -77,11 +77,14 @@ export default class LilliputUIMgr extends Component {
   @property(Node)
   private rotateMenu: Node
 
+  private roateLeft: Node
+  private roateRight: Node
+
   @property(Node)
   private skinMenu: Node
 
   @property(Node)
-  private loading: Node
+  private overlay: Node
 
   @property(Node)
   private network: Node
@@ -89,10 +92,19 @@ export default class LilliputUIMgr extends Component {
   @property(Label)
   private fpsLabel: Label
 
+  @property(Node)
+  private assetLoadIndicator: Node
+
+  @property(Node)
+  private loginPanel: Node
+
+  @property(EditBox)
+  inputRoomId: EditBox
+
   private networkSprite: Sprite
   private networkLabel: Label
   private frameCount: number = 0
-  private frameTime: number = new Date().getTime()
+  private frameTime: number = Date.now()
 
   private actionsMgr: ActionsMgr
   private _editHandler: TerrainEditHandler
@@ -104,21 +116,15 @@ export default class LilliputUIMgr extends Component {
 
   private _curToolItem = 'Select'
 
-  private get inputToken() {
-    return this.userInfoPanel.getChildByName('UserToken').getComponent(EditBox).string
-  }
-
-  private get inputRoomId() {
-    return this.userInfoPanel.getChildByName('RoomId').getComponent(EditBox).string
-  }
+  private loginMgr: LilliputLoginMgr
 
   onLoad() {
     // TODO not work 
-    this.frameTime = new Date().getTime()
+    this.frameTime = Date.now()
     this.node.on(Director.EVENT_AFTER_DRAW, () => {
-      if (new Date().getTime() - this.frameTime >= 1000) {
+      if (Date.now() - this.frameTime >= 1000) {
         this.fpsLabel.string = `FPS:\t ${this.frameCount}`
-        this.frameTime = new Date().getTime()
+        this.frameTime = Date.now()
         this.frameCount = 0
       } else {
         this.frameCount++
@@ -126,6 +132,8 @@ export default class LilliputUIMgr extends Component {
     }, this)
 
     this.actionsMgr = this.actions.getComponent(ActionsMgr)
+
+    this.loginMgr = this.loginPanel.getComponent(LilliputLoginMgr)
 
     this.networkSprite = this.network.getComponent(Sprite)
     this.networkLabel = this.network.getComponentInChildren(Label)
@@ -137,6 +145,32 @@ export default class LilliputUIMgr extends Component {
     wid.right = -view.getViewportRect().x
 
     // screen.requestFullScreen()
+    let envEditMenuHandler = new EventHandler()
+    envEditMenuHandler.target = this.node
+    envEditMenuHandler.component = 'LilliputUIMgr'
+    envEditMenuHandler.handler = 'onEnvEditToolbarChanged'
+    this.terrainEditToolbar.getComponent(ToggleContainer).checkEvents.push(envEditMenuHandler)
+
+    let layerMenuHandler = new EventHandler()
+    layerMenuHandler.target = this.node
+    layerMenuHandler.component = 'LilliputUIMgr'
+    layerMenuHandler.handler = 'onEnvLayerChanged'
+    this.layerMenu.getComponent(ToggleContainer).checkEvents.push(layerMenuHandler)
+
+    this.roateLeft = this.rotateMenu.getChildByName('RotateLeft')
+    this.roateRight = this.rotateMenu.getChildByName('RotateRight')
+
+    this.roateLeft.on(Button.EventType.CLICK, () => {
+      this._editHandler.onRotate(-90)
+    }, this)
+
+    this.roateRight.on(Button.EventType.CLICK, () => {
+      this._editHandler.onRotate(90)
+    }, this)
+
+    this.loginPanel.active = LocalPrefs.myself == null
+
+    this.node.getChildByName('UserInfo').getChildByName('EnterButton').on(Button.EventType.CLICK, this.onEnter, this)
   }
 
   update(dt: number) {
@@ -153,15 +187,15 @@ export default class LilliputUIMgr extends Component {
   }
 
   onEdit() {
-    this.node.dispatchEvent(new UIEvent(UIEvent.Type.TerrainEdit))
+    this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.TerrainEdit))
   }
 
   onBind(event: Event) {
-    this.node.dispatchEvent(new UIEvent(UIEvent.Type.UserInfoBind, this.inputToken))
+    // this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.UserInfoBind, this.inputToken))
   }
 
   onEnter(event: Event) {
-    this.node.dispatchEvent(new UIEvent(UIEvent.Type.EnterIsland, this.inputRoomId))
+    this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.EnterIsland, this.inputRoomId.string))
   }
 
   onAction(event: Event, data: string) {
@@ -231,12 +265,7 @@ export default class LilliputUIMgr extends Component {
     this.terrainEditBtn.getComponent(Button)
 
     this.profileBtn.active = !isEdit
-    this.userInfoPanel.active = !isEdit
     this.actions.active = !isEdit
-    // this.cameraReactArea.active = !isEdit
-
-    // this.editReactArea.active = isEdit
-    // this.editCameraReactArea.active = isEdit
     this.selectedTerrainItem.active = isEdit
     this.terrainEditToolbar.active = isEdit
 
@@ -250,13 +279,14 @@ export default class LilliputUIMgr extends Component {
 
     this.terrainItemBar.getComponent(TerrainItemBarMgr).show(isEdit)
     this.rocker.getComponent(RockerMgr).show(!isEdit)
-    this._editHandler?.onEditModeChanged(isEdit)
+    this._editHandler?.onEditModeChanged()
   }
 
   updateLoading(show: boolean, content?: string) {
-    this.loading.active = show
+    this.overlay.active = show
+    this.assetLoadIndicator.active = show
     if (show) {
-      this.loading.getChildByName('Content').getComponentInChildren(Label).string = content
+      this.assetLoadIndicator.getComponentInChildren(Label).string = content
     }
   }
 

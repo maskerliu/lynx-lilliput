@@ -1,0 +1,353 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05",
+  "files": [],
+  "subMetas": {
+    "53398": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@53398",
+      "displayName": "",
+      "id": "53398",
+      "name": "grass.material",
+      "userData": {
+        "gltfIndex": 3
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1d4ca": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@1d4ca",
+      "displayName": "",
+      "id": "1d4ca",
+      "name": "basketball.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d329e": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@d329e",
+      "displayName": "",
+      "id": "d329e",
+      "name": "beachball.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "0af0b": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@0af0b",
+      "displayName": "",
+      "id": "0af0b",
+      "name": "ground.mesh",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "6a712": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@6a712",
+      "displayName": "",
+      "id": "6a712",
+      "name": "line.mesh",
+      "userData": {
+        "gltfIndex": 3
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "0c104": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@0c104",
+      "displayName": "",
+      "id": "0c104",
+      "name": "seat.mesh",
+      "userData": {
+        "gltfIndex": 4
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "86a26": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@86a26",
+      "displayName": "",
+      "id": "86a26",
+      "name": "net.mesh",
+      "userData": {
+        "gltfIndex": 5
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "8212c": {
+      "importer": "gltf-mesh",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@8212c",
+      "displayName": "",
+      "id": "8212c",
+      "name": "stands.mesh",
+      "userData": {
+        "gltfIndex": 6
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e7d8a": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@e7d8a",
+      "displayName": "",
+      "id": "e7d8a",
+      "name": "basketball.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "515b9": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@515b9",
+      "displayName": "",
+      "id": "515b9",
+      "name": "black.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "dfa42": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@dfa42",
+      "displayName": "",
+      "id": "dfa42",
+      "name": "snow.material",
+      "userData": {
+        "gltfIndex": 2
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "9dbcb": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@9dbcb",
+      "displayName": "",
+      "id": "9dbcb",
+      "name": "gold.material",
+      "userData": {
+        "gltfIndex": 4
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "4e300": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@4e300",
+      "displayName": "",
+      "id": "4e300",
+      "name": "heart.material",
+      "userData": {
+        "gltfIndex": 5
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a22c3": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@a22c3",
+      "displayName": "",
+      "id": "a22c3",
+      "name": "blue.material",
+      "userData": {
+        "gltfIndex": 6
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f1271": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@f1271",
+      "displayName": "",
+      "id": "f1271",
+      "name": "Floor.material",
+      "userData": {
+        "gltfIndex": 7
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "cf376": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@cf376",
+      "displayName": "",
+      "id": "cf376",
+      "name": "Asphalt.material",
+      "userData": {
+        "gltfIndex": 8
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "8c1ef": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@8c1ef",
+      "displayName": "",
+      "id": "8c1ef",
+      "name": "Wood.material",
+      "userData": {
+        "gltfIndex": 9
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "710bf": {
+      "importer": "gltf-material",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@710bf",
+      "displayName": "",
+      "id": "710bf",
+      "name": "Metal.material",
+      "userData": {
+        "gltfIndex": 10
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "31c98": {
+      "importer": "gltf-scene",
+      "uuid": "2248b078-9219-4ab7-bd65-4099fc801f05@31c98",
+      "displayName": "",
+      "id": "31c98",
+      "name": "BasketballCourt.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "2248b078-9219-4ab7-bd65-4099fc801f05@31c98",
+    "assetFinder": {
+      "meshes": [
+        "2248b078-9219-4ab7-bd65-4099fc801f05@1d4ca",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@d329e",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@0af0b",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@6a712",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@0c104",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@86a26",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@8212c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "2248b078-9219-4ab7-bd65-4099fc801f05@e7d8a",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@515b9",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@dfa42",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@53398",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@9dbcb",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@4e300",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@a22c3",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@f1271",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@cf376",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@8c1ef",
+        "2248b078-9219-4ab7-bd65-4099fc801f05@710bf"
+      ],
+      "scenes": [
+        "2248b078-9219-4ab7-bd65-4099fc801f05@31c98"
+      ]
+    }
+  }
+}

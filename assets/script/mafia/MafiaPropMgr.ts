@@ -1,5 +1,5 @@
 import { BoxCollider, Collider, Component, Mesh, MeshCollider, MeshRenderer, RigidBody, Widget, _decorator, color, renderer, v3, view } from "cc"
-import { DynamicPropMtl, PhyEnvGroup } from "../common/Misc"
+import { DynamicPropPhyMtl, PhyEnvGroup } from "../common/Misc"
 const { ccclass, property } = _decorator
 
 @ccclass('MafiaPropMgr')
@@ -35,6 +35,6 @@ export default class MafiaPropMgr extends Component {
     this.node.addComponent(MeshCollider)
     let collider = this.node.getComponent(MeshCollider)
     collider.mesh = this.node.getComponent(MeshRenderer).mesh
-    collider.material = DynamicPropMtl
+    collider.material = DynamicPropPhyMtl
   }
 }

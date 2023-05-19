@@ -1,130 +1,57 @@
 [
   {
     "name": "blockDirt",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "dirt"
-    ]
+    "type": 2
   },
   {
     "name": "blockDirtHalf",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "dirt"
-    ]
+    "type": 2
   },
   {
     "name": "blockDirtRamp",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "dirt"
-    ]
+    "type": 2
   },
   {
     "name": "blockDirtRampHalf",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "dirt"
-    ]
+    "type": 2
   },
   {
     "name": "blockMoving",
-    "x": 1,
-    "y": 0.25,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "gold",
-      "wood"
-    ]
+    "type": 2
   },
   {
     "name": "blockMovingBlue",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "blue",
-      "gold"
-    ]
+    "type": 2
   },
   {
     "name": "blockMovingLarge",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "gold",
-      "wood"
-    ]
+    "type": 2
   },
   {
     "name": "bridge",
-    "x": 1,
-    "y": 0.4,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 2
   },
   {
     "name": "bridgeHalf",
-    "x": 1,
-    "y": 0.4,
-    "z": 0.46,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "wood",
-      "woodDark"      
-    ]
+    "type": 2
   },
   {
     "name": "bridgeRamp",
-    "x": 1,
-    "y": 0.5,
-    "z": 0.88,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 2
   },
   {
     "name": "platform",
-    "x": 1,
-    "y": 0.1,
-    "z": 1,
     "anchor": 1,
-    "type": 2,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 2
   }
 ]

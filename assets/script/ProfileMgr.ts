@@ -72,7 +72,6 @@ export default class ProfileMgr extends Component {
   }
 
   onDestroy() {
-    console.log('profile destory')
     if (this._renderTex) {
       this._renderTex.destroy()
       this._renderTex = null

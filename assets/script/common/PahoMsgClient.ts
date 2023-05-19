@@ -49,7 +49,7 @@ class PahoMsgClient {
     this.client.onConnectionLost = (err: Paho.MQTTError) => {
       if (err.errorCode !== 0 && this.retry > 0 && this.retry <= 5) {
         this.connect()
-        console.log(`[${err.errorCode}]:`, err.errorMessage)
+        console.error(`[${err.errorCode}]:`, err.errorMessage)
         this.connect()
       }
     }

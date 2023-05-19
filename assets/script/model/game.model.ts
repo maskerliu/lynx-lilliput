@@ -30,7 +30,8 @@ export namespace Game {
     Private
   }
 
-  export interface Island extends Common.DBDoc {
+  export interface Island {
+    id: string
     owner?: string
     map: Array<MapItem>
     status: IslandStatus

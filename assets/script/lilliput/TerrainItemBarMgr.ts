@@ -1,5 +1,5 @@
 import {
-  Component, Node, Prefab, ScrollView, Sprite,
+  Component, EventHandler, Node, Prefab, ScrollView, Sprite,
   SpriteAtlas, Toggle, ToggleContainer, UITransform, Vec3, _decorator, instantiate, screen, size, tween, v3
 } from 'cc'
 import { Terrain } from '../model'
@@ -14,6 +14,9 @@ export default class TerrainItemBarMgr extends Component {
 
   @property(Node)
   private selectedProp: Node
+
+  @property(ToggleContainer)
+  private itemGroup: ToggleContainer
 
   @property(ToggleContainer)
   private itemsContainer: ToggleContainer
@@ -31,14 +34,23 @@ export default class TerrainItemBarMgr extends Component {
 
   editHandler: TerrainEditHandler
 
-
-  // TODO UI在浏览器尺寸下有拉伸适配问题
-
   onLoad() {
     this.scrollView = this.getComponent(ScrollView)
     this.selectedPropSnap = this.selectedProp.getComponentInChildren(Sprite)
     this.dstPos = v3(this.node.position)
     this.dstPos.x = screen.windowSize.width / 2 - 30
+
+    let groupSelectHandler = new EventHandler()
+    groupSelectHandler.target = this.node
+    groupSelectHandler.component = 'TerrainItemBarMgr'
+    groupSelectHandler.handler = 'onTerrainGroupChanged'
+    this.itemGroup.checkEvents.push(groupSelectHandler)
+
+    let itemSelectHandler = new EventHandler()
+    itemSelectHandler.target = this.node
+    itemSelectHandler.component = 'TerrainItemBarMgr'
+    itemSelectHandler.handler = 'onTerrainItemSelected'
+    this.itemsContainer.checkEvents.push(itemSelectHandler)
   }
 
   show(show: boolean) {

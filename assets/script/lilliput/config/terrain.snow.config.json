@@ -1,51 +1,23 @@
 [
   {
     "name": "blockSnow",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowCliff",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowCliffCorner",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowCornerLarge",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "snow",
-      "dirt"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowCornerSmall",
@@ -53,106 +25,46 @@
     "y": 1,
     "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowEnd",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowHalf",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowHexagon",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "snow",
-      "dirt"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowHexagonLow",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowLevel",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowQuarter",
-    "x": 0.5,
-    "y": 1,
-    "z": 0.5,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowSlope",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   },
   {
     "name": "blockSnowSlopeHalf",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 1,
-    "material": [
-      "dirt",
-      "snow"
-    ]
+    "type": 1
   }
 ]

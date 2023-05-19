@@ -1,7 +1,7 @@
 import { BoxCollider, ICollisionEvent, ITriggerEvent, MeshCollider, MeshRenderer, Node, RigidBody, _decorator, v3 } from 'cc'
 import { Game, Terrain } from '../../model'
 import TerrainItemMgr, { PropEvent } from '../TerrainItemMgr'
-import { PhyEnvGroup, PropMtl } from '../../common/Misc'
+import { PhyEnvGroup, StaticPropPhyMtl } from '../../common/Misc'
 
 const { ccclass, property } = _decorator
 
@@ -35,7 +35,7 @@ export default class LadderMgr extends TerrainItemMgr {
 
     let meshCollider = this.node.getComponent(MeshCollider)
     meshCollider.mesh = this.node.getComponent(MeshRenderer).mesh
-    meshCollider.material = PropMtl
+    meshCollider.material = StaticPropPhyMtl
 
     let minPos = v3(), maxPos = v3()
     this.node.getComponent(MeshRenderer).model.modelBounds.getBoundary(minPos, maxPos)

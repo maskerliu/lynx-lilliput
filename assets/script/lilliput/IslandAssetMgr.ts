@@ -19,11 +19,12 @@ class IslandAssetMgr implements AssetMgr {
   private static _instance: IslandAssetMgr
 
   private configs: Map<string, Terrain.ModelConfig> = new Map()
-  private materials: Map<string, Material> = new Map()
+  private materials: Map<string | number, Material> = new Map()
   private textures: Map<string, Asset> = new Map()
-  private mtlNames: Set<string> = new Set()
 
-  private env: Node
+  private _env: Node
+  set env(val: Node) { this._env = val }
+
   private characters: Node
 
   static instance() {
@@ -35,23 +36,18 @@ class IslandAssetMgr implements AssetMgr {
     this.configs = new Map()
     TerrainGrassConfigs.forEach(it => {
       this.configs.set(it.name, it)
-      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
     TerrainDirtConfigs.forEach(it => {
       this.configs.set(it.name, it)
-      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
     TerrainSnowConfigs.forEach(it => {
       this.configs.set(it.name, it)
-      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
     TerrainSkinnableConfigs.forEach(it => {
       this.configs.set(it.name, it)
-      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
     PropConfigs.forEach(it => {
       this.configs.set(it.name, it)
-      it.material?.forEach(mtl => { this.mtlNames.add(mtl) })
     })
     WeaponConfigs.forEach(it => {
       this.configs.set(it.name, it)
@@ -63,11 +59,11 @@ class IslandAssetMgr implements AssetMgr {
   }
 
   get resouceCount() {
-    return 1 + TextureConfigs.length
+    return TextureConfigs.length + 1
   }
 
   get preloadCount() {
-    return this.textures.size + (this.env ? 1 : 0)
+    return this.textures.size + (this.characters == null ? 0 : 1)
   }
 
   get isPreloaded() { return this.preloadCount >= this.resouceCount }
@@ -95,10 +91,8 @@ class IslandAssetMgr implements AssetMgr {
 
   hasPrefab(name: string) { return this.configs.has(name) }
   getPrefab(name: string) {
-    // if (!this.configs.has(name)) return null
-
     let config = this.configs.get(name)
-    return this.env.getChildByName(name)
+    return this._env.getChildByName(name)
   }
 
   getCharacter(uid: string) {
@@ -135,9 +129,12 @@ class IslandAssetMgr implements AssetMgr {
 
   }
 
-  hasMaterial(name: string) { return this.materials.has(name) }
-  addMaterial(name: string, material: Material) { this.materials.set(name, material) }
-  getMaterial(name: string) { return this.materials.get(name) }
+  hasMaterial(name: number | string) { return this.materials.has(name) }
+  addMaterial(name: number | string, material: Material) {
+    if (this.materials.has(name)) return
+    this.materials.set(name, material)
+  }
+  getMaterial(name: string | number) { return this.materials.get(name) }
 
   hasTexture(name: string) { return this.textures.has(name) }
   getTexture<T>(name: string) { return this.textures.get(name) as T }
@@ -164,21 +161,16 @@ class IslandAssetMgr implements AssetMgr {
       }
     })
 
-    let timestamp = new Date().getTime()
+    let timestamp = Date.now()
 
-    resources.load('prefab/terrain/env', Prefab, (err, prefab) => {
-      this.env = instantiate(prefab)
-      console.log(`env cost:`, new Date().getTime() - timestamp)
-    })
+    // resources.load('prefab/terrain/env', Prefab, (err, prefab) => {
+    //   this.env = instantiate(prefab)
+    //   console.log(`env cost:`, Date.now() - timestamp)
+    // })
 
     resources.load('prefab/character/characters', Prefab, (err, prefab) => {
       this.characters = instantiate(prefab)
-      console.log(`characters cost:`, new Date().getTime() - timestamp)
-    })
-
-    resources.loadDir('material/env', Material, (err, assets) => {
-      assets.forEach(it => { this.addMaterial(it.name, it) })
-      console.log(`material cost:`, new Date().getTime() - timestamp)
+      console.log(`characters cost:`, Date.now() - timestamp)
     })
   }
 }

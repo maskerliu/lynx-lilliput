@@ -1,54 +1,26 @@
 [
   {
     "name": "blockCurve",
-    "x": 2,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
     "type": 3,
-    "skin": 1,
-    "material": [
-      "dirt",
-      "grass"
-    ]
+    "skin": 1
   },
   {
     "name": "blockCurveHalf",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
     "type": 3,
-    "skin": 1,
-    "material": [
-      "dirt",
-      "grass"
-    ]
+    "skin": 1
   },
   {
     "name": "tree",
-    "x": 1,
-    "y": 2,
-    "z": 1,
     "anchor": 1,
     "type": 3,
-    "skin": 1,
-    "material": [
-      "wood",
-      "grass"
-    ]
+    "skin": 1
   },
   {
     "name": "treePine",
-    "x": 1,
-    "y": 2,
-    "z": 1,
     "anchor": 1,
     "type": 3,
-    "skin": 1,
-    "material": [
-      "wood",
-      "grass"
-    ]
+    "skin": 1
   }
 ]

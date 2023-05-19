@@ -35,7 +35,7 @@ export default class MafiaRoomMgr extends Component {
   private mafiaRoom: Node
 
   onLoad() {
-    this.mafiaRoom = this.node.getChildByName('mafiaRoom')
+    this.mafiaRoom = this.node.getChildByName('MafiaRoom')
 
     let player = instantiate(this.playerPrefab)
     player.position = v3(0, 0.5, 0)

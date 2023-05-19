@@ -1,162 +1,67 @@
 [
   {
     "name": "block",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-      
-    ]
+    "type": 0
   },
   {
     "name": "blockCliff",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-     
-    ]
+    "type": 0
   },
   {
     "name": "blockCliffCorner",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-    ]
+    "type": 0
   },
   {
     "name": "blockCornerLarge",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"      
-    ]
+    "type": 0
   },
   {
     "name": "blockCornerSmall",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-      
-    ]
+    "type": 0
   },
-  
   {
     "name": "blockEnd",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [ "dirt",
-      "grass"
-     
-    ]
+    "type": 0
   },
   {
     "name": "blockHalf",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": ["dirt",
-      "grass"
-      
-    ]
+    "type": 0
   },
   {
     "name": "blockHexagon",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": ["dirt",
-      "grass"
-      
-    ]
+    "type": 0
   },
   {
     "name": "blockHexagonLow",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-    ]
+    "type": 0
   },
   {
     "name": "blockLevel",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt", "grass"
-      
-    ]
+    "type": 0
   },
   {
     "name": "blockQuarter",
-    "x": 0.5,
-    "y": 1,
-    "z": 0.5,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt", "grass"
-     
-    ]
+    "type": 0
   },
   {
     "name": "blockSlope",
-    "x": 1,
-    "y": 1,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-    ]
+    "type": 0
   },
   {
     "name": "blockSlopeHalf",
-    "x": 1,
-    "y": 0.5,
-    "z": 1,
     "anchor": 1,
-    "type": 0,
-    "material": [
-      "dirt",
-      "grass"
-    ]
+    "type": 0
   }
 ]

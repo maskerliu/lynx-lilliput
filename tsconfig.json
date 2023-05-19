@@ -16,10 +16,12 @@
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "suppressExcessPropertyErrors": true,
+    "ignoreDeprecations": "5.0",
     "emitDecoratorMetadata": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "assets/res",

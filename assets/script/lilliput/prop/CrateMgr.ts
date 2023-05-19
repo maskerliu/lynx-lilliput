@@ -1,7 +1,7 @@
 import { BoxCollider, ITriggerEvent, MeshRenderer, RigidBody, _decorator, v3 } from 'cc'
+import { DynamicPropPhyMtl } from '../../common/Misc'
 import { Game, Terrain } from '../../model'
 import TerrainItemMgr, { PropEvent } from '../TerrainItemMgr'
-import { DynamicPropMtl } from '../../common/Misc'
 
 const { ccclass, property } = _decorator
 
@@ -23,7 +23,7 @@ export default class CrateMgr extends TerrainItemMgr {
     let minPos = v3(), maxPos = v3()
     this.node.getComponent(MeshRenderer).model.modelBounds.getBoundary(minPos, maxPos)
     collider.size = maxPos.subtract(minPos)
-    collider.material = DynamicPropMtl
+    collider.material = DynamicPropPhyMtl
 
     this.getComponent(BoxCollider)?.on('onTriggerEnter', this.onTriggerEnter, this)
     this.getComponent(BoxCollider)?.on('onTriggerExit', this.onTriggerExit, this)

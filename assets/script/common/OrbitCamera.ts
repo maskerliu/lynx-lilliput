@@ -18,22 +18,21 @@ export default class OrbitCamera extends Component {
   @property
   yRotationRange = v2(-180, 180)
 
-  
+  @property
+  radiusRange = v2(5, 10)
   private _targetRadius = 10
+  
   @property
   get radius() { return this._targetRadius }
   set radius(r) { this._targetRadius = r }
 
   @property
   radiusScaleSpeed = 1
-  @property
-  minRadius = 5
-  @property
-  maxRadius = 10
+  
   @property
   followTargetRotationY = true
- 
-  private _v3Pos= v3()
+
+  private _v3Pos = v3()
   private _q_tmp = quat()
 
   private _center = v3()
@@ -139,8 +138,8 @@ export default class OrbitCamera extends Component {
       let dis = Vec2.distance(touchs[0].getUILocation(), touchs[1].getUILocation())
 
       // this._targetRadius += this.radiusScaleSpeed * -Math.sign(dis - this._lastTouchDis)
-      this._targetRadius -= (dis - this._lastTouchDis) * this.maxRadius / 750
-      this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
+      this._targetRadius -= (dis - this._lastTouchDis) * this.radiusRange.y / 750
+      this._targetRadius = Math.min(this.radiusRange.x, Math.max(this.radiusRange.x, this._targetRadius))
       this._lastTouchDis = dis
     } else {
       Quat.fromEuler(this._q_tmp, this._targetDir.x, this._targetDir.y, this._targetDir.z)
@@ -160,7 +159,7 @@ export default class OrbitCamera extends Component {
   private onMouseWhee(event: EventMouse) {
     let scrollY = event.getScrollY()
     this._targetRadius += this.radiusScaleSpeed * -Math.sign(scrollY)
-    this._targetRadius = Math.min(this.maxRadius, Math.max(this.minRadius, this._targetRadius))
+    this._targetRadius = Math.min(this.radiusRange.y, Math.max(this.radiusRange.x, this._targetRadius))
     if (director.getScene()!.globals.shadows.enabled) {
       let r = this._targetRadius + 6
       // director.getScene()!.globals.shadows.shadowDistance = r

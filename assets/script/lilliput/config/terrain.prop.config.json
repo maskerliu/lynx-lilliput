@@ -1,458 +1,202 @@
 [
   {
     "name": "arrow",
-    "x": 0.46,
-    "y": 0.6,
-    "z": 0.16,
     "anchor": 1,
     "type": 4,
-    "react": 0,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "react": 0
   },
   {
     "name": "arrows",
-    "x": 0.6,
-    "y": 0.9,
-    "z": 0.16,
     "anchor": 1,
     "type": 4,
-    "react": 3,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "react": 3
   },
   {
     "name": "barrel",
-    "x": 0.44,
-    "y": 0.4,
-    "z": 0.44,
     "anchor": 1,
     "type": 4,
-    "react": 0,
-    "material": [
-      "metal",
-      "rock",
-      "wood",
-      "woodDark"
-    ]
+    "react": 0
   },
   {
     "name": "bomb",
-    "x": 0.4,
-    "y": 0.4,
-    "z": 0.4,
     "anchor": 1,
     "type": 4,
-    "react": 0,
-    "material": [
-      "metal",
-      "metalDark",
-      "wood"
-    ]
+    "react": 0
   },
   {
     "name": "buttonRound",
-    "x": 0.6,
-    "y": 0.14,
-    "z": 0.6,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "buttonSquare",
-    "x": 0.6,
-    "y": 0.16,
-    "z": 0.6,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "chest",
-    "x": 0.5,
-    "y": 0.5,
-    "z": 0.5,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "coinBronze",
-    "x": 0.35,
-    "y": 0.4,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "coinGold",
-    "x": 0.35,
-    "y": 0.4,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "gold",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "coinSilver",
-    "x": 0.35,
-    "y": 0.4,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "metal",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "crate",
-    "x": 0.5,
-    "y": 0.5,
-    "z": 0.5,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "crateItemStrong",
-    "x": 0.54,
-    "y": 0.54,
-    "z": 0.54,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "gold",
-      "metal",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "dice",
-    "x": 0.67,
-    "y": 0.67,
-    "z": 0.67,
     "anchor": 0,
     "type": 4,
-    "react": 0,
-    "material": []
+    "react": 0
   },
   {
     "name": "doorClosed",
-    "x": 0.6,
-    "y": 1,
-    "z": 0.2,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "metal",
-      "wood",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "doorLargeClosed",
-    "x": 1,
-    "y": 1,
-    "z": 0.4,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "metal",
-      "wood",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "doorLargeOpen",
-    "x": 1,
-    "y": 1,
-    "z": 0.4,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "metal"
-    ]
+    "type": 4
   },
   {
     "name": "fence",
-    "x": 1,
-    "y": 0.4,
-    "z": 0.2,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "wood",
-      "woodDark"
-    ],
-    "action": [
-      10
-    ]
+    "type": 4
   },
   {
     "name": "fenceCorner",
-    "x": 1,
-    "y": 0.4,
-    "z": 1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "flag",
-    "x": 0.1,
-    "y": 0.9,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "heart",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "flowers",
-    "x": 0.5,
-    "y": 0.48,
-    "z": 0.5,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "grass",
-      "heart",
-      "snow"
-    ]
+    "type": 4
   },
   {
     "name": "flowersLow",
-    "x": 0.76,
-    "y": 0.1,
-    "z": 0.76,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "grass",
-      "heart",
-      "snow"
-    ]
+    "type": 4
   },
   {
     "name": "fishPond",
-    "x": 2,
-    "y": 1,
-    "z": 2,
     "anchor": 0,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "heart",
-    "x": 0.42,
-    "y": 0.4,
-    "z": 0.12,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "heart"
-    ]
+    "type": 4
   },
   {
     "name": "hedge",
-    "x": 1,
-    "y": 0.2,
-    "z": 0.2,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "grass"
-    ]
+    "type": 4
   },
   {
     "name": "hedgeCorner",
-    "x": 1,
-    "y": 0.2,
-    "z": 1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "grass"
-    ]
+    "type": 4
   },
   {
     "name": "jewel",
-    "x": 0.34,
-    "y": 0.4,
-    "z": 0.3,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "blue"
-    ]
+    "type": 4
   },
   {
     "name": "key",
-    "x": 0.42,
-    "y": 0.22,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "gold"
-    ]
+    "type": 4
   },
   {
     "name": "ladder",
-    "x": 0.38,
-    "y": 1,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "woodDark",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "lever",
-    "x": 0.58,
-    "y": 0.5,
-    "z": 0.28,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "mushrooms",
-    "x": 0.52,
-    "y": 0.3,
-    "z": 0.52,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "heart",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "plant",
-    "x": 0.56,
-    "y": 0.18,
-    "z": 0.58,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "grass"
-    ]
+    "type": 4
   },
   {
     "name": "poles",
-    "x": 1,
-    "y": 1,
-    "z": 0.24,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "woodDark",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "rocks",
-    "x": 0.66,
-    "y": 0.4,
-    "z": 0.66,
     "anchor": 1,
-    "type": 4,
-    "material": [
-      "rock"
-    ]
+    "type": 4
   },
   {
     "name": "saw",
-    "x": 0.88,
-    "y": 0.88,
-    "z": 0.3,
     "anchor": 0,
-    "type": 4,
-    "material": [
-      "metal"
-    ]
+    "type": 4
   },
   {
     "name": "sign",
-    "x": 0.5,
-    "y": 0.6,
-    "z": 0.14,
     "anchor": 0,
-    "type": 4,
-    "material": [
-      "wood",
-      "woodDark"
-    ]
+    "type": 4
   },
   {
     "name": "spikeBlock",
-    "x": 0.9,
-    "y": 0.9,
-    "z": 0.9,
     "anchor": 0,
-    "type": 4,
-    "material": [
-      "blue",
-      "metal"
-    ]
+    "type": 4
   },
   {
     "name": "stones",
-    "x": 0.72,
-    "y": 0.1,
-    "z": 0.8,
     "anchor": 0,
-    "type": 4,
-    "material": [
-      "rock"
-    ]
+    "type": 4
   },
   {
     "name": "tent",
-    "x": 1.75,
-    "y": 1.12,
-    "z": 1.3,
     "anchor": 0,
-    "type": 4,
-    "material": [
-      "heart",
-      "wood"
-    ]
+    "type": 4
   },
   {
     "name": "tentLarge",
-    "x": 1.75,
-    "y": 1.12,
-    "z": 1.3,
     "anchor": 0,
-    "type": 4,
-    "material": [
-      "heart",
-      "wood"
-    ]
+    "type": 4
   }
 ]

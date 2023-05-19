@@ -48,7 +48,7 @@ export default class OtherMgr extends PlayerMgr {
         if (Vec3.NEG_ONE.equals(this.dstPos)) {
           this.v3_speed.set(Vec3.ZERO)
         } else {
-          this._speed = BattleService.playerFrameCount(this.userProfile.uid) > 4 ? Speed_Fast : Speed_Def
+          this._speed = BattleService.playerFrameCount(this.profile.id) > 4 ? Speed_Fast : Speed_Def
           Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), this._speed)
         }
         this.v3_speed.y = speedY
@@ -78,7 +78,7 @@ export default class OtherMgr extends PlayerMgr {
     }
 
     if (Vec3.NEG_ONE.equals(this.dstPos)) {
-      this.onAction(BattleService.popPlayerFrame(this.userProfile.uid))
+      this.onAction(BattleService.popPlayerFrame(this.profile.id))
     }
   }
 
@@ -115,7 +115,7 @@ export default class OtherMgr extends PlayerMgr {
     }
 
     // 当前位置与目标帧出现较大误差，直接跳帧
-    if (Math.abs(this.node.position.y - this.dstPos.y) > 0.1 || BattleService.playerFrameCount(this.userProfile.uid) > 4) {
+    if (Math.abs(this.node.position.y - this.dstPos.y) > 0.1 || BattleService.playerFrameCount(this.profile.id) > 4) {
       this.node.position = this.dstPos
       this.state = this._postState == Game.CharacterState.None ? Game.CharacterState.Idle : this._postState
       this._postState = Game.CharacterState.None

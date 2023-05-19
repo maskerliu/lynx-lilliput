@@ -1,4 +1,4 @@
-import { CylinderCollider, MeshCollider, Quat, RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Vec2, Vec3, _decorator, lerp } from "cc"
+import { Quat, SkeletalAnimation, SkinnedMeshRenderer, Vec2, Vec3, _decorator } from "cc"
 import PlayerMgr, { Climb_Speed, QuatNeg, Roate_Speed } from "../common/PlayerMgr"
 import { Game, User } from "../model"
 
@@ -32,7 +32,7 @@ export default class MafiaPlayerMgr extends PlayerMgr {
       if (this.node.rotation.equals(this._rotation, 0.12)) {
         this._rotation.set(QuatNeg)
       } else {
-        this._rotateSpeed = lerp(this._rotateSpeed, Roate_Speed, 30 * dt)
+        // this._rotateSpeed = lerp(this._rotateSpeed, Roate_Speed, 30 * dt)
         this.node.rotation = this.node.rotation.slerp(this._rotation, Roate_Speed * dt)
       }
     }

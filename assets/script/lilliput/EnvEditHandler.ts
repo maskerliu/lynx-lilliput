@@ -19,7 +19,7 @@ export interface TerrainEditAction {
 
 export interface TerrainEditHandler {
 
-  onEditModeChanged(isEdit: boolean): void
+  onEditModeChanged(): void
 
   onEditItemChanged(name: string): void
 

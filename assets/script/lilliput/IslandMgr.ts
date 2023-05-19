@@ -1,18 +1,6 @@
 import {
-  Camera, Component,
-  Event, EventTouch,
-  MeshRenderer,
-  Node, PhysicsSystem, Quat,
-  Touch,
-  UITransform,
-  Vec3, _decorator,
-  geometry, instantiate,
-  quat,
-  tween,
-  v3,
-  __private,
-  BatchingUtility,
-  Mesh
+  Camera, Component, Event, EventTouch, MeshRenderer, Node, PhysicsSystem, Quat, Touch, UITransform, Vec3,
+  __private, _decorator, geometry, instantiate, quat, tween, v3
 } from 'cc'
 import { terrainItemIdx } from '../misc/Utils'
 import { Game, GameApi } from '../model'
@@ -21,6 +9,7 @@ import { TerrainEditAction, TerrainEditActionType, TerrainEditHandler } from './
 import IslandAssetMgr from './IslandAssetMgr'
 import SkinnedTerrainItemMgr from './SkinnedTerrainItemMgr'
 import TerrainItemMgr from './TerrainItemMgr'
+import UserService from './UserService'
 import CannonMgr from './prop/CannonMgr'
 import CannonMobileMgr from './prop/CannonMobileMgr'
 import CrateMgr from './prop/CrateMgr'
@@ -90,7 +79,6 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     }
     this._reactArea = node
   }
-  // editReactArea: Node
 
   private hitMeshRenderer: MeshRenderer
 
@@ -110,6 +98,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   // for map sence edit
   private _isEdit: boolean = false
   get isEdit() { return this._isEdit }
+  set isEdit(val: boolean) {
+    this._isEdit = val
+  }
 
   private _ray: geometry.Ray = new geometry.Ray()
   private curAction: TerrainEditActionType = TerrainEditActionType.None
@@ -148,7 +139,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
 
     if (BattleService.curIsland == null ||
       this._senceInfo == null ||
-      BattleService.curIsland?._id != this._senceInfo?._id)
+      BattleService.curIsland?.id != this._senceInfo?.id)
       return
 
     this.v3_0.set(BattleService.player().node.position)
@@ -170,9 +161,9 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     // }
   }
 
-  async loadMap(uid?: string) {
+  async init(id?: string, uid?: string) {
     try {
-      this._senceInfo = await GameApi.getUserIsland(uid)
+      this._senceInfo = await GameApi.getIsland(id, uid)
 
       if (this._senceInfo.map == null || this.senceInfo.map.length == 0) {
         throw 'map is error'
@@ -185,7 +176,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       item.node.destroy()
     }
     this.mapInfo.clear()
-    return this.senceInfo._id
+    return this.senceInfo.id
   }
 
   async updateMap(info: Game.MapItem) {
@@ -215,13 +206,16 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     item.interact(action)
   }
 
-  async onEditModeChanged(isEdit: boolean) {
-    this._isEdit = isEdit
-    this.airWall.active = !isEdit
-    this.hitNode.active = isEdit
-    this.hitPoint.active = isEdit
-    this.waterLayer.active = isEdit
-    this.skinBtn.active = isEdit
+  canEdit(uid: string) {
+    return uid == this._senceInfo.owner
+  }
+
+  async onEditModeChanged() {
+    this.airWall.active = !this._isEdit
+    this.hitNode.active = this._isEdit
+    this.hitPoint.active = this._isEdit
+    this.waterLayer.active = this._isEdit
+    this.skinBtn.active = this._isEdit
     this.curLayer = 0
 
     let world: any = PhysicsSystem.instance.physicsWorld
@@ -231,24 +225,25 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     this.curTerrainItemMgr?.node?.destroy()
     this.curPropName = null
     this.curTerrainItemMgr = null
-    if (isEdit) {
+    if (this._isEdit) {
       this.curLayer = 0
       this.curAction = TerrainEditActionType.Selected
       this.orginPlayerPos.set(BattleService.player().node.position)
       this.waterLayer.position.set(0, this.curLayer + 0.5, 0)
 
-      BattleService.player().onEditModel(isEdit, this.orginPlayerPos.x, this.curLayer + 1.5, this.orginPlayerPos.z)
+      BattleService.player().onEditModel(this._isEdit, this.orginPlayerPos.x, this.curLayer + 1.5, this.orginPlayerPos.z)
       for (let mgr of this.mapInfo.values()) {
         mgr.preview(mgr.info.y > this.curLayer)
       }
       this.registerEvent()
     } else {
 
-      BattleService.player().onEditModel(isEdit, this.orginPlayerPos.x, this.orginPlayerPos.y, this.orginPlayerPos.z)
+      BattleService.player().onEditModel(this._isEdit, this.orginPlayerPos.x, this.orginPlayerPos.y, this.orginPlayerPos.z)
 
       for (let mgr of this.mapInfo.values()) { mgr.apply() }
 
-      await GameApi.saveIsland(this.convert2RemoteData())
+      let owner = await UserService.profile()
+      await GameApi.saveIsland(owner.id, this.convert2RemoteData())
 
       this.unRegisterEvent()
     }
@@ -475,7 +470,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   private addTerrainItem(info: Game.MapItem) {
-    this.loadCost = new Date().getTime()
+    this.loadCost = Date.now()
     if (info == null) return
     let prefab = IslandAssetMgr.getPrefab(info.prefab)
     let config = IslandAssetMgr.getModelConfig(info.prefab)
@@ -501,7 +496,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     }
 
     mgr.init(info)
-    this.loadCost = (new Date().getTime() - this.loadCost) / 1000
+    this.loadCost = (Date.now() - this.loadCost) / 1000
 
     if (info.y >= 0) {
       node.active = true
@@ -520,8 +515,6 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     }
 
     arr.sort((a, b) => { return terrainItemIdx(a.x, a.y, a.z) - terrainItemIdx(b.x, b.y, b.z) })
-
-    console.log(arr)
     return arr
   }
 
@@ -537,7 +530,8 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     }
     let info: Game.MapItem = { x: 0, y: 1, z: 0, prefab: 'tree', angle: 0 }
     infos.push(info)
-    this._senceInfo = await GameApi.saveIsland(infos)
+    let owner = await UserService.profile()
+    this._senceInfo = await GameApi.saveIsland(owner.id, infos)
   }
 
   private occlusion() {

@@ -9,13 +9,13 @@ export enum PhyEnvGroup {
   Test = 1 << 5,
 }
 
-export const TerrainMtl = new PhysicMaterial()
-TerrainMtl.setValues(0.8, 0, 0, 0.4)
+export const TerrainPhyMtl = new PhysicMaterial()
+TerrainPhyMtl.setValues(0.8, 0, 0, 0.4)
 
-export const PropMtl = new PhysicMaterial()
-PropMtl.setValues(0, 0, 0, 0.5)
+export const StaticPropPhyMtl = new PhysicMaterial()
+StaticPropPhyMtl.setValues(0, 0, 0, 0.5)
 
-export const DynamicPropMtl = new PhysicMaterial()
-DynamicPropMtl.setValues(1, 0, 0, 0.5)
+export const DynamicPropPhyMtl = new PhysicMaterial()
+DynamicPropPhyMtl.setValues(1, 0, 0, 0.5)
 
 Enum(PhyEnvGroup)

@@ -2,16 +2,13 @@ import { Component, Event, MeshCollider, MeshRenderer, PhysicMaterial, RigidBody
 import { isDebug, terrainItemIdx } from '../misc/Utils'
 import { Game, Terrain } from '../model'
 import IslandAssetMgr from './IslandAssetMgr'
-import { PhyEnvGroup } from '../common/Misc'
+import { PhyEnvGroup, TerrainPhyMtl } from '../common/Misc'
 
 const { ccclass, property } = _decorator
 
 const DROP_Height = 0.4
 const DropPos: Vec3 = v3()
 const PreviewScale = v3(0.8, 1, 0.8)
-
-const PropMtl = new PhysicMaterial()
-PropMtl.setValues(1, 0, 0, 0)
 
 export class PropEvent extends Event {
   static Name = 'PropEvent'
@@ -40,12 +37,15 @@ export default class TerrainItemMgr extends Component {
   private isDroping: boolean = false
   private _isSelected = false
   private _index: number = -1
+  private boundary: Vec3 = v3()
 
 
   protected _info: Game.MapItem
   protected isTranslucent: boolean = false
   protected meshRenderer: MeshRenderer
   protected rigidBody: RigidBody
+
+  private mtls: string[] = []
 
   get config() { return IslandAssetMgr.getModelConfig(this._info.prefab) }
   get info() { return this._info }
@@ -57,13 +57,28 @@ export default class TerrainItemMgr extends Component {
   }
 
   onLoad() {
-    this.meshRenderer = this.node.getComponent(MeshRenderer)
-    this.rigidBody = this.getComponent(RigidBody)
+
   }
 
   init(info: Game.MapItem): TerrainItemMgr {
     this._info = info
     this._index = terrainItemIdx(this.info.x, this.info.y, this.info.z)
+
+    this.meshRenderer = this.node.getComponent(MeshRenderer)
+
+    this.meshRenderer.materials.forEach(it => {
+      IslandAssetMgr.addMaterial(it.parent.uuid, it.parent)
+    })
+
+    this.mtls = this.meshRenderer.materials.map(it => { return it.parent.uuid })
+
+    for (let i = 0; i < this.mtls.length; ++i) {
+      this.meshRenderer.setMaterial(IslandAssetMgr.getMaterial(this.mtls[i]), i)
+    }
+
+    let minPos = v3(), maxPos = v3()
+    this.meshRenderer.model.modelBounds.getBoundary(minPos, maxPos)
+    Vec3.subtract(this.boundary, maxPos, minPos)
 
     let debugNode = this.node.getChildByName('Debug')
     if (debugNode) debugNode.active = isDebug
@@ -72,20 +87,18 @@ export default class TerrainItemMgr extends Component {
       case Terrain.ModelType.BlockGrass:
       case Terrain.ModelType.BlockSnow:
       case Terrain.ModelType.BlockDirt:
-        this.node.position = v3(info.x, info.y + 1 - this.config.y, info.z)
+        this.node.position = v3(info.x, info.y + 1 - this.boundary.y, info.z)
 
         if (this.rigidBody == null) {
-          this.addComponent(RigidBody)
-
-          this.rigidBody = this.getComponent(RigidBody)
+          this.rigidBody = this.addComponent(RigidBody)
           this.rigidBody.type = RigidBody.Type.STATIC
           this.rigidBody.group = PhyEnvGroup.Terrain
           this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle)
 
-          this.node.addComponent(MeshCollider)
-          let collider = this.node.getComponent(MeshCollider)
+          let collider = this.node.addComponent(MeshCollider)
           collider.convex = true
           collider.mesh = this.meshRenderer.mesh
+          collider.material = TerrainPhyMtl
         }
 
         break
@@ -107,7 +120,7 @@ export default class TerrainItemMgr extends Component {
     let tmp = v3(pos)
     this.node.active = true
     if (this.config.type != Terrain.ModelType.Prop && this.config.type != Terrain.ModelType.Skinnable) {
-      tmp.y = tmp.y + 1 - this.config.y
+      tmp.y = tmp.y + 1 - this.boundary.y
     }
     tmp.y += DROP_Height
     this.node.position = tmp
@@ -150,8 +163,8 @@ export default class TerrainItemMgr extends Component {
   translucent(did: boolean) {
     if (this.isTranslucent == did) return
 
-    for (let i = 0; i < this.config.material.length; ++i) {
-      let name = !this.isTranslucent && did ? 'translucent' : this.config.material[i]
+    for (let i = 0; i < this.mtls.length; ++i) {
+      let name = !this.isTranslucent && did ? 'translucent' : this.mtls[i]
       this.meshRenderer.setMaterial(IslandAssetMgr.getMaterial(name), i)
     }
 

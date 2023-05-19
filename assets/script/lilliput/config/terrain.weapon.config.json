@@ -1,29 +1,17 @@
 [
   {
     "name": "cannon",
-    "x": 0.5,
-    "y": 0.4,
-    "z": 0.6,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "cannonLarge",
-    "x": 0.5,
-    "y": 0.5,
-    "z": 0.1,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   },
   {
     "name": "cannonMobile",
-    "x": 0.65,
-    "y": 0.6,
-    "z": 0.84,
     "anchor": 1,
-    "type": 4,
-    "material": []
+    "type": 4
   }
 ]

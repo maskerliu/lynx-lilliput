@@ -1,5 +1,6 @@
 import { instantiate, Prefab, v3, Vec3 } from 'cc'
 import PlayerMgr from '../common/PlayerMgr'
+import { v3ToXYZ } from '../misc/Utils'
 import { Game, User } from '../model'
 import IslandAssetMgr from './IslandAssetMgr'
 import IslandMgr from './IslandMgr'
@@ -87,14 +88,8 @@ class BattleService implements MessageHandler {
     msg.type = Game.MsgType.Player
     if (this._curIsland == null) return
 
-    msg.uid = this.myself.uid
+    msg.uid = this.myself.id
     msg.seq = this.gameFrame++
-    // msg.state = msg.state ? msg.state : this.player().state
-    // msg.pos = this.v3ToXYZ(this.player()?.node.position)
-
-    // if (this.player().state == Game.CharacterState.Idle || this.player().state == Game.CharacterState.Run) {
-    //   msg.dir = this.v3ToXYZ(this.player()?.node.forward)
-    // }
 
     this.gameMsgs.push(msg)
     this.lstFrameState = msg.state
@@ -102,13 +97,13 @@ class BattleService implements MessageHandler {
 
   async init() {
     this.myself = await UserService.profile()
-    msgClient.init(this.myself.uid)
+    msgClient.init(this.myself.id)
   }
 
   player(uid?: string) {
     try {
       if (uid == null)
-        return this.players.get(this.myself.uid)
+        return this.players.get(this.myself.id)
       else
         return this.players.get(uid)
     } catch (err) {
@@ -123,29 +118,18 @@ class BattleService implements MessageHandler {
   }
 
   isMyself(uid: string) {
-    return this.myself.uid == uid
+    return this.myself.id == uid
   }
 
   canEdit(): boolean {
     if (this._curIsland == null || this.myself == null) return false
-    return this._curIsland.owner == this.myself.uid
+    return this._curIsland.owner == this.myself.id
   }
 
   removePlayer(uid: string) {
     this.players.get(uid)?.node.destroy()
     this.players.delete(uid)
     this.playerRemoteFrames.delete(uid)
-  }
-
-  userIsland(uid?: string) {
-    if (uid == null) uid = this.myself.uid
-
-    for (let island of this.islands.values()) {
-      if (island.senceInfo?.owner == uid) {
-        return island
-      }
-    }
-    return null
   }
 
   randomPos() {
@@ -156,16 +140,27 @@ class BattleService implements MessageHandler {
 
   }
 
-  island(id?: string) {
-    if (id == null) {
-      if (this._curIsland) return this.islands.get(this._curIsland._id)
-      else return null
+  island(id?: string, uid?: string) {
+
+    if (id == null && uid == null) return this.islands.get(this._curIsland.id)
+
+    if (id) {
+      return this.islands.get(id)
     }
-    return this.islands.get(id)
+
+    if (uid) {
+      for (let island of this.islands.values()) {
+        if (island.senceInfo?.owner == uid) {
+          return island
+        }
+      }
+    }
+
+    return null
   }
 
-  addIsland(id: string, mgr: IslandMgr) {
-    this.islands.set(id, mgr)
+  addIsland(mgr: IslandMgr) {
+    this.islands.set(mgr.senceInfo.id, mgr)
     let idx = this.positions.findIndex(it => {
       return mgr.node.position.equals(it.pos)
     })
@@ -190,14 +185,14 @@ class BattleService implements MessageHandler {
 
   async enter(player: PlayerMgr, island: IslandMgr) {
     if (this._curIsland) {
-      if (this._curIsland._id == island.senceInfo._id) { } else {
+      if (this._curIsland.id == island.senceInfo.id) { } else {
         this.stop()
       }
     }
     await this.start(island.senceInfo)
     player.node.removeFromParent()
     player.node.active = false
-    this.playerRemoteFrames.delete(player.userProfile.uid)
+    this.playerRemoteFrames.delete(player.profile.id)
 
     player.node.position = v3(1, 1.5, 1)
     island.node.addChild(player.node)
@@ -206,9 +201,11 @@ class BattleService implements MessageHandler {
     this.sendPlayerMsg({
       cmd: Game.PlayerMsgType.Enter,
       state: Game.CharacterState.Idle,
-      pos: this.v3ToXYZ(player.node.position),
-      dir: this.v3ToXYZ(player.node.forward)
+      pos: v3ToXYZ(player.node.position),
+      dir: v3ToXYZ(player.node.forward)
     })
+
+    console.log(island)
   }
 
   leave() {
@@ -221,7 +218,7 @@ class BattleService implements MessageHandler {
     this._curIsland = island
     this.gameFrame = 0
     msgClient.msgHanlder = this
-    msgClient.subscribe(`_game/island/${this.curIsland._id}`)
+    msgClient.subscribe(`_game/island/${this.curIsland.id}`)
 
     if (this.timer) clearInterval(this.timer)
     this.timer = setInterval(() => {
@@ -237,7 +234,7 @@ class BattleService implements MessageHandler {
       if (msgClient.isLocal) {
         // this.mockTimer()
       } else {
-        msgClient.send(`_game/island/${this.curIsland._id}`, JSON.stringify(this.gameMsgs))
+        msgClient.send(`_game/island/${this.curIsland.id}`, JSON.stringify(this.gameMsgs))
         this.gameMsgs.splice(0, this.gameMsgs.length)
       }
     }, 70)
@@ -275,17 +272,18 @@ class BattleService implements MessageHandler {
 
 
   private async handlePlayerMsg(msg: Game.PlayerMsg) {
+
     switch (msg.cmd) {
       case Game.PlayerMsgType.Enter:
-        let uid = this.myself.uid == msg.uid ? 'shadow' : msg.uid
-        let island = this.island(this.curIsland._id)
+        let uid = this.myself.id == msg.uid ? 'shadow' : msg.uid
+        let island = this.island(this.curIsland.id)
         let mgr = this.player(uid)
         let profile = await UserService.profile(msg.uid)
-        profile.uid = uid
+        profile.id = uid
         if (mgr == null) {
           let player = instantiate(this._playerPrefab)
           island.node.addChild(player)
-          mgr = player.addComponent(OtherMgr).init(profile)
+          mgr = player.addComponent(OtherMgr).init(profile, IslandAssetMgr.getCharacter(profile.id))
           this.addPlayer(uid, mgr)
         } else {
           mgr.node.removeFromParent()
@@ -296,11 +294,11 @@ class BattleService implements MessageHandler {
         mgr.node.position = v3(msg.pos.x, msg.pos.y, msg.pos.z)
         break
       case Game.PlayerMsgType.Sync:
-        if (msg.uid == this.myself.uid) msg.uid = 'shadow'
+        if (msg.uid == this.myself.id) msg.uid = 'shadow'
         this.pushPlayerFrame(msg)
         break
       case Game.PlayerMsgType.Leave:
-        if (msg.uid == this.myself.uid) msg.uid = 'shadow'
+        if (msg.uid == this.myself.id) msg.uid = 'shadow'
         this.removePlayer(msg.uid)
         break
     }
@@ -311,7 +309,7 @@ class BattleService implements MessageHandler {
   }
 
   private stop() {
-    msgClient.unsubscribe(`_game/island/${this.curIsland?._id}`)
+    msgClient.unsubscribe(`_game/island/${this.curIsland?.id}`)
     this._curIsland = null
     if (this.timer) clearInterval(this.timer)
     this._isStart = false
@@ -324,7 +322,7 @@ class BattleService implements MessageHandler {
   }
 
   popPlayerFrame(uid: string) {
-    if (uid != this.myself.uid && this.playerRemoteFrames.has(uid))
+    if (uid != this.myself.id && this.playerRemoteFrames.has(uid))
       return this.playerRemoteFrames.get(uid).shift()
     return null
   }
@@ -339,10 +337,6 @@ class BattleService implements MessageHandler {
 
   popPropFrame(propId: number) {
 
-  }
-
-  private v3ToXYZ(pos: Vec3) {
-    return { x: pos.x, y: pos.y, z: pos.z }
   }
 
 }

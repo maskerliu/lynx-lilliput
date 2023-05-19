@@ -31,14 +31,9 @@ export namespace Terrain {
 
   export interface ModelConfig {
     name: string
-    x: number
-    y: number
-    z: number
     anchor: ModelAnchor
     type: ModelType
     react?: ModelInteraction
-    joint?: number[]
-    material?: Array<string>
     skin?: number
     interactions?: Array<ModelInteraction> // 道具可被使用的动作
   }

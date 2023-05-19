@@ -1,17 +1,9 @@
 import {
-  BoxCollider,
-  Component,
-  CylinderCollider,
+  BoxCollider, Component, CylinderCollider,
   DirectionalLight, Event, ICollisionEvent,
-  ITriggerEvent,
-  Node,
-  PhysicMaterial,
-  Quat,
+  ITriggerEvent, Node, PhysicMaterial, Quat,
   RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Texture2D,
-  Vec2, Vec3, _decorator,
-  instantiate,
-  quat,
-  tween, v2, v3
+  Vec2, Vec3, _decorator, instantiate, quat, tween, v2, v3
 } from 'cc'
 import IslandAssetMgr from '../lilliput/IslandAssetMgr'
 import LadderMgr from '../lilliput/prop/LadderMgr'
@@ -77,8 +69,7 @@ export default class PlayerMgr extends Component {
   headProp: Node
 
   followCamera: Node
-  followLight: DirectionalLight
-  userProfile: User.Profile
+  profile: User.Profile
 
   protected _state: Game.CharacterState = Game.CharacterState.Idle
   protected _postState: Game.CharacterState = Game.CharacterState.None
@@ -177,10 +168,10 @@ export default class PlayerMgr extends Component {
     this._canClimb = false
   }
 
-  init(profile: User.Profile) {
-    this.userProfile = profile
+  init(profile: User.Profile, prefab: Node) {
+    this.profile = profile
 
-    switch (this.userProfile.uid) {
+    switch (this.profile.id) {
       case '8f4e7438-4285-4268-910c-3898fb8d6d96':
         this.character = 'hoboRat'
         this.skin = 'hoboRatRed'
@@ -207,7 +198,7 @@ export default class PlayerMgr extends Component {
         break
     }
 
-    let character = instantiate(IslandAssetMgr.getCharacter(profile.uid))
+    let character = instantiate(prefab)
     character.position = v3(0, -0.5, 0)
     this.node.addChild(character)
 
@@ -303,6 +294,9 @@ export default class PlayerMgr extends Component {
       case Game.CharacterState.Climb:
       case Game.CharacterState.JumpLand:
         break
+      case Game.CharacterState.TreadWater:
+        this.state = Game.CharacterState.TreadWater
+        break
       case Game.CharacterState.Idle:
         if (event.otherCollider.node.name == 'airWall') break
       case Game.CharacterState.Run:
@@ -314,28 +308,24 @@ export default class PlayerMgr extends Component {
   }
 
   private onTriggerEnter(event: ITriggerEvent) {
-    // console.log(PhysicsSystem.instance.physicsWorld)
-    // console.log(event.otherCollider.shape['sharedBody'])
     this._tmpTriggers.push(event.otherCollider.shape['sharedBody'].id)
-    // console.log(this._tmpTriggers)
     this.curInteractProp = event.otherCollider.node
     if (this.curInteractProp.name == LadderMgr.ItemName) {
       this._canClimb = true
-    } else if (event.otherCollider.node.name == 'Water') {
-      this.state = Game.CharacterState.TreadWater
-      this.rigidBody.useGravity = false
     }
 
+    if (event.otherCollider.node.name == 'Water') {
+      this.state = Game.CharacterState.TreadWater
+
+      this.v3_pos.set(this.node.position)
+      this.v3_pos.y = event.otherCollider.node.position.y - 0.1
+      this.node.position = this.v3_pos
+    }
   }
 
   private onTriggerStay(event: ITriggerEvent) {
     // this._canClimb = event.otherCollider.node.name == LadderMgr.ItemName
     // // if (event.otherCollider.node.name == LadderMgr.ItemName) { this._canClimb = true }
-
-    if (event.otherCollider.node.name == 'Water') {
-      this.state = Game.CharacterState.TreadWater
-      this.rigidBody.useGravity = false
-    }
   }
 
   private onTriggerExit(event: ITriggerEvent) {
@@ -462,6 +452,7 @@ export default class PlayerMgr extends Component {
     // on action ongoing, can not break except idle or run
     if (this._state != Game.CharacterState.Idle &&
       this._state != Game.CharacterState.Run &&
+      this._state != Game.CharacterState.TreadWater &&
       this._state != Game.CharacterState.Climb &&
       this.animState())
       return
@@ -476,6 +467,9 @@ export default class PlayerMgr extends Component {
         this.v3_speed.set(0, this.v3_speed.y, 0)
         this.rigidBody.setLinearVelocity(this.v3_speed)
         this.dstPos.set(Vec3.NEG_ONE)
+        break
+      case Game.CharacterState.TreadWater:
+        this.rigidBody.useGravity = false
         break
       case Game.CharacterState.Lift:
       case Game.CharacterState.Throw:

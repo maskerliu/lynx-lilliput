@@ -1,10 +1,9 @@
-import { Quat, SkeletalAnimation, SkinnedMeshRenderer, Texture2D, Vec2, Vec3, _decorator, instantiate, lerp, v3 } from 'cc'
+import { Quat, Vec2, Vec3, _decorator, v3 } from 'cc'
 import PlayerMgr, { Climb_Speed, QuatNeg, Roate_Speed } from '../../common/PlayerMgr'
 import { RockerTarget } from '../../common/RockerMgr'
-import { Game, User } from '../../model'
+import { Game } from '../../model'
 import BattleService from '../BattleService'
-import IslandAssetMgr from '../IslandAssetMgr'
-import { isDebug } from '../../misc/Utils'
+import { v3ToXYZ } from '../../misc/Utils'
 
 
 const { ccclass, property } = _decorator
@@ -19,10 +18,6 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
 
   private lstState = Game.CharacterState.None
   private lstPos = v3()
-
-  private curAngle = 0
-  private dstAngle = 0
-  private radius = 0
 
   onLoad() {
     super.onLoad()
@@ -57,6 +52,20 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
         this.v3_speed.y = speedY
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
+
+      case Game.CharacterState.TreadWater:
+
+
+        if (Vec2.ZERO.equals(this._curDir)) {
+          this.v3_speed.set(Vec3.ZERO)
+        } else {
+          Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Move_Speed)
+          this.v3_speed.y = 0
+        }
+
+        this.rigidBody.setLinearVelocity(this.v3_speed)
+        break
+
       case Game.CharacterState.Climb:
         if (this._canClimb) {
           this.v3_speed.set(0, Climb_Speed, 0)
@@ -79,7 +88,9 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
     } else {
       this.frameCount = 0
 
-      if (this._state != Game.CharacterState.Idle && this._state != Game.CharacterState.Run) {
+      if (this._state != Game.CharacterState.Idle &&
+        this._state != Game.CharacterState.Run &&
+        this._state != Game.CharacterState.TreadWater) {
         return
       }
 
@@ -96,8 +107,8 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
       let msg: Game.PlayerMsg = {
         cmd: Game.PlayerMsgType.Sync,
         state: this._state,
-        pos: { x: this.node.position.x, y: this.node.position.y, z: this.node.position.z },
-        dir: { x: this.node.forward.x, y: this.node.forward.y, z: this.node.forward.z }
+        pos: v3ToXYZ(this.node.position),
+        dir: v3ToXYZ(this.node.forward)
       }
       BattleService.sendPlayerMsg(msg)
     }
@@ -139,25 +150,23 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
   onDirectionChanged(dir: Vec2) {
     if (this._state != Game.CharacterState.Idle &&
       this._state != Game.CharacterState.Run &&
-      this._state != Game.CharacterState.JumpUp) {
+      this._state != Game.CharacterState.JumpUp &&
+      this._state != Game.CharacterState.TreadWater) {
       return
     }
 
     this._curDir.set(dir)
-    // this.rigidBody.getLinearVelocity(this.v3_speed)
-    // if (this.v3_speed.y != 0) {
-    //   this.state = Game.CharacterState.Idle
-    //   return
-    // }
 
     if (Vec2.ZERO.equals(dir)) {
-      this.state = Game.CharacterState.Idle
-    } else {
-      this.state = Game.CharacterState.Run
-      this.dstPos.set(Vec3.NEG_ONE)
-      this.v3_dir.set(this.followCamera.forward)
-      Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, dir.signAngle(Vec2.UNIT_Y))
-      Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
+      this.state = this._state == Game.CharacterState.TreadWater ? this._state : Game.CharacterState.Idle
+      return
     }
+
+    this.state = this._state == Game.CharacterState.TreadWater ? this._state : Game.CharacterState.Run
+    this.dstPos.set(Vec3.NEG_ONE)
+    this.v3_dir.set(this.followCamera.forward)
+    Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, dir.signAngle(Vec2.UNIT_Y))
+    Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
+
   }
 }

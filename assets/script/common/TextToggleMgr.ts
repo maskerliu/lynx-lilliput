@@ -1,14 +1,14 @@
-import { Component, Node, Toggle, _decorator } from 'cc'
+import { Node, Toggle, _decorator } from 'cc'
+import ToggleMgr from './ToggleMgr'
 const { ccclass, property } = _decorator
 
 
 @ccclass('TextToggleMgr')
-export default class TextToggleMgr extends Component {
+export default class TextToggleMgr extends ToggleMgr {
 
   @property(Node)
   textNode: Node
-
-  private toggle: Toggle
+  
   private touchStarted: boolean = false
 
   onLoad() {

@@ -1,0 +1,64 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "2ba6d99d-bc1f-48ec-a4b9-6e7d7006bc8d",
+  "files": [],
+  "subMetas": {
+    "75d5e": {
+      "importer": "gltf-mesh",
+      "uuid": "2ba6d99d-bc1f-48ec-a4b9-6e7d7006bc8d@75d5e",
+      "displayName": "",
+      "id": "75d5e",
+      "name": "barrel.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "67ae4": {
+      "importer": "gltf-scene",
+      "uuid": "2ba6d99d-bc1f-48ec-a4b9-6e7d7006bc8d@67ae4",
+      "displayName": "",
+      "id": "67ae4",
+      "name": "barrel.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "2ba6d99d-bc1f-48ec-a4b9-6e7d7006bc8d@67ae4",
+    "assetFinder": {
+      "meshes": [
+        "2ba6d99d-bc1f-48ec-a4b9-6e7d7006bc8d@75d5e"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "f81e899f-b9f7-454e-8b1e-5ad93faa7eae",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1",
+        "bc0ffaa5-1624-419c-a97e-3a35ffb397c9"
+      ],
+      "scenes": [
+        "2ba6d99d-bc1f-48ec-a4b9-6e7d7006bc8d@67ae4"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

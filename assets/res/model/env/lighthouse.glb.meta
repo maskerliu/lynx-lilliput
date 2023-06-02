@@ -1,0 +1,84 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "1937a312-3267-4612-aebd-d5e555c151aa",
+  "files": [],
+  "subMetas": {
+    "5751c": {
+      "importer": "gltf-mesh",
+      "uuid": "1937a312-3267-4612-aebd-d5e555c151aa@5751c",
+      "displayName": "",
+      "id": "5751c",
+      "name": "light.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b3560": {
+      "importer": "gltf-mesh",
+      "uuid": "1937a312-3267-4612-aebd-d5e555c151aa@b3560",
+      "displayName": "",
+      "id": "b3560",
+      "name": "lighthouse.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "847fe": {
+      "importer": "gltf-scene",
+      "uuid": "1937a312-3267-4612-aebd-d5e555c151aa@847fe",
+      "displayName": "",
+      "id": "847fe",
+      "name": "lighthouse.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "1937a312-3267-4612-aebd-d5e555c151aa@847fe",
+    "assetFinder": {
+      "meshes": [
+        "1937a312-3267-4612-aebd-d5e555c151aa@5751c",
+        "1937a312-3267-4612-aebd-d5e555c151aa@b3560"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1",
+        "00b382a7-3b91-41b9-b95b-589587477edd",
+        "c5a51f52-8fe8-46ae-8774-dc4de795a729",
+        "9ec81cb2-b6fc-4da0-ad7b-0d25d6d26bb9",
+        "8de10271-fdab-4aa6-9f94-48ac0527ecff"
+      ],
+      "scenes": [
+        "1937a312-3267-4612-aebd-d5e555c151aa@847fe"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

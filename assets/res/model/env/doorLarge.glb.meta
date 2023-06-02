@@ -1,0 +1,81 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "4078e179-6c3e-41b7-b208-376cfbe29ab9",
+  "files": [],
+  "subMetas": {
+    "3e1a3": {
+      "importer": "gltf-mesh",
+      "uuid": "4078e179-6c3e-41b7-b208-376cfbe29ab9@3e1a3",
+      "displayName": "",
+      "id": "3e1a3",
+      "name": "doorLargeClosed.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "572f1": {
+      "importer": "gltf-mesh",
+      "uuid": "4078e179-6c3e-41b7-b208-376cfbe29ab9@572f1",
+      "displayName": "",
+      "id": "572f1",
+      "name": "doorLarge.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f8198": {
+      "importer": "gltf-scene",
+      "uuid": "4078e179-6c3e-41b7-b208-376cfbe29ab9@f8198",
+      "displayName": "",
+      "id": "f8198",
+      "name": "doorLarge.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "4078e179-6c3e-41b7-b208-376cfbe29ab9@f8198",
+    "assetFinder": {
+      "meshes": [
+        "4078e179-6c3e-41b7-b208-376cfbe29ab9@3e1a3",
+        "4078e179-6c3e-41b7-b208-376cfbe29ab9@572f1"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "bc0ffaa5-1624-419c-a97e-3a35ffb397c9",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1",
+        "f81e899f-b9f7-454e-8b1e-5ad93faa7eae"
+      ],
+      "scenes": [
+        "4078e179-6c3e-41b7-b208-376cfbe29ab9@f8198"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

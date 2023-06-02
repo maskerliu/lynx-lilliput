@@ -39,8 +39,6 @@ export default class ProfileMgr extends Component {
     this.preview.node.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
 
     this._rotation.set(this.character.rotation)
-
-    // IslandAssetMgr.getCharacter()
   }
 
   start() {

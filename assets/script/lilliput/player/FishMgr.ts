@@ -1,7 +1,6 @@
 import { BoxCollider, Component, ICollisionEvent, MeshRenderer, Node, Quat, _decorator, quat } from 'cc'
 const { ccclass, property } = _decorator
 
-import IslandAssetMgr from '../IslandAssetMgr'
 
 
 @ccclass('FishMgr')
@@ -39,7 +38,6 @@ export default class FishMgr extends Component {
 
 
   private onTriggerEnter(event: ICollisionEvent) {
-    console.log(event.otherCollider.node.name)
 
     if (event.otherCollider.name == 'myself') {
       // emit can climb event

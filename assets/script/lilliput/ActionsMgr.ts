@@ -1,16 +1,12 @@
-import {
-  Button, Component, Event, EventHandler,
-  Node, Prefab, Sprite, SpriteAtlas,
-  _decorator,
-  instantiate,
-  v3
-} from 'cc'
-import { PlayerEvent } from '../common/PlayerMgr'
-import { Game, Terrain } from '../model'
+import { Button, Component, Event, EventHandler, Node, Prefab, Sprite, SpriteAtlas, _decorator, instantiate, v3 } from 'cc'
+import { Game } from '../model'
+import { Lilliput } from './LilliputEvents'
+import { Terrain } from '../common/Terrain'
 
 
 const { ccclass, property } = _decorator
 
+const PlayerActionEvent = new Lilliput.PlayerEvent(Lilliput.PlayerEvent.Type.OnAction)
 
 @ccclass('ActionsMgr')
 export default class ActionsMgr extends Component {
@@ -35,7 +31,7 @@ export default class ActionsMgr extends Component {
     this.clickHanlder.handler = 'onInteract'
   }
 
-  updateActions(interactions: Array<Terrain.ModelInteraction>) {
+  updateActions(interactions: Array<Terrain.InteractType>) {
     this.interactionNode.removeAllChildren()
     if (interactions == null) return
     for (let i = 0; i < interactions.length; ++i) {
@@ -44,57 +40,57 @@ export default class ActionsMgr extends Component {
   }
 
   onInteract(event: Event, data: string) {
-    let interaction = Number.parseInt(data) as Terrain.ModelInteraction
+    let interaction = Number.parseInt(data) as Terrain.InteractType
     let action: Game.CharacterState = Game.CharacterState.None
     switch (interaction) {
-      case Terrain.ModelInteraction.Lift:
+      case Terrain.InteractType.Lift:
         action = Game.CharacterState.Lift
         break
-      case Terrain.ModelInteraction.Push:
-        action = Game.CharacterState.Push
-        break
-      case Terrain.ModelInteraction.Shake:
+      case Terrain.InteractType.Shake:
         action = Game.CharacterState.Kick
         break
-      case Terrain.ModelInteraction.Grab:
+      case Terrain.InteractType.Grab:
         action = Game.CharacterState.Grab
         break
-      case Terrain.ModelInteraction.Climb:
+      case Terrain.InteractType.Climb:
         action = Game.CharacterState.Climb
         break
-      case Terrain.ModelInteraction.Fire:
+      case Terrain.InteractType.Fire:
         action = Game.CharacterState.Attack
         break
     }
-    if (action != Game.CharacterState.None)
-      this.node.dispatchEvent(new PlayerEvent(PlayerEvent.Type.OnAction, action))
+
+    if (action != Game.CharacterState.None) {
+      PlayerActionEvent.action = action
+      this.node.dispatchEvent(PlayerActionEvent)
+    }
   }
 
-  private generateActionBtn(interaction: Terrain.ModelInteraction, index: number) {
+  private generateActionBtn(interaction: Terrain.InteractType, index: number) {
     let icon: string = null
     switch (interaction) {
-      case Terrain.ModelInteraction.Lift:
+      case Terrain.InteractType.Lift:
         icon = 'ic_lift'
         break
-      case Terrain.ModelInteraction.Push:
+      case Terrain.InteractType.Push:
         icon = 'ic_grab'
         break
-      case Terrain.ModelInteraction.Grab:
+      case Terrain.InteractType.Grab:
         icon = 'ic_grab'
         break
-      case Terrain.ModelInteraction.Shake:
+      case Terrain.InteractType.Shake:
         icon = 'ic_kick'
         break
-      case Terrain.ModelInteraction.Throw:
+      case Terrain.InteractType.Throw:
         icon = 'ic_throw'
         break
-      case Terrain.ModelInteraction.Climb:
+      case Terrain.InteractType.Climb:
         icon = 'ic_handup'
         break
-      case Terrain.ModelInteraction.Sit:
+      case Terrain.InteractType.Sit:
         icon = 'ic_props'
         break
-      case Terrain.ModelInteraction.Fire:
+      case Terrain.InteractType.Fire:
         icon = 'ic_throw'
         break
       default:

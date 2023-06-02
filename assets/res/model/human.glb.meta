@@ -10,6 +10,8 @@
     "__original-animation-11.cconb",
     "__original-animation-12.cconb",
     "__original-animation-13.cconb",
+    "__original-animation-14.cconb",
+    "__original-animation-15.cconb",
     "__original-animation-2.cconb",
     "__original-animation-3.cconb",
     "__original-animation-4.cconb",
@@ -27,7 +29,7 @@
       "id": "43757",
       "name": "Lift.animation",
       "userData": {
-        "gltfIndex": 9,
+        "gltfIndex": 10,
         "wrapMode": 1,
         "sample": 30,
         "span": {
@@ -267,6 +269,29 @@
       ],
       "subMetas": {}
     },
+    "947a2": {
+      "importer": "gltf-animation",
+      "uuid": "77f5485a-8837-4879-9102-427c00768f75@947a2",
+      "displayName": "",
+      "id": "947a2",
+      "name": "Kneel.animation",
+      "userData": {
+        "gltfIndex": 9,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.5666667222976685
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
     "9292d": {
       "importer": "gltf-animation",
       "uuid": "77f5485a-8837-4879-9102-427c00768f75@9292d",
@@ -274,7 +299,7 @@
       "id": "9292d",
       "name": "Run.animation",
       "userData": {
-        "gltfIndex": 10,
+        "gltfIndex": 11,
         "wrapMode": 2,
         "sample": 30,
         "span": {
@@ -297,12 +322,35 @@
       "id": "2875d",
       "name": "Sit.animation",
       "userData": {
-        "gltfIndex": 11,
+        "gltfIndex": 12,
         "wrapMode": 2,
         "sample": 30,
         "span": {
           "from": 0,
           "to": 1.2000000476837158
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "e23ce": {
+      "importer": "gltf-animation",
+      "uuid": "77f5485a-8837-4879-9102-427c00768f75@e23ce",
+      "displayName": "",
+      "id": "e23ce",
+      "name": "Swim.animation",
+      "userData": {
+        "gltfIndex": 13,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 4.566666603088379
         },
         "events": []
       },
@@ -320,7 +368,7 @@
       "id": "6395e",
       "name": "Throw.animation",
       "userData": {
-        "gltfIndex": 12,
+        "gltfIndex": 14,
         "wrapMode": 1,
         "sample": 30,
         "span": {
@@ -343,7 +391,7 @@
       "id": "539a9",
       "name": "TreadWater.animation",
       "userData": {
-        "gltfIndex": 13,
+        "gltfIndex": 15,
         "wrapMode": 2,
         "sample": 30,
         "span": {
@@ -530,6 +578,19 @@
         ]
       },
       {
+        "name": "Kneel",
+        "duration": 1.5666667222976685,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Kneel",
+            "from": 0,
+            "to": 1.5666667222976685,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
         "name": "Lift",
         "duration": 7.233333110809326,
         "fps": 30,
@@ -564,6 +625,19 @@
             "name": "Sit",
             "from": 0,
             "to": 1.2000000476837158,
+            "wrapMode": 2
+          }
+        ]
+      },
+      {
+        "name": "Swim",
+        "duration": 4.566666603088379,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Swim",
+            "from": 0,
+            "to": 4.566666603088379,
             "wrapMode": 2
           }
         ]

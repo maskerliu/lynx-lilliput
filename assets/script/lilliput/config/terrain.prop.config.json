@@ -1,202 +1,197 @@
 [
   {
     "name": "arrow",
-    "anchor": 1,
-    "type": 4,
-    "react": 0
+    "group": 1
   },
   {
     "name": "arrows",
-    "anchor": 1,
-    "type": 4,
-    "react": 3
+    "group": 1
   },
   {
     "name": "barrel",
-    "anchor": 1,
-    "type": 4,
-    "react": 0
+    "group": 1
   },
   {
     "name": "bomb",
-    "anchor": 1,
-    "type": 4,
-    "react": 0
+    "group": 1
   },
   {
     "name": "buttonRound",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "buttonSquare",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "chest",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "coinBronze",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "coinGold",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "coinSilver",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "crate",
-    "anchor": 1,
-    "type": 4
+    "group": 1,
+    "interaction": [
+      3
+    ],
+    "physical": {
+      "type": 1,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
   },
   {
     "name": "crateItemStrong",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "dice",
-    "anchor": 0,
-    "type": 4,
-    "react": 0
+    "group": 1,
+    "interaction": [
+      2,
+      4
+    ],
+    "physical": {
+      "type": 1,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
   },
   {
     "name": "doorClosed",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "doorLargeClosed",
-    "anchor": 1,
-    "type": 4
-  },
-  {
-    "name": "doorLargeOpen",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "fence",
-    "anchor": 1,
-    "type": 4
+    "group": 1,
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 0,
+      "isTrriger": false
+    }
   },
   {
     "name": "fenceCorner",
-    "anchor": 1,
-    "type": 4
+    "group": 1,
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 0,
+      "isTrriger": false
+    }
   },
   {
     "name": "flag",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "flowers",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "flowersLow",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "fishPond",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   },
   {
     "name": "heart",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "hedge",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "hedgeCorner",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "jewel",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "key",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "ladder",
-    "anchor": 1,
-    "type": 4
+    "group": 1,
+    "interaction": [
+      6
+    ]
   },
   {
     "name": "lever",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "mushrooms",
-    "anchor": 1,
-    "type": 4
+    "group": 1,
+    "interaction": [
+      5
+    ],
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": true
+    }
   },
   {
     "name": "plant",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "poles",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "rocks",
-    "anchor": 1,
-    "type": 4
+    "group": 1
   },
   {
     "name": "saw",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   },
   {
     "name": "sign",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   },
   {
     "name": "spikeBlock",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   },
   {
     "name": "stones",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   },
   {
     "name": "tent",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   },
   {
     "name": "tentLarge",
-    "anchor": 0,
-    "type": 4
+    "group": 1
   }
 ]

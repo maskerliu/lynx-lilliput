@@ -6,17 +6,17 @@ import { get, post } from './base.api'
 export namespace UserApi {
 
   export function validCheck(phone?: string, username?: string) {
-    let data = { phone: phone ? Crypto.MD5(phone) : null, username }
+    let data = { phone: phone ? Crypto.MD5(phone).toString() : null, username }
     return get<string>(RemoteAPI.User.BasePath + RemoteAPI.User.ValidCheck, data)
   }
 
   export function login(phone: string, username: string, pwd: string) {
-    let data = { phone: Crypto.MD5(phone), username, pwd: Crypto.MD5(pwd) }
+    let data = { phone: Crypto.MD5(phone).toString(), username, pwd: Crypto.MD5(pwd).toString() }
     return post<User.Account & User.Profile>(RemoteAPI.User.BasePath + RemoteAPI.User.Login, data)
   }
 
   export function signUp(phone: string, username: string, pwd: string) {
-    let data = { phone: `${phone}`, username, pwd: Crypto.MD5(pwd) }
+    let data = { phone: `${phone}`, username, pwd: Crypto.MD5(pwd).toString() }
     return post<User.Account & User.Profile>(RemoteAPI.User.BasePath + RemoteAPI.User.SignUp, data)
   }
 

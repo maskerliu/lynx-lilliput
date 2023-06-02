@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "220047ab-acd1-40a7-bcf9-cf598f28fd46",
+  "files": [],
+  "subMetas": {
+    "fcafb": {
+      "importer": "gltf-mesh",
+      "uuid": "220047ab-acd1-40a7-bcf9-cf598f28fd46@fcafb",
+      "displayName": "",
+      "id": "fcafb",
+      "name": "groundCornerSmallSnow.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "c7ef7": {
+      "importer": "gltf-scene",
+      "uuid": "220047ab-acd1-40a7-bcf9-cf598f28fd46@c7ef7",
+      "displayName": "",
+      "id": "c7ef7",
+      "name": "groundCornerSmallSnow.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "220047ab-acd1-40a7-bcf9-cf598f28fd46@c7ef7",
+    "assetFinder": {
+      "meshes": [
+        "220047ab-acd1-40a7-bcf9-cf598f28fd46@fcafb"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "c5a51f52-8fe8-46ae-8774-dc4de795a729"
+      ],
+      "scenes": [
+        "220047ab-acd1-40a7-bcf9-cf598f28fd46@c7ef7"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

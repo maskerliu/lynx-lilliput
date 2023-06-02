@@ -10,7 +10,6 @@
   "_techIdx": 1,
   "_defines": [
     {
-      "USE_INSTANCING": true,
       "HAS_SECOND_UV": true
     }
   ],

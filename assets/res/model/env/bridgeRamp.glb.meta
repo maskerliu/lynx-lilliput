@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "b3bafb7b-14de-44e4-aef3-7d5ffa94744b",
+  "files": [],
+  "subMetas": {
+    "5c70f": {
+      "importer": "gltf-mesh",
+      "uuid": "b3bafb7b-14de-44e4-aef3-7d5ffa94744b@5c70f",
+      "displayName": "",
+      "id": "5c70f",
+      "name": "bridgeRamp.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f08bb": {
+      "importer": "gltf-scene",
+      "uuid": "b3bafb7b-14de-44e4-aef3-7d5ffa94744b@f08bb",
+      "displayName": "",
+      "id": "f08bb",
+      "name": "bridgeRamp.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "b3bafb7b-14de-44e4-aef3-7d5ffa94744b@f08bb",
+    "assetFinder": {
+      "meshes": [
+        "b3bafb7b-14de-44e4-aef3-7d5ffa94744b@5c70f"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1",
+        "bc0ffaa5-1624-419c-a97e-3a35ffb397c9"
+      ],
+      "scenes": [
+        "b3bafb7b-14de-44e4-aef3-7d5ffa94744b@f08bb"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

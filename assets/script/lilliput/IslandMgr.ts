@@ -1,68 +1,43 @@
 import {
-  Camera, Component, Event, EventTouch, MeshRenderer, Node, PhysicsSystem, Quat, Touch, UITransform, Vec3,
-  __private, _decorator, geometry, instantiate, quat, tween, v3
+  Camera, Component, EventTouch,
+  MeshRenderer, Node, PhysicsSystem, Prefab, Quat, Touch, UITransform, Vec2, Vec3,
+  _decorator, geometry, instantiate, quat, resources, tween, v3
 } from 'cc'
+import OrbitCamera from '../common/OrbitCamera'
+import { Terrain } from '../common/Terrain'
 import { terrainItemIdx } from '../misc/Utils'
-import { Game, GameApi } from '../model'
-import BattleService from './BattleService'
-import { TerrainEditAction, TerrainEditActionType, TerrainEditHandler } from './EnvEditHandler'
-import IslandAssetMgr from './IslandAssetMgr'
-import SkinnedTerrainItemMgr from './SkinnedTerrainItemMgr'
+import { Game, Island, IslandApi } from '../model'
+import LilliputAssetMgr from './LilliputAssetMgr'
+import { Lilliput } from './LilliputEvents'
+import SkinnedTerrainItemMgr from './SkinnableTerrainItemMgr'
 import TerrainItemMgr from './TerrainItemMgr'
 import UserService from './UserService'
-import CannonMgr from './prop/CannonMgr'
-import CannonMobileMgr from './prop/CannonMobileMgr'
-import CrateMgr from './prop/CrateMgr'
-import DiceMgr from './prop/DiceMgr'
-import FishPondMgr from './prop/FishPondMgr'
-import LadderMgr from './prop/LadderMgr'
-import LeverMgr from './prop/LeverMgr'
-import MushroomMgr from './prop/MushroomMgr'
-import RocksMgr from './prop/RocksMgr'
-import SpikesMgr from './prop/SpikesMgr'
+import { PropMgrs } from './prop/Props'
 
 
 const { ccclass, property } = _decorator
 
-export class IslandEvent extends Event {
-  customData: boolean
 
-  static Type = {
-    SkinMenu: 'SkinMenu'
-  }
-
-  constructor(type: string, data: any) {
-    super(type, true)
-
-    this.customData = data
-  }
-}
-
-export const PropMgrs: Map<string, __private._types_globals__Constructor<TerrainItemMgr>> = new Map()
-const MIN_FRAME_TIME = 0.02
-
-PropMgrs.set(CrateMgr.ItemName, CrateMgr)
-PropMgrs.set(DiceMgr.ItemName, DiceMgr)
-PropMgrs.set(LadderMgr.ItemName, LadderMgr)
-PropMgrs.set(LeverMgr.ItemName, LeverMgr)
-PropMgrs.set(MushroomMgr.ItemName, MushroomMgr)
-PropMgrs.set(SpikesMgr.ItemName, SpikesMgr)
-PropMgrs.set(RocksMgr.ItemName, RocksMgr)
-PropMgrs.set(CannonMgr.ItemName, CannonMgr)
-PropMgrs.set(CannonMobileMgr.ItemName, CannonMobileMgr)
-PropMgrs.set(FishPondMgr.ItemName, FishPondMgr)
+const MIN_FRAME_TIME = 0.033
 
 @ccclass('IslandMgr')
-export default class IslandMgr extends Component implements TerrainEditHandler {
+export default class IslandMgr extends Component {
 
   @property(Node)
-  private waterLayer: Node
+  private checkLayer: Node
 
   @property(Node)
-  hitNode: Node
+  private hitNode: Node
 
   @property(Node)
   private hitPoint: Node
+
+  @property(Node)
+  private anchorNode: Node
+
+  get curAnchorNode() {
+    return this._isEdit ? this.anchorNode : this.myself
+  }
 
   @property(Node)
   private skinBtn: Node
@@ -70,27 +45,27 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   @property(Node)
   private airWall: Node
 
+  private _isMove = false
+
   camera: Camera
 
   private _reactArea: Node
-  set reactArea(node: Node) {
-    if (this._reactArea && node != this._reactArea) {
-      this.unRegisterEvent()
-    }
-    this._reactArea = node
-  }
+  set reactArea(node: Node) { this._reactArea = node }
 
   private hitMeshRenderer: MeshRenderer
 
   private skinBtnPos = v3(0, -2, 0)
-  private mapInfo: Map<number, TerrainItemMgr> = new Map()
-  private _senceInfo: Game.Island = null
+  private _mapInfo: Map<number, TerrainItemMgr> = new Map()
+  mapInfo(idx: number) { return this._mapInfo.get(idx) }
+
+  private _senceInfo: Island.Island = null
   get senceInfo() { return this._senceInfo }
 
   private orginPlayerPos = v3()
   private v3_0 = v3()
   private v3_1 = v3()
   private v3_2 = v3()
+  private q_skinBtn = quat()
   private q_rotation = quat()
   private occlusionPos = v3()
   private worldPos = v3()
@@ -98,56 +73,58 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   // for map sence edit
   private _isEdit: boolean = false
   get isEdit() { return this._isEdit }
-  set isEdit(val: boolean) {
-    this._isEdit = val
-  }
 
   private _ray: geometry.Ray = new geometry.Ray()
-  private curAction: TerrainEditActionType = TerrainEditActionType.None
+  private curAction: Terrain.ActionType = Terrain.ActionType.None
   private curLayer: number = 0
   private curPropName: string
-  private curTerrainItemMgr: TerrainItemMgr = null
+  private selectedItem: number
   private lstOcclusions: Array<number> = []
   private curOcclusions: Array<number> = []
 
-  private static SkinMenuEvent: IslandEvent = new IslandEvent(IslandEvent.Type.SkinMenu, true)
+  private static IslandEvent: Lilliput.IslandEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.SkinMenu)
 
   private loadCost = 0
   private loadCount = 0
   private frequency = 0
+  private mergeGround = false
+  private myself: Node
 
   onLoad() {
     this.hitMeshRenderer = this.hitNode.getComponentInChildren(MeshRenderer)
+
+    this.q_skinBtn.set(this.skinBtn.rotation)
+  }
+
+  protected onDestroy(): void {
+    this._mapInfo.clear()
+    this._senceInfo = null
   }
 
   update(dt: number) {
+    // if (this.loadCount < this._senceInfo?.map.length) {
+    //   if (dt > MIN_FRAME_TIME) return
+    //   this.addTerrainItem(this._senceInfo?.map[this.loadCount], false)
+    //   this.loadCount++
+    // } else {
+    //   if (!this.mergeGround) {
+    //     this.mergeGround = true
 
-    PhysicsSystem.instance.enable = !this.isEdit
+    //     // TODO 合并静态地形
+    //     // BatchingUtility.batchStaticModel(this.terrainGroundStatic, this.terrainGroundMerged)
+    //     // let mesh = new Mesh()
+    //     // mesh.merge
+    //   }
+    // }
 
-    if (this.loadCount < this._senceInfo?.map.length) {
-      if (dt > MIN_FRAME_TIME) return
-      this.addTerrainItem(this._senceInfo?.map[this.loadCount])
-      this.loadCount++
+    if (this.myself == null) return
 
-      // let rest = MIN_FRAME_TIME - this.loadCost
-      // while (rest > 0.01) {
-      //   this.addTerrainItem(this._senceInfo?.map[this.loadCount])
-      //   this.loadCount++
-      //   rest = rest - this.loadCost
-      // }
-    }
-
-    if (BattleService.curIsland == null ||
-      this._senceInfo == null ||
-      BattleService.curIsland?.id != this._senceInfo?.id)
-      return
-
-    this.v3_0.set(BattleService.player().node.position)
+    this.v3_0.set(this.myself.position)
     this.v3_0.x = Math.round(this.v3_0.x)
     this.v3_0.y = Math.round(this.v3_0.y - 1)
     this.v3_0.z = Math.round(this.v3_0.z)
 
-    if (BattleService.player() != null && !this.v3_0.equals(this.airWall.position)) {
+    if (!this.v3_0.equals(this.airWall.position)) {
       this.updateAirWall(this.v3_0)
     }
 
@@ -161,30 +138,40 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     // }
   }
 
-  async init(id?: string, uid?: string) {
+  async init(camera: Camera, id?: string, uid?: string) {
+    this.camera = camera
     try {
-      this._senceInfo = await GameApi.getIsland(id, uid)
+      this._senceInfo = await IslandApi.getIsland(id, uid)
 
       if (this._senceInfo.map == null || this.senceInfo.map.length == 0) {
         throw 'map is error'
       }
-    } catch (err) {
-      await this.genOriginTerrain()
-    }
 
-    for (let item of this.mapInfo.values()) {
-      item.node.destroy()
+      for (let item of this._mapInfo.values()) {
+        item.node.destroy()
+      }
+
+      this._senceInfo.map.forEach(it => {
+        this.addTerrainItem(it, false)
+      })
+
+      this._mapInfo.clear()
+
+      this._isEdit = false
+      this.initIsland()
+      return this.senceInfo.id
+    } catch (err) {
+      console.log(err)
+      // await this.genOriginTerrain()
     }
-    this.mapInfo.clear()
-    return this.senceInfo.id
   }
 
-  async updateMap(info: Game.MapItem) {
+  async updateMap(info: Island.MapItem) {
     let idx = terrainItemIdx(info.x, info.y, info.z)
     if (info.prefab == null)
-      this.mapInfo.delete(idx)
-    else if (info.prefab != this.mapInfo.get(idx).info.prefab) {
-      this.mapInfo.get(idx).node.removeFromParent()
+      this._mapInfo.delete(idx)
+    else if (info.prefab != this._mapInfo.get(idx).info.prefab) {
+      this._mapInfo.get(idx).node.removeFromParent()
       this.addTerrainItem(info)
     }
 
@@ -196,12 +183,12 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     this.airWall.children.forEach(it => {
       Vec3.add(this.v3_1, pos, it.position)
       let idx = terrainItemIdx(this.v3_1.x, this.v3_1.y - 1, this.v3_1.z)
-      it.active = !this.mapInfo.has(idx)
+      it.active = !this._mapInfo.has(idx)
     })
   }
 
   handleInteract(index: number, action: Game.CharacterState) {
-    let item = this.mapInfo.get(index)
+    let item = this._mapInfo.get(index)
     if (item == null) return
     item.interact(action)
   }
@@ -210,102 +197,92 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
     return uid == this._senceInfo.owner
   }
 
-  async onEditModeChanged() {
+  private initIsland() {
+    PhysicsSystem.instance.enable = !this._isEdit
+
+
     this.airWall.active = !this._isEdit
     this.hitNode.active = this._isEdit
     this.hitPoint.active = this._isEdit
-    this.waterLayer.active = this._isEdit
+    this.anchorNode.active = this._isEdit
+    this.checkLayer.active = this._isEdit
     this.skinBtn.active = this._isEdit
     this.curLayer = 0
 
-    let world: any = PhysicsSystem.instance.physicsWorld
     this.hitNode.position.set(0, -2, 0)
     this.skinBtn.position.set(0, -2, 0)
     this.hitPoint.position.set(0, -2, 0)
-    this.curTerrainItemMgr?.node?.destroy()
     this.curPropName = null
-    this.curTerrainItemMgr = null
     if (this._isEdit) {
       this.curLayer = 0
-      this.curAction = TerrainEditActionType.Selected
-      this.orginPlayerPos.set(BattleService.player().node.position)
-      this.waterLayer.position.set(0, this.curLayer + 0.5, 0)
-
-      BattleService.player().onEditModel(this._isEdit, this.orginPlayerPos.x, this.curLayer + 1.5, this.orginPlayerPos.z)
-      for (let mgr of this.mapInfo.values()) {
+      this.curAction = Terrain.ActionType.Selected
+      this.checkLayer.position = v3(0, this.curLayer + 1, 0)
+      for (let mgr of this._mapInfo.values()) {
         mgr.preview(mgr.info.y > this.curLayer)
       }
       this.registerEvent()
     } else {
-
-      BattleService.player().onEditModel(this._isEdit, this.orginPlayerPos.x, this.orginPlayerPos.y, this.orginPlayerPos.z)
-
-      for (let mgr of this.mapInfo.values()) { mgr.apply() }
-
-      let owner = await UserService.profile()
-      await GameApi.saveIsland(owner.id, this.convert2RemoteData())
-
+      for (let mgr of this._mapInfo.values()) { mgr.apply() }
       this.unRegisterEvent()
     }
   }
 
-  onEditItemChanged(name: string): void {
-    if (this.curPropName == name) return
+  async onEditModeChanged() {
+    this._isEdit = !this._isEdit
+    this.initIsland()
 
-
-    try {
-
-      if (this.curTerrainItemMgr) {
-        if (this.curTerrainItemMgr.node == null) {
-          this.curTerrainItemMgr = null
-        } else {
-          this.curTerrainItemMgr.node.destroy()
-          this.curTerrainItemMgr = null
-        }
-      }
-
-      this.curPropName = name
-      let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: name, angle: 0 }
-      this.curTerrainItemMgr = this.addTerrainItem(info)
-    } catch (err) {
-      console.error(err)
-      console.error(name)
+    this.myself = this.node.getChildByName('myself')
+    if (this.myself) {
+      this.myself.active = !this._isEdit
+      this.orginPlayerPos.set(this.myself.position)
+      this.anchorNode.position = this.myself.position
+      this.camera.node.getComponent(OrbitCamera).target = this.curAnchorNode
     }
 
+    if (!this._isEdit) {
+      let owner = await UserService.profile()
+      await IslandApi.saveIsland(owner.id, this.convert2RemoteData())
+
+    }
   }
 
-  onEditActionChanged(type: TerrainEditActionType): void {
-    this.curAction = type
+  onEditItemChanged(event: Lilliput.IslandEvent): void {
+    this.curPropName = event.customData.prefab
   }
 
-  onEditLayerChanged(layer: number): void {
-    this.curLayer = layer
-    let pos = v3(0, layer, 0)
+  onEditActionChanged(event: Lilliput.IslandEvent): void {
+    this.curAction = event.customData.action
+  }
+
+  onEditLayerChanged(event: Lilliput.IslandEvent): void {
+    this.curLayer = event.customData.layer
+    let pos = v3(0, this.curLayer, 0)
     pos.y = this.curLayer + 0.1
-    tween(this.waterLayer).to(0.5, { position: pos }, { easing: 'linear' }).start()
+    // tween(this.waterLayer).to(0.5, { position: pos }, { easing: 'linear' }).start()
 
     pos.set(this.orginPlayerPos)
-    pos.y = layer + 1
-    tween(BattleService.player().node).to(0.5, { position: pos }, { easing: 'linear' }).start()
+    pos.y = this.curLayer + 1.5
+    tween(this.anchorNode).to(0.5, { position: pos }, { easing: 'linear' }).start()
 
-    for (let mgr of this.mapInfo.values()) {
-      mgr.translucent(mgr.info.y > layer)
+    this.checkLayer.position = v3(0, this.curLayer + 1 + 0.2, 0)
+
+    for (let mgr of this._mapInfo.values()) {
+      mgr.translucent(mgr.info.y > this.curLayer)
     }
   }
 
-  onRotate(angle: number): void {
-    let action: TerrainEditAction = {
+  onRotate(event: Lilliput.IslandEvent): void {
+    this.updateMapInfo({
       pos: this.hitNode.position,
-      type: TerrainEditActionType.Rotate,
-      angle
-    }
-    this.updateMapInfo(action)
+      type: Terrain.ActionType.Rotate,
+      angle: event.customData.degree
+    })
   }
 
-  onSkinChanged(skin: string) {
-    for (let mgr of this.mapInfo.values()) {
+  onSkinChanged(event: Lilliput.IslandEvent) {
+    for (let mgr of this._mapInfo.values()) {
       if (!mgr.isSelected) { continue }
-      (mgr as SkinnedTerrainItemMgr).updateSkin(skin)
+      (mgr as SkinnedTerrainItemMgr).updateSkin(event.customData.skin)
     }
   }
 
@@ -318,198 +295,195 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   private unRegisterEvent() {
-    this._reactArea.off(Node.EventType.TOUCH_START, this.onTouchStart, this)
-    this._reactArea.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-    this._reactArea.off(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
-    this._reactArea.off(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-    this._reactArea.off(Node.EventType.MOUSE_MOVE, this.onTouchMove, this)
+    this._reactArea?.off(Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this._reactArea?.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+    this._reactArea?.off(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+    this._reactArea?.off(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+    this._reactArea?.off(Node.EventType.MOUSE_MOVE, this.onTouchMove, this)
   }
 
   private onTouchStart(event: EventTouch) {
     if (!this.isEdit) return
+    this._isMove = false
   }
 
   private onTouchMove(event: EventTouch) {
     if (!this.isEdit) return
+    this._isMove = !Vec2.ZERO.equals(event.getDelta(), 0.542)
+    // if (this._isMove) console.log(event.getDelta())
   }
 
   private onTouchEnd(event: EventTouch) {
-    if (!this.isEdit) return
-    let selected = this.selectGirdItem(event.touch)
-
-    if (selected == TerrainEditActionType.None && this.curAction != TerrainEditActionType.Selected) return
-    if (this.curAction == TerrainEditActionType.Rotate || this.curAction == TerrainEditActionType.None) return
-    let type = this.curAction == TerrainEditActionType.Add_Preview ? TerrainEditActionType.Add_Done : this.curAction
-    type = selected == TerrainEditActionType.Selected ? type : TerrainEditActionType.Selected
-    this.updateMapInfo({ pos: this.hitNode.position, type, angle: 0 })
+    if (!this.isEdit || this._isMove) return
+    let action = this.selectGirdItem(event.touch)
+    if (action == Terrain.ActionType.None) return
+    this.updateMapInfo({ pos: this.hitNode.position, type: action, angle: 0 })
   }
 
-  private selectGirdItem(touch: Touch): TerrainEditActionType {
+  private selectGirdItem(touch: Touch): Terrain.ActionType {
     this.camera.screenPointToRay(touch.getLocationX(), touch.getLocationY(), this._ray)
 
     if (!PhysicsSystem.instance.raycast(this._ray, 0xffffffff, 500)) {
       console.warn('no hit')
-      return TerrainEditActionType.None
+      return Terrain.ActionType.None
     }
-    let onSkin = -1, onSelected = -1
-    for (let i = 0; i < PhysicsSystem.instance.raycastResults.length; i++) {
-      let item = PhysicsSystem.instance.raycastResults[i]
-      let pos = this.node.getComponent(UITransform).convertToNodeSpaceAR(item.hitPoint)
 
-      if (item.collider.node.name == 'SkinBtn') {
-        onSkin = i
-        continue
+    let skinIdx = PhysicsSystem.instance.raycastResults.findIndex((it) => it.collider.node.name == 'SkinBtn')
+    let checkIdx = PhysicsSystem.instance.raycastResults.findIndex((it) => it.collider.node.name == 'CheckLayer')
+
+    if (skinIdx != -1) {
+      IslandMgr.IslandEvent.customData = { show: true, skin: this._mapInfo.get(this.selectedItem).info.skin }
+      this.node.dispatchEvent(IslandMgr.IslandEvent)
+      return Terrain.ActionType.None
+    }
+
+    if (checkIdx != -1) {
+      this.v3_1.set(this.node.getComponent(UITransform).convertToNodeSpaceAR(PhysicsSystem.instance.raycastResults[checkIdx].hitPoint))
+      this.hitPoint.position = this.v3_1
+      this.v3_1.set(Math.floor(this.v3_1.x + 0.5), this.curLayer, Math.floor(this.v3_1.z + 0.5))
+
+      let action = this.curAction
+      if (this.curAction == Terrain.ActionType.Add) {
+        if (this.hitNode.position.equals(this.v3_1)) { action = this.curAction }
+        else { action = Terrain.ActionType.Selected }
       }
 
-      pos.x = Math.floor(pos.x + 0.5)
-      pos.y = Math.floor(this.curLayer)
-      pos.z = Math.floor(pos.z + 0.5)
-
-      if (this.hitNode.position.equals(pos)) {
-        onSelected = i
+      this.hitNode.position = this.v3_1
+      if (Math.abs(this.hitNode.position.x) > 9 || Math.abs(this.hitNode.position.z) > 9) {
+        this.hitMeshRenderer.setMaterial(LilliputAssetMgr.getMaterial('heart'), 0)
+        action = Terrain.ActionType.Selected
+      } else {
+        this.hitMeshRenderer.setMaterial(LilliputAssetMgr.getMaterial('green'), 0)
       }
+      return action
     }
-
-    if (onSkin != -1) {
-      IslandMgr.SkinMenuEvent.customData = true
-      this.node.dispatchEvent(IslandMgr.SkinMenuEvent)
-      return TerrainEditActionType.None
-    }
-    IslandMgr.SkinMenuEvent.customData = false
-    this.node.dispatchEvent(IslandMgr.SkinMenuEvent)
-
-    let item = PhysicsSystem.instance.raycastResults[onSelected == -1 ? 0 : onSelected]
-    let pos = this.node.getComponent(UITransform).convertToNodeSpaceAR(item.hitPoint)
-    this.hitPoint.position = pos
-    pos.x = Math.floor(pos.x + 0.5)
-    pos.y = Math.floor(this.curLayer)
-    pos.z = Math.floor(pos.z + 0.5)
-    this.hitNode.position = pos
-
-    // 超出边界
-    if (Math.abs(this.hitNode.position.x) > 9 || Math.abs(this.hitNode.position.z) > 9) {
-      this.hitMeshRenderer.setMaterial(IslandAssetMgr.getMaterial('heart-translucent'), 0)
-      return TerrainEditActionType.None
-    } else {
-      this.hitMeshRenderer.setMaterial(IslandAssetMgr.getMaterial('grass-translucent'), 0)
-    }
-
-    return onSelected == -1 ? TerrainEditActionType.None : TerrainEditActionType.Selected
+    return Terrain.ActionType.None
   }
 
-  private updateMapInfo(action: TerrainEditAction) {
+  private updateMapInfo(action: Terrain.EditAction) {
     let idx = terrainItemIdx(action.pos.x, action.pos.y, action.pos.z)
     switch (action.type) {
-      case TerrainEditActionType.Add_Preview: {
-        this.curTerrainItemMgr.updatePosition(action.pos)
-        return
-      }
-      case TerrainEditActionType.Add_Done: {
-        if (this.curTerrainItemMgr == null) {
-          let info: Game.MapItem = { x: 0, y: -2, z: 0, prefab: this.curPropName, angle: 0 }
-          this.curTerrainItemMgr = this.addTerrainItem(info)
+      case Terrain.ActionType.Add: {
+        let info: Island.MapItem = {
+          x: action.pos.x,
+          y: action.pos.y,
+          z: action.pos.z,
+          prefab: this.curPropName,
+          angle: 0
         }
-
-        let mgr = this.mapInfo.get(idx)
-
-        if (mgr) {
-          if (mgr.info.prefab == this.curPropName) {
-            return
-          } else {
-            mgr.node.destroy()
-          }
-        }
-        if (this.curTerrainItemMgr == null) {
-          console.warn(this.curPropName, action.pos)
-          return
-        }
-
-        this.curTerrainItemMgr.updatePosition(action.pos)
-        this.mapInfo.set(idx, this.curTerrainItemMgr)
-        this.curTerrainItemMgr = null
+        this.addTerrainItem(info)
         break
       }
-      case TerrainEditActionType.Erase:
-        if (this.mapInfo.has(idx)) {
-          this.mapInfo.get(idx)!.node.active = false
-          this.mapInfo.get(idx)!.node.destroy()
-          this.mapInfo.delete(idx)
+      case Terrain.ActionType.Erase:
+        if (this._mapInfo.has(idx)) {
+          this._mapInfo.get(idx)!.node.active = false
+          this._mapInfo.get(idx)!.node.destroy()
+          this._mapInfo.delete(idx)
         }
         break
-      case TerrainEditActionType.Rotate: {
-        if (this.mapInfo.has(idx)) {
-          let node = this.mapInfo.get(idx)!.node
+      case Terrain.ActionType.Rotate: {
+        if (this._mapInfo.has(idx)) {
+          let node = this._mapInfo.get(idx)!.node
           Quat.rotateY(this.q_rotation, node.rotation, Math.PI / 180 * action.angle)
           tween(node).to(0.3, { rotation: this.q_rotation }, {
             easing: 'linear',
             onComplete: () => {
-              this.mapInfo.get(idx)!.info.angle += action.angle
+              this._mapInfo.get(idx)!.info.angle += action.angle
             }
           }).start()
         }
         break
       }
-      case TerrainEditActionType.Selected: {
-        for (let key of this.mapInfo.keys()) {
-          this.mapInfo.get(key).onSelected(idx == key)
-        }
+      case Terrain.ActionType.Selected: {
+        this._mapInfo.get(this.selectedItem)?.onSelected(false)
+        this.selectedItem = idx
+        this._mapInfo.get(this.selectedItem)?.onSelected(true)
 
-        if (this.mapInfo.has(idx) && this.mapInfo.get(idx).skinnable) {
+        if (this._mapInfo.get(idx)?.skinnable) {
           this.skinBtnPos.set(action.pos)
           this.skinBtnPos.y += 3
           this.skinBtn.position = this.skinBtnPos
           this.skinBtn.active = true
+          this.skinBtn.rotation = this.camera.node.rotation
         } else {
+          IslandMgr.IslandEvent.customData = { show: false }
+          this.node.dispatchEvent(IslandMgr.IslandEvent)
+
           this.skinBtn.active = false
           this.skinBtn.position = this.skinBtnPos
         }
-
         break
       }
     }
   }
 
-  private addTerrainItem(info: Game.MapItem) {
+  private addTerrainItem(info: Island.MapItem, preview: boolean = true) {
     this.loadCost = Date.now()
     if (info == null) return
-    let prefab = IslandAssetMgr.getPrefab(info.prefab)
-    let config = IslandAssetMgr.getModelConfig(info.prefab)
-    if (prefab == null) return
+
+    let idx = terrainItemIdx(info.x, info.y, info.z)
+    let mgr = this._mapInfo.get(idx)
+
+    if (mgr != null) {
+      if (mgr.info.prefab == info.prefab) return
+
+      mgr.node.active = false
+      mgr.node.destroy()
+      this._mapInfo.delete(idx)
+    }
+
+    let prefab = LilliputAssetMgr.getTerrainPrefab(info.prefab)
+
+    if (prefab == null) {
+      resources.load(`prefab/terrain/env/${info.prefab}`, Prefab, (err, data) => {
+        try {
+          LilliputAssetMgr.addTerrainPrefab(info.prefab, data)
+          this.initTerrainItem(info, data, preview)
+        } catch (err) {
+          console.error(err, info.prefab)
+        }
+      })
+    } else {
+      this.initTerrainItem(info, prefab, preview)
+    }
+  }
+
+  initTerrainItem(info: Island.MapItem, prefab: Prefab, preview: boolean = true) {
+    let config = LilliputAssetMgr.getModelConfig(info.prefab)
+    if (config == null) {
+      return
+    }
 
     let node = instantiate(prefab)
-    node.position.set(info.x, info.y, info.z)
-    Quat.rotateY(this.q_rotation, node.rotation, Math.PI / 180 * info.angle)
-    node.rotation = this.q_rotation
+    node.getChildByName(info.prefab).position = Vec3.ZERO
     this.node.addChild(node)
 
-    let mgr: TerrainItemMgr
+    // if (config.group == Terrain.ModelGroup.Ground) {
 
+    // } else {
+    //   this.node.addChild(node)
+    // }
+
+    let mgr: TerrainItemMgr
     if (PropMgrs.has(config.name)) {
       let clazz = PropMgrs.get(config.name)
       mgr = node.addComponent(clazz)
     } else {
-      if (config.skin == 1) {
+      if (config.skinnable) {
         mgr = node.addComponent(SkinnedTerrainItemMgr)
       } else {
         mgr = node.addComponent(TerrainItemMgr)
       }
     }
-
     mgr.init(info)
+    if (!preview) mgr.apply()
     this.loadCost = (Date.now() - this.loadCost) / 1000
-
-    if (info.y >= 0) {
-      node.active = true
-      this.mapInfo.set(mgr.index, mgr)
-      return null
-    } else {
-      return mgr
-    }
+    this._mapInfo.set(mgr.index, mgr)
   }
 
   private convert2RemoteData() {
-    let arr: Array<Game.MapItem> = []
-    for (let item of this.mapInfo.values()) {
+    let arr: Array<Island.MapItem> = []
+    for (let item of this._mapInfo.values()) {
       if (item.info == null) continue
       arr.push(item.info)
     }
@@ -519,23 +493,23 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
   }
 
   private async genOriginTerrain() {
-    let infos: Array<Game.MapItem> = []
+    let infos: Array<Island.MapItem> = []
     for (let x = -1; x < 2; ++x) {
       for (let z = -1; z < 2; ++z) {
-        let info: Game.MapItem = {
+        let info: Island.MapItem = {
           x, y: 0, z, prefab: 'block', angle: 0
         }
         infos.push(info)
       }
     }
-    let info: Game.MapItem = { x: 0, y: 1, z: 0, prefab: 'tree', angle: 0 }
+    let info: Island.MapItem = { x: 0, y: 1, z: 0, prefab: 'tree', angle: 0 }
     infos.push(info)
     let owner = await UserService.profile()
-    this._senceInfo = await GameApi.saveIsland(owner.id, infos)
+    this._senceInfo = await IslandApi.saveIsland(owner.id, infos)
   }
 
   private occlusion() {
-    this.occlusionPos.set(BattleService.player().node.position)
+    this.occlusionPos.set(this.myself.position)
     this.occlusionPos.y += 0.66
     this.node.getComponent(UITransform).convertToWorldSpaceAR(this.occlusionPos, this.worldPos)
     geometry.Ray.fromPoints(this._ray, this.camera.node.position, this.worldPos)
@@ -559,7 +533,7 @@ export default class IslandMgr extends Component implements TerrainEditHandler {
       return !this.curOcclusions.includes(it)
     })
 
-    tmp.forEach(it => { this.mapInfo.get(it)?.translucent(false) })
+    tmp.forEach(it => { this._mapInfo.get(it)?.translucent(false) })
 
     for (let i = 0; i < this.curOcclusions.length; ++i) {
       // this.mapInfo.get(this.curOcclusions[i])?.translucent(true)

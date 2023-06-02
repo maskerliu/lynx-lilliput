@@ -191,8 +191,8 @@
       "__uuid__": "77f5485a-8837-4879-9102-427c00768f75@2b750",
       "__expectedType__": "cc.Mesh"
     },
-    "_shadowCastingMode": 0,
-    "_shadowReceivingMode": 1,
+    "_shadowCastingMode": 1,
+    "_shadowReceivingMode": 0,
     "_shadowBias": 0,
     "_shadowNormalBias": 0,
     "_reflectionProbeId": -1,
@@ -3190,6 +3190,14 @@
       {
         "__uuid__": "77f5485a-8837-4879-9102-427c00768f75@2cd1c",
         "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "77f5485a-8837-4879-9102-427c00768f75@e23ce",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "77f5485a-8837-4879-9102-427c00768f75@947a2",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
@@ -3254,6 +3262,7 @@
       "__id__": 0
     },
     "fileId": "0fxO+Iw6ZQw6HfNbN11W8e",
+    "instance": null,
     "targetOverrides": null
   }
 ]

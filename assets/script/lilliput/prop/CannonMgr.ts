@@ -1,7 +1,7 @@
-import { BoxCollider, ITriggerEvent, Node, Quat, RigidBody, Vec3, _decorator, instantiate, quat, v3 } from 'cc'
-import { Game, Terrain } from '../../model'
-import IslandAssetMgr from '../IslandAssetMgr'
-import TerrainItemMgr, { PropEvent } from '../TerrainItemMgr'
+import { Node, Quat, RigidBody, Vec3, _decorator, instantiate, quat, v3 } from 'cc'
+import { Game } from '../../model'
+import LilliputAssetMgr from '../LilliputAssetMgr'
+import TerrainItemMgr from '../TerrainItemMgr'
 import CannonBallMgr from './CannonBallMgr'
 
 
@@ -9,12 +9,7 @@ const { ccclass, property } = _decorator
 
 @ccclass('CannonMgr')
 export default class CannonMgr extends TerrainItemMgr {
-
-  protected static ShowInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, true, [Terrain.ModelInteraction.Fire])
-  protected static HideInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, false)
-
   protected barrel: Node
-
   protected _rotation: Quat = quat()
 
   protected static MAX_ANGLE = 50 * Math.PI / 180
@@ -33,9 +28,8 @@ export default class CannonMgr extends TerrainItemMgr {
 
     this.rigidBody = this.getComponent(RigidBody)
     this.barrel = this.node.getChildByName('barrelCannon')
-
-    this.getComponent(BoxCollider)?.on('onTriggerEnter', this.onTriggerEnter, this)
-    this.getComponent(BoxCollider)?.on('onTriggerExit', this.onTriggerExit, this)
+    
+    
 
     Quat.fromAxisAngle(this.MAX_QUAT, Vec3.UNIT_X, 50 * Math.PI / 180)
     Quat.fromAxisAngle(this.MIN_QUAT, Vec3.UNIT_X, 0)
@@ -43,7 +37,7 @@ export default class CannonMgr extends TerrainItemMgr {
 
   start() {
     for (let i = 0; i < this.capacity; ++i) {
-      let ballNode = instantiate(IslandAssetMgr.getPrefab('cannonBall'))
+      let ballNode = instantiate(LilliputAssetMgr.getPrefab('cannonBall'))
       ballNode.addComponent(CannonBallMgr)
       ballNode.active = false
       ballNode.parent = null
@@ -69,19 +63,6 @@ export default class CannonMgr extends TerrainItemMgr {
       } else {
         this.isUp = true
       }
-    }
-  }
-
-  protected onTriggerEnter(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'myself') {
-      CannonMgr.ShowInteractEvent.propIndex = this.index
-      this.node.dispatchEvent(CannonMgr.ShowInteractEvent)
-    }
-  }
-
-  protected onTriggerExit(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'myself') {
-      this.node.dispatchEvent(CannonMgr.HideInteractEvent)
     }
   }
 

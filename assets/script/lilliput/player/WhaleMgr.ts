@@ -11,7 +11,6 @@ export default class WhaleMgr extends Component {
   onLoad() {
     Quat.fromAxisAngle(this.q_dir, Vec3.UNIT_Y, Math.PI)
     // this.node.rotation = this.q_dir
-    console.log(this.q_dir)
   }
 
   update(dt: number) {

@@ -1,6 +1,5 @@
-import { Camera, Component, Mesh, MeshCollider, MeshRenderer, RigidBody, _decorator, renderer, v3 } from "cc"
-import MafiaPropMgr from "./MafiaPropMgr"
-import { PhyEnvGroup } from "../common/Misc"
+import { Camera, Component, MeshCollider, MeshRenderer, RigidBody, _decorator, renderer, v3 } from "cc"
+import { Terrain } from "../common/Terrain"
 const { ccclass, property } = _decorator
 
 @ccclass('MafiaBilliardMgr')
@@ -16,8 +15,8 @@ export default class MafiaBilliardMgr extends Component {
   onLoad() {
     let rigidBody = this.node.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Prop
-    rigidBody.addMask(PhyEnvGroup.Player | PhyEnvGroup.Terrain)
+    rigidBody.group = Terrain.PhyEnvGroup.Prop
+    rigidBody.addMask(Terrain.PropMask)
 
     this.tableMeshRenderer = this.node.getComponent(MeshRenderer)
   }

@@ -1,17 +1,23 @@
 [
   {
     "name": "cannon",
-    "anchor": 1,
-    "type": 4
+    "group": 2,
+    "interaction": [
+      9
+    ]
   },
   {
     "name": "cannonLarge",
-    "anchor": 1,
-    "type": 4
+    "group": 2,
+    "interaction": [
+      9
+    ]
   },
   {
     "name": "cannonMobile",
-    "anchor": 1,
-    "type": 4
+    "group": 2,
+    "interaction": [
+      9
+    ]
   }
 ]

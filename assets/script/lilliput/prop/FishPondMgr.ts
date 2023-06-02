@@ -1,14 +1,13 @@
 import { ICollisionEvent, ITriggerEvent, Quat, _decorator, quat, v3 } from 'cc'
-import { Terrain } from '../../model'
-import TerrainItemMgr, { PropEvent } from '../TerrainItemMgr'
+import TerrainItemMgr from '../TerrainItemMgr'
 
 const { ccclass, property } = _decorator
 
 
 @ccclass('FishPondMgr')
 export default class FishPondMgr extends TerrainItemMgr {
-  private static ShowInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, true, [Terrain.ModelInteraction.Climb])
-  private static HideInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, false)
+  // private static ShowInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, true, [Terrain.ModelInteraction.Climb])
+  // private static HideInteractEvent = new PropEvent(PropEvent.Type.ShowInteraction, false)
 
   private v3_dir = v3()
   private v3_pos = v3()
@@ -71,7 +70,7 @@ export default class FishPondMgr extends TerrainItemMgr {
 
   private onTriggerExit(event: ICollisionEvent) {
     if (event.otherCollider.node.name == 'myself') {
-      this.node.dispatchEvent(FishPondMgr.HideInteractEvent)
+      // this.node.dispatchEvent(FishPondMgr.HideInteractEvent)
     }
   }
 

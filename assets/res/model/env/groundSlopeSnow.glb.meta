@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "01937b31-9b7b-4c9b-9008-f93c0a03560b",
+  "files": [],
+  "subMetas": {
+    "46b50": {
+      "importer": "gltf-mesh",
+      "uuid": "01937b31-9b7b-4c9b-9008-f93c0a03560b@46b50",
+      "displayName": "",
+      "id": "46b50",
+      "name": "groundSlopeSnow.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "267b6": {
+      "importer": "gltf-scene",
+      "uuid": "01937b31-9b7b-4c9b-9008-f93c0a03560b@267b6",
+      "displayName": "",
+      "id": "267b6",
+      "name": "groundSlopeSnow.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "01937b31-9b7b-4c9b-9008-f93c0a03560b@267b6",
+    "assetFinder": {
+      "meshes": [
+        "01937b31-9b7b-4c9b-9008-f93c0a03560b@46b50"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "c5a51f52-8fe8-46ae-8774-dc4de795a729"
+      ],
+      "scenes": [
+        "01937b31-9b7b-4c9b-9008-f93c0a03560b@267b6"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

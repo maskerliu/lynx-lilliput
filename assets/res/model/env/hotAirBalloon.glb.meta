@@ -1,0 +1,108 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "76608a55-6c2b-4225-ace7-c044e0f9b6c8",
+  "files": [],
+  "subMetas": {
+    "bce7f": {
+      "importer": "gltf-mesh",
+      "uuid": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@bce7f",
+      "displayName": "",
+      "id": "bce7f",
+      "name": "hotAirBalloon.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f65ad": {
+      "importer": "gltf-embeded-image",
+      "uuid": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@f65ad",
+      "displayName": "",
+      "id": "f65ad",
+      "name": "hotAirBalloon.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@f65ad"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "db434": {
+      "importer": "gltf-scene",
+      "uuid": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@db434",
+      "displayName": "",
+      "id": "db434",
+      "name": "hotAirBalloon.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "hotAirBalloon",
+        "uri": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@f65ad"
+      }
+    ],
+    "redirect": "76608a55-6c2b-4225-ace7-c044e0f9b6c8@db434",
+    "assetFinder": {
+      "meshes": [
+        "76608a55-6c2b-4225-ace7-c044e0f9b6c8@bce7f"
+      ],
+      "skeletons": [],
+      "textures": [
+        "76608a55-6c2b-4225-ace7-c044e0f9b6c8@e39f7"
+      ],
+      "materials": [
+        "94ff02a0-48fe-4b5e-9b83-067414ac35b8"
+      ],
+      "scenes": [
+        "76608a55-6c2b-4225-ace7-c044e0f9b6c8@db434"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

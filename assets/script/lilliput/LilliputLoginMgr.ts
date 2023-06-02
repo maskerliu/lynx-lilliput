@@ -1,7 +1,7 @@
 import { Button, Component, EditBox, EventHandler, Label, Node, Toggle, ToggleContainer, _decorator } from 'cc'
 import LocalPrefs from '../misc/LocalPrefs'
 import { UserApi } from '../model'
-import { LilliputUIEvent } from './LilliputUIMgr'
+import { Lilliput } from './LilliputEvents'
 
 const { ccclass, property } = _decorator
 
@@ -59,11 +59,11 @@ export default class LilliputLoginMgr extends Component {
     this.switchBtn.node.on(Button.EventType.CLICK, this.onSwitch, this)
     this.submitBtn.node.on(Button.EventType.CLICK, this.loginOrSignUp, this)
 
-    // let accountTypeHandler = new EventHandler()
-    // accountTypeHandler.target = this.node
-    // accountTypeHandler.component = 'LilliputLoginMgr'
-    // accountTypeHandler.handler = 'onAccountTypeChanged'
-    // this.loginAccountType.checkEvents.push(accountTypeHandler)
+    let accountTypeHandler = new EventHandler()
+    accountTypeHandler.target = this.node
+    accountTypeHandler.component = 'LilliputLoginMgr'
+    accountTypeHandler.handler = 'onAccountTypeChanged'
+    this.loginAccountType.checkEvents.push(accountTypeHandler)
 
     let phoneInputHandler = new EventHandler()
     phoneInputHandler.target = this.node
@@ -115,6 +115,10 @@ export default class LilliputLoginMgr extends Component {
     }
   }
 
+  protected onAccountTypeChanged(event: Toggle) {
+    this.loginAccountInput.maxLength = event.node.name == 'Phone' ? 11 : 16
+  }
+
   private async loginOrSignUp() {
     try {
       if (this.islogin) {
@@ -148,7 +152,7 @@ export default class LilliputLoginMgr extends Component {
       }
 
       this.node.active = false
-      this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.UserInfoBind))
+      this.node.dispatchEvent(new Lilliput.UIEvent(Lilliput.UIEvent.Type.UserInfoBind))
     } catch (err: any) {
       if (this.islogin) {
         this.loginErrorMsg.node.active = true

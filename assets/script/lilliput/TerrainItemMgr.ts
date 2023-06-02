@@ -1,33 +1,18 @@
-import { Component, Event, MeshCollider, MeshRenderer, PhysicMaterial, RigidBody, Vec3, _decorator, tween, v3 } from 'cc'
+import { BoxCollider, Component, MeshCollider, MeshRenderer, Quat, RigidBody, Vec3, _decorator, tween, v3 } from 'cc'
+import { Terrain } from '../common/Terrain'
 import { isDebug, terrainItemIdx } from '../misc/Utils'
-import { Game, Terrain } from '../model'
-import IslandAssetMgr from './IslandAssetMgr'
-import { PhyEnvGroup, TerrainPhyMtl } from '../common/Misc'
+import { Game, Island } from '../model'
+import LilliputAssetMgr from './LilliputAssetMgr'
+import { Lilliput } from './LilliputEvents'
 
 const { ccclass, property } = _decorator
 
 const DROP_Height = 0.4
 const DropPos: Vec3 = v3()
-const PreviewScale = v3(0.8, 1, 0.8)
+const PreviewScale = v3(0.8, 0.8, 0.8)
 
-export class PropEvent extends Event {
-  static Name = 'PropEvent'
-  static Type = {
-    ShowInteraction: 'ShowInteraction'
-  }
+export const InteractEvent: Lilliput.PropEvent = new Lilliput.PropEvent(Lilliput.PropEvent.Type.ShowInteractMenu)
 
-  canAction: boolean = false
-  propIndex: number = -1
-  interactions: Array<Terrain.ModelInteraction>
-
-  constructor(type: string, canAction: boolean, interactions?: Array<Terrain.ModelInteraction>, propIndex: number = -1) {
-    super(PropEvent.Name, true)
-    this.type = type
-    this.canAction = canAction
-    this.interactions = interactions
-    this.propIndex = propIndex
-  }
-}
 
 @ccclass('TerrainItemMgr')
 export default class TerrainItemMgr extends Component {
@@ -37,97 +22,57 @@ export default class TerrainItemMgr extends Component {
   private isDroping: boolean = false
   private _isSelected = false
   private _index: number = -1
-  private boundary: Vec3 = v3()
 
-
-  protected _info: Game.MapItem
+  protected _info: Island.MapItem
   protected isTranslucent: boolean = false
   protected meshRenderer: MeshRenderer
   protected rigidBody: RigidBody
+  protected boundary: Vec3 = v3()
+  protected mtls: string[] = []
 
-  private mtls: string[] = []
-
-  get config() { return IslandAssetMgr.getModelConfig(this._info.prefab) }
+  get config() { return LilliputAssetMgr.getModelConfig(this._info.prefab) }
   get info() { return this._info }
   get isSelected(): boolean { return this._isSelected }
   get index() { return this._index }
 
   get skinnable() {
-    return this.config.skin != null
+    return this.config.skinnable != null && this.config.skinnable
   }
 
-  onLoad() {
-
-  }
-
-  init(info: Game.MapItem): TerrainItemMgr {
+  init(info: Island.MapItem): TerrainItemMgr {
     this._info = info
     this._index = terrainItemIdx(this.info.x, this.info.y, this.info.z)
 
-    this.meshRenderer = this.node.getComponent(MeshRenderer)
+    Quat.rotateY(this.node.rotation, this.node.rotation, Math.PI / 180 * info.angle)
+
+    let debugNode = this.node.getChildByName('Debug')
+    if (debugNode) debugNode.active = isDebug
+
+    this.meshRenderer = this.node.getChildByName(this.info.prefab).getComponent(MeshRenderer)
 
     this.meshRenderer.materials.forEach(it => {
-      IslandAssetMgr.addMaterial(it.parent.uuid, it.parent)
+      LilliputAssetMgr.addMaterial(it.parent.uuid, it.parent)
     })
 
     this.mtls = this.meshRenderer.materials.map(it => { return it.parent.uuid })
+    if (this.mtls != null) {
+      for (let i = 0; i < this.mtls.length; ++i) {
+        this.meshRenderer.setMaterial(LilliputAssetMgr.getMaterial(this.mtls[i]), i)
+      }
+    }
 
-    for (let i = 0; i < this.mtls.length; ++i) {
-      this.meshRenderer.setMaterial(IslandAssetMgr.getMaterial(this.mtls[i]), i)
+    if (this.config.group == Terrain.ModelGroup.Prop) {
+      this.meshRenderer.shadowCastingMode = 1
     }
 
     let minPos = v3(), maxPos = v3()
     this.meshRenderer.model.modelBounds.getBoundary(minPos, maxPos)
     Vec3.subtract(this.boundary, maxPos, minPos)
 
-    let debugNode = this.node.getChildByName('Debug')
-    if (debugNode) debugNode.active = isDebug
-
-    switch (this.config.type) {
-      case Terrain.ModelType.BlockGrass:
-      case Terrain.ModelType.BlockSnow:
-      case Terrain.ModelType.BlockDirt:
-        this.node.position = v3(info.x, info.y + 1 - this.boundary.y, info.z)
-
-        if (this.rigidBody == null) {
-          this.rigidBody = this.addComponent(RigidBody)
-          this.rigidBody.type = RigidBody.Type.STATIC
-          this.rigidBody.group = PhyEnvGroup.Terrain
-          this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle)
-
-          let collider = this.node.addComponent(MeshCollider)
-          collider.convex = true
-          collider.mesh = this.meshRenderer.mesh
-          collider.material = TerrainPhyMtl
-        }
-
-        break
-      case Terrain.ModelType.Skinnable:
-      case Terrain.ModelType.Prop: {
-        this.node.position = v3(info.x, info.y, info.z)
-        break
-      }
-    }
+    this.updatePosition()
+    this.physicalInit()
 
     return this
-  }
-
-  updatePosition(pos: Vec3) {
-    this.node.active = true
-    this.info.x = pos.x
-    this.info.y = pos.y
-    this.info.z = pos.z
-    let tmp = v3(pos)
-    this.node.active = true
-    if (this.config.type != Terrain.ModelType.Prop && this.config.type != Terrain.ModelType.Skinnable) {
-      tmp.y = tmp.y + 1 - this.boundary.y
-    }
-    tmp.y += DROP_Height
-    this.node.position = tmp
-
-    this.node.scale = v3(0.8, 1, 0.8)
-    this._isSelected = true
-    this.onSelected(false)
   }
 
   onSelected(selected: boolean) {
@@ -165,7 +110,7 @@ export default class TerrainItemMgr extends Component {
 
     for (let i = 0; i < this.mtls.length; ++i) {
       let name = !this.isTranslucent && did ? 'translucent' : this.mtls[i]
-      this.meshRenderer.setMaterial(IslandAssetMgr.getMaterial(name), i)
+      this.meshRenderer.setMaterial(LilliputAssetMgr.getMaterial(name), i)
     }
 
     this.isTranslucent = did
@@ -184,5 +129,68 @@ export default class TerrainItemMgr extends Component {
   interact(action: Game.CharacterState) {
     // default do nothing, u can implement this func to apply interact 
     // console.log(action)
+  }
+
+  private updatePosition() {
+    let tmp = v3(this._info.x, this._info.y, this._info.z)
+    this.node.active = true
+    if (this.config.group != Terrain.ModelGroup.Prop) {
+      tmp.y = tmp.y + 1 - this.boundary.y
+    }
+    tmp.y += DROP_Height
+    this.node.position = tmp
+    this.node.scale = PreviewScale
+    this._isSelected = true
+    this.onSelected(false)
+  }
+
+  private physicalInit() {
+    if (this.config.physical == null) { return }
+
+    this.rigidBody = this.node.addComponent(RigidBody)
+    this.rigidBody.type = this.config.physical.type
+    this.rigidBody.group = this.config.physical.group
+
+    switch (this.config.physical.collider) {
+      case Terrain.ColliderType.Box: {
+        let collider = this.node.addComponent(BoxCollider)
+        collider.center = this.meshRenderer.model.modelBounds.center
+        collider.size = this.boundary
+        collider.material = this.phyMtl()
+        break
+      }
+      case Terrain.ColliderType.Mesh: {
+        let collider = this.node.addComponent(MeshCollider)
+        collider.mesh = this.meshRenderer.mesh
+        collider.material = this.phyMtl()
+        break
+      }
+      case Terrain.ColliderType.Cylinder:
+        break
+      case Terrain.ColliderType.Sphere:
+        break
+    }
+
+    switch (this.config.physical.group) {
+      case Terrain.PhyEnvGroup.Terrain:
+        this.rigidBody.setMask(Terrain.TerrainMask)
+        break
+      case Terrain.PhyEnvGroup.Prop: {
+        this.rigidBody.setMask(Terrain.PropMask)
+        break
+      }
+    }
+  }
+
+  private phyMtl() {
+    switch (this.config.group) {
+      case Terrain.ModelGroup.Ground:
+        if (this.config.physical?.type == RigidBody.Type.STATIC) return LilliputAssetMgr.getPhyMtl('terrain')
+      case Terrain.ModelGroup.Prop:
+        if (this.config.physical.type == RigidBody.Type.STATIC) return LilliputAssetMgr.getPhyMtl('propStatic')
+        else return LilliputAssetMgr.getPhyMtl('propDynamic')
+      default:
+        return LilliputAssetMgr.getPhyMtl('terrain')
+    }
   }
 }

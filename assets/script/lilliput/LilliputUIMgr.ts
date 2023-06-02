@@ -1,44 +1,30 @@
 import {
-  Button, Color, Component,
-  Director,
-  EditBox, Event, EventHandler, Label, Node, Sprite, Toggle,
-  ToggleContainer,
-  Widget, _decorator, director,
-  tween, v3, view
+  Button, Component, Director, EditBox, Event, EventHandler,
+  Label, Node, Prefab, Sprite, SpriteAtlas, Toggle, ToggleContainer,
+  UITransform, Widget, _decorator, director, instantiate, size, tween, v3, view
 } from 'cc'
-import { PlayerEvent } from '../common/PlayerMgr'
 import RockerMgr, { RockerTarget } from '../common/RockerMgr'
-import { Game, Terrain } from '../model'
+import { Terrain } from '../common/Terrain'
+import ToggleMgr from '../common/ToggleMgr'
+import LocalPrefs from '../misc/LocalPrefs'
+import { Game, Island } from '../model'
 import ActionsMgr from './ActionsMgr'
 import BattleService from './BattleService'
-import { TerrainEditActionType, TerrainEditHandler } from './EnvEditHandler'
-import TerrainItemBarMgr from './TerrainItemBarMgr'
+import { Lilliput } from './LilliputEvents'
 import LilliputLoginMgr from './LilliputLoginMgr'
-import LocalPrefs from '../misc/LocalPrefs'
+import TerrainItemBarMgr from './TerrainItemBarMgr'
 
 
 const { ccclass, property } = _decorator
 
-export class LilliputUIEvent extends Event {
+const TryEnterEvent = new Lilliput.PlayerEvent(Lilliput.PlayerEvent.Type.TryEnter)
+const IslandEditChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnEditChanged)
+const IslandActionChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnActionChanged)
+const IslandLayerChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnLayerChanged)
+const IslandRotateEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnRotate)
+const IslandSkinChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnSkinChanged)
 
-  static Name = 'UIEvent'
-
-  static Type = {
-    TerrainEdit: 'OnTerrainEdit',
-    UserInfoBind: 'OnUserInfoBind',
-    EnterIsland: 'OnEnterIsland'
-  }
-  static UserInfoBind = 'OnUserInfoBind'
-  static EnterIsland = 'OnEnterIsland'
-
-  customData: any
-
-  constructor(type: string, data?: any) {
-    super(LilliputUIEvent.Name, true)
-    this.type = type
-    this.customData = data
-  }
-}
+const PlayerActionEvent = new Lilliput.PlayerEvent(Lilliput.PlayerEvent.Type.OnAction)
 
 @ccclass('LilliputUIMgr')
 export default class LilliputUIMgr extends Component {
@@ -99,7 +85,13 @@ export default class LilliputUIMgr extends Component {
   private loginPanel: Node
 
   @property(EditBox)
-  inputRoomId: EditBox
+  private inputRoomId: EditBox
+
+  @property(SpriteAtlas)
+  private uiAtlas: SpriteAtlas
+
+  @property(Prefab)
+  private iconTogglePrefab: Prefab
 
   private networkSprite: Sprite
   private networkLabel: Label
@@ -107,16 +99,12 @@ export default class LilliputUIMgr extends Component {
   private frameTime: number = Date.now()
 
   private actionsMgr: ActionsMgr
-  private _editHandler: TerrainEditHandler
-
-  set editHandler(handler: TerrainEditHandler) {
-    this._editHandler = handler
-    this.getComponentInChildren(TerrainItemBarMgr).editHandler = handler
-  }
 
   private _curToolItem = 'Select'
 
   private loginMgr: LilliputLoginMgr
+
+  private _isEdit: boolean = false
 
   onLoad() {
     // TODO not work 
@@ -161,128 +149,172 @@ export default class LilliputUIMgr extends Component {
     this.roateRight = this.rotateMenu.getChildByName('RotateRight')
 
     this.roateLeft.on(Button.EventType.CLICK, () => {
-      this._editHandler.onRotate(-90)
+      IslandRotateEvent.customData = { degree: -90 }
+      this.node.dispatchEvent(IslandRotateEvent)
     }, this)
 
     this.roateRight.on(Button.EventType.CLICK, () => {
-      this._editHandler.onRotate(90)
+      IslandRotateEvent.customData = { degree: 90 }
+      this.node.dispatchEvent(IslandRotateEvent)
     }, this)
 
     this.loginPanel.active = LocalPrefs.myself == null
 
     this.node.getChildByName('UserInfo').getChildByName('EnterButton').on(Button.EventType.CLICK, this.onEnter, this)
+
+    this.initSkinMenu()
   }
 
-  update(dt: number) {
-    if (BattleService.delay < 50) {
-      this.networkSprite.color = this.networkLabel.color = Color.GREEN
-    } else if (BattleService.delay < 70) {
-      this.networkSprite.color = this.networkLabel.color = Color.YELLOW
-    } else {
-      this.networkSprite.color = this.networkLabel.color = Color.RED
+  canEdit(canEdit: boolean, isEdit: boolean) {
+    this.terrainEditBtn.active = canEdit
+    this._isEdit = isEdit
+    this.updateEditMode()
+  }
+
+  private initSkinMenu() {
+    let p = v3()
+    let s = size(100, 100)
+    for (let i = 0; i < 3; ++i) {
+      p.set(140 * (i - 1), -25)
+      let toggle = instantiate(this.iconTogglePrefab)
+      toggle.position = p
+      toggle.getComponent(UITransform).contentSize = s
+      let mgr = toggle.addComponent(ToggleMgr)
+      mgr.customData = i as Island.MapItemSkin
+      let iconNode = toggle.getChildByName('Icon')
+      let sprite = iconNode.getComponent(Sprite)
+
+      let name = 'dirt'
+      switch (i) {
+        case Island.MapItemSkin.Dirt:
+          name = 'blockDirt'
+          break
+        case Island.MapItemSkin.Grass:
+          name = 'block'
+          break
+        case Island.MapItemSkin.Snow:
+          name = 'blockSnow'
+          break
+      }
+      sprite.spriteFrame = this.uiAtlas.getSpriteFrame(`snap/${name}`)
+      s.set(80, 80)
+      sprite.getComponent(UITransform).contentSize = s
+      this.skinMenu.addChild(toggle)
     }
-    this.networkLabel.string = `${BattleService.delay}ms`
 
-    // this.fpsLabel.string = `FPS: ${Math.round(1 / game.deltaTime)}`
+    let skinMenuHandler = new EventHandler()
+    skinMenuHandler.target = this.node
+    skinMenuHandler.component = 'LilliputUIMgr'
+    skinMenuHandler.handler = 'onEnvItemSkinChanged'
+    this.skinMenu.getComponent(ToggleContainer).checkEvents.push(skinMenuHandler)
+
+    this.skinMenu.getChildByName('CloseBtn').on(Button.EventType.CLICK, this.onCloseSkinMenu, this)
+    this.skinMenu.active = false
   }
 
-  onEdit() {
-    this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.TerrainEdit))
+  protected onEdit() {
+    this.node.dispatchEvent(IslandEditChangedEvent)
+    this._isEdit = !this._isEdit
+    this.updateEditMode()
   }
 
-  onBind(event: Event) {
+  protected onBind(event: Event) {
     // this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.UserInfoBind, this.inputToken))
   }
 
-  onEnter(event: Event) {
-    this.node.dispatchEvent(new LilliputUIEvent(LilliputUIEvent.Type.EnterIsland, this.inputRoomId.string))
+  protected onEnter(event: Event) {
+    TryEnterEvent.customData = { islandId: this.inputRoomId.string }
+    this.node.dispatchEvent(TryEnterEvent)
   }
 
-  onAction(event: Event, data: string) {
-    let action = Number.parseInt(data) as Game.CharacterState
-    this.node.dispatchEvent(new PlayerEvent(PlayerEvent.Type.OnAction, action))
+  protected onAction(event: Event, data: string) {
+    PlayerActionEvent.action = Number.parseInt(data) as Game.CharacterState
+    this.node.dispatchEvent(PlayerActionEvent)
   }
 
-  onProfile() {
+  protected onProfile() {
     director.loadScene('profile')
-
-    BattleService.leave()
-    BattleService.removeAllIsland()
+    BattleService.instance.stop()
   }
 
-  canEdit(edit: boolean) {
-    this.terrainEditBtn.active = edit
-  }
-
-  onEnvEditToolbarChanged(event: Toggle) {
+  protected onEnvEditToolbarChanged(event: Toggle) {
     if (this._curToolItem == event.node.name) return
     this._curToolItem = event.node.name
-    let type = TerrainEditActionType.None
+    let type = Terrain.ActionType.None
     this.layerMenu.active = false
     this.rotateMenu.active = false
     switch (event.node.name) {
       case 'Layers':
         this.showSubMenu(this.layerMenu)
-        type = TerrainEditActionType.Selected
+        type = Terrain.ActionType.Selected
         break
       case 'Rotate':
         this.showSubMenu(this.rotateMenu)
-        type = TerrainEditActionType.Selected
+        type = Terrain.ActionType.Selected
         break
       case 'Select':
-        type = TerrainEditActionType.Selected
+        type = Terrain.ActionType.Selected
         break
       case 'Paint':
-        type = TerrainEditActionType.Add_Preview
+        type = Terrain.ActionType.Add
         break
       case 'Erase':
-        type = TerrainEditActionType.Erase
+        type = Terrain.ActionType.Erase
         break
     }
 
-    this._editHandler.onEditActionChanged(type)
+    IslandActionChangedEvent.customData = { action: type }
+    this.node.dispatchEvent(IslandActionChangedEvent)
   }
 
-  onEnvLayerChanged(event: Toggle) {
+  protected onEnvLayerChanged(event: Toggle) {
     let layer = Number.parseInt(event.node.name.split('Layer')[1])
-    this._editHandler.onEditLayerChanged(layer)
+
+    // layer = this.layerMenu.getComponent(ToggleContainer).toggleItems.findIndex(it => it == event)
+
+    IslandLayerChangedEvent.customData = { layer }
+    this.node.dispatchEvent(IslandLayerChangedEvent)
   }
 
-  onEnvItemRotated(event: Event, data: string) {
-    let angle = Number.parseInt(data)
-    this._editHandler.onRotate(angle)
+  protected onEnvItemRotated(event: Event, data: string) {
+    let degree = Number.parseInt(data)
+    IslandRotateEvent.customData = { degree }
+    this.node.dispatchEvent(IslandRotateEvent)
   }
 
-  onEnvItemSkinChanged(toggle: Toggle) {
-    this._editHandler.onSkinChanged(toggle.node.name)
+  protected onEnvItemSkinChanged(toggle: Toggle) {
+    let mgr = toggle.node.getComponent(ToggleMgr)
+    IslandSkinChangedEvent.customData = { skin: mgr.customData }
+    this.node.dispatchEvent(IslandSkinChangedEvent)
   }
 
-  onCloseSkinMenu() {
+  protected onCloseSkinMenu() {
     this.skinMenu.active = false
   }
 
-  updateEditMode(isEdit: boolean) {
+  protected updateEditMode() {
     this.terrainEditBtn.getComponent(Button)
 
-    this.profileBtn.active = !isEdit
-    this.actions.active = !isEdit
-    this.selectedTerrainItem.active = isEdit
-    this.terrainEditToolbar.active = isEdit
+    this.profileBtn.active = !this._isEdit
+    this.actions.active = !this._isEdit
+    this.selectedTerrainItem.active = this._isEdit
+    this.terrainEditToolbar.active = this._isEdit
 
     let tc = this.terrainEditToolbar.getComponent(ToggleContainer)
     tc.toggleItems[0].isChecked = true
-    tc.notifyToggleCheck(tc.toggleItems[0])
+    // tc.notifyToggleCheck(tc.toggleItems[0])
 
     tc = this.layerMenu.getComponent(ToggleContainer)
     tc.toggleItems[0].isChecked = true
-    tc.notifyToggleCheck(tc.toggleItems[0])
+    // tc.notifyToggleCheck(tc.toggleItems[0])
 
-    this.terrainItemBar.getComponent(TerrainItemBarMgr).show(isEdit)
-    this.rocker.getComponent(RockerMgr).show(!isEdit)
-    this._editHandler?.onEditModeChanged()
+    this.terrainItemBar.getComponent(TerrainItemBarMgr).show(this._isEdit)
+    this.rocker.getComponent(RockerMgr).show(!this._isEdit)
+    // this._editHandler?.onEditModeChanged()
   }
 
   updateLoading(show: boolean, content?: string) {
+
     this.overlay.active = show
     this.assetLoadIndicator.active = show
     if (show) {
@@ -290,12 +322,18 @@ export default class LilliputUIMgr extends Component {
     }
   }
 
-  updateActions(interactions: Array<Terrain.ModelInteraction>) {
-    this.actionsMgr.updateActions(interactions)
+  updateActions(event: Lilliput.PropEvent) {
+
+    this.actionsMgr.updateActions(event.interactions)
   }
 
-  showSkinMenu(show: boolean) {
-    this.skinMenu.active = show
+  showSkinMenu(event: Lilliput.IslandEvent) {
+    this.skinMenu.active = event.customData.show
+
+    if (event.customData.show) {
+      let container = this.skinMenu.getComponent(ToggleContainer)
+      container.toggleItems[event.customData.skin ? event.customData.skin : 0].isChecked = true
+    }
   }
 
   private showSubMenu(node: Node) {

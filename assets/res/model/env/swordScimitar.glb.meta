@@ -1,0 +1,63 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "f3dff6a1-f8f1-4f3f-b6e4-d051357a61b2",
+  "files": [],
+  "subMetas": {
+    "4059c": {
+      "importer": "gltf-mesh",
+      "uuid": "f3dff6a1-f8f1-4f3f-b6e4-d051357a61b2@4059c",
+      "displayName": "",
+      "id": "4059c",
+      "name": "swordScimitar.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d8dd1": {
+      "importer": "gltf-scene",
+      "uuid": "f3dff6a1-f8f1-4f3f-b6e4-d051357a61b2@d8dd1",
+      "displayName": "",
+      "id": "d8dd1",
+      "name": "swordScimitar.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "f3dff6a1-f8f1-4f3f-b6e4-d051357a61b2@d8dd1",
+    "assetFinder": {
+      "meshes": [
+        "f3dff6a1-f8f1-4f3f-b6e4-d051357a61b2@4059c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "bd41ab7f-19a6-4da8-9c4f-5e1ed18ddc3e",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1"
+      ],
+      "scenes": [
+        "f3dff6a1-f8f1-4f3f-b6e4-d051357a61b2@d8dd1"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

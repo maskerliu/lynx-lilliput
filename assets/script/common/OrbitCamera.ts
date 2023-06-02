@@ -20,15 +20,15 @@ export default class OrbitCamera extends Component {
 
   @property
   radiusRange = v2(5, 10)
-  private _targetRadius = 10
-  
+  private _targetRadius = 15
+
   @property
   get radius() { return this._targetRadius }
   set radius(r) { this._targetRadius = r }
 
   @property
   radiusScaleSpeed = 1
-  
+
   @property
   followTargetRotationY = true
 
@@ -54,7 +54,6 @@ export default class OrbitCamera extends Component {
 
   set target(node: Node) {
     this._target = node
-    this._targetDir.set(this._startDir)
     this._targetCenter.set(node!.worldPosition)
   }
 
@@ -136,10 +135,10 @@ export default class OrbitCamera extends Component {
     let touchs = event.getAllTouches()
     if (touchs.length >= 2) {
       let dis = Vec2.distance(touchs[0].getUILocation(), touchs[1].getUILocation())
-
-      // this._targetRadius += this.radiusScaleSpeed * -Math.sign(dis - this._lastTouchDis)
+      console.log(dis, this._lastTouchDis)
       this._targetRadius -= (dis - this._lastTouchDis) * this.radiusRange.y / 750
-      this._targetRadius = Math.min(this.radiusRange.x, Math.max(this.radiusRange.x, this._targetRadius))
+      // console.log(this._targetRadius)
+      this._targetRadius = Math.min(this.radiusRange.y, Math.max(this.radiusRange.x, this._targetRadius))
       this._lastTouchDis = dis
     } else {
       Quat.fromEuler(this._q_tmp, this._targetDir.x, this._targetDir.y, this._targetDir.z)

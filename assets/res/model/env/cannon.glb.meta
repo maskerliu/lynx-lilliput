@@ -1,0 +1,80 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "f276ef4b-f699-49b3-b17f-59431e6db6d1",
+  "files": [],
+  "subMetas": {
+    "f470a": {
+      "importer": "gltf-mesh",
+      "uuid": "f276ef4b-f699-49b3-b17f-59431e6db6d1@f470a",
+      "displayName": "",
+      "id": "f470a",
+      "name": "barrelCannon.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "dcd2b": {
+      "importer": "gltf-mesh",
+      "uuid": "f276ef4b-f699-49b3-b17f-59431e6db6d1@dcd2b",
+      "displayName": "",
+      "id": "dcd2b",
+      "name": "cannon.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a6dc2": {
+      "importer": "gltf-scene",
+      "uuid": "f276ef4b-f699-49b3-b17f-59431e6db6d1@a6dc2",
+      "displayName": "",
+      "id": "a6dc2",
+      "name": "cannon.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "f276ef4b-f699-49b3-b17f-59431e6db6d1@a6dc2",
+    "assetFinder": {
+      "meshes": [
+        "f276ef4b-f699-49b3-b17f-59431e6db6d1@f470a",
+        "f276ef4b-f699-49b3-b17f-59431e6db6d1@dcd2b"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1"
+      ],
+      "scenes": [
+        "f276ef4b-f699-49b3-b17f-59431e6db6d1@a6dc2"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

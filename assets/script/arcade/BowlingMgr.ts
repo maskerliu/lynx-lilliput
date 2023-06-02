@@ -1,13 +1,13 @@
-import { Component, _decorator, Node, instantiate, RigidBody, MeshCollider, MeshRenderer, PhysicMaterial } from 'cc'
-import { PhyEnvGroup } from '../common/Misc'
+import { Component, MeshCollider, MeshRenderer, Node, RigidBody, _decorator, instantiate } from 'cc'
+import { Terrain } from '../common/Terrain'
 
 const { ccclass, property } = _decorator
 
 
-const BowlingPinPhyMtl = new PhysicMaterial()
-BowlingPinPhyMtl.setValues(0.5, 0, 0, 0.2)
+// const BowlingPinPhyMtl = new PhysicMaterial()
+// BowlingPinPhyMtl.setValues(0.5, 0, 0, 0.2)
 
-const BowlingPongPhyMtl = new PhysicMaterial()
+// const BowlingPongPhyMtl = new PhysicMaterial()
 
 
 @ccclass('BowlingMgr')
@@ -39,25 +39,25 @@ export default class BowlingMgr extends Component {
     this.pins.forEach(it => {
       let rigidBody = it.addComponent(RigidBody)
       rigidBody.type = RigidBody.Type.DYNAMIC
-      rigidBody.group = PhyEnvGroup.Prop
-      rigidBody.setMask(PhyEnvGroup.Terrain | PhyEnvGroup.Prop)
+      rigidBody.group = Terrain.PhyEnvGroup.Prop
+      rigidBody.setMask(Terrain.PropMask)
       rigidBody.sleep()
 
       let collider = it.addComponent(MeshCollider)
       collider.convex = true
       collider.mesh = it.getComponent(MeshRenderer).mesh
-      collider.material = BowlingPinPhyMtl
+      collider.material.setValues(0.5, 0, 0, 0.2)
     })
 
     let rigidBody = this.pong.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.DYNAMIC
-    rigidBody.group = PhyEnvGroup.Prop
-    rigidBody.setMask(PhyEnvGroup.Terrain | PhyEnvGroup.Prop)
+    rigidBody.group = Terrain.PhyEnvGroup.Prop
+    rigidBody.setMask(Terrain.PropMask)
     rigidBody.sleep()
     let collider = this.pong.addComponent(MeshCollider)
     collider.convex = true
     collider.mesh = this.pong.getComponent(MeshRenderer).mesh
-    collider.material = BowlingPongPhyMtl
+    // collider.material = BowlingPongPhyMtl
   }
 
 

@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "476c32b6-563d-4f8f-baff-a53f8613d732",
+  "files": [],
+  "subMetas": {
+    "fb18a": {
+      "importer": "gltf-mesh",
+      "uuid": "476c32b6-563d-4f8f-baff-a53f8613d732@fb18a",
+      "displayName": "",
+      "id": "fb18a",
+      "name": "bridgeHalf.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3f637": {
+      "importer": "gltf-scene",
+      "uuid": "476c32b6-563d-4f8f-baff-a53f8613d732@3f637",
+      "displayName": "",
+      "id": "3f637",
+      "name": "bridgeHalf.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "476c32b6-563d-4f8f-baff-a53f8613d732@3f637",
+    "assetFinder": {
+      "meshes": [
+        "476c32b6-563d-4f8f-baff-a53f8613d732@fb18a"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1",
+        "bc0ffaa5-1624-419c-a97e-3a35ffb397c9"
+      ],
+      "scenes": [
+        "476c32b6-563d-4f8f-baff-a53f8613d732@3f637"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

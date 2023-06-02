@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "ef8b9ec7-bb1d-4546-b514-16779be020cb",
+  "files": [],
+  "subMetas": {
+    "da53c": {
+      "importer": "gltf-mesh",
+      "uuid": "ef8b9ec7-bb1d-4546-b514-16779be020cb@da53c",
+      "displayName": "",
+      "id": "da53c",
+      "name": "treePine.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "92d97": {
+      "importer": "gltf-scene",
+      "uuid": "ef8b9ec7-bb1d-4546-b514-16779be020cb@92d97",
+      "displayName": "",
+      "id": "92d97",
+      "name": "treePine.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "ef8b9ec7-bb1d-4546-b514-16779be020cb@92d97",
+    "assetFinder": {
+      "meshes": [
+        "ef8b9ec7-bb1d-4546-b514-16779be020cb@da53c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "2b81a6c0-1301-43e3-8d14-f8b00da23818",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1"
+      ],
+      "scenes": [
+        "ef8b9ec7-bb1d-4546-b514-16779be020cb@92d97"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

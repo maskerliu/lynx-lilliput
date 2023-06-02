@@ -1,9 +1,6 @@
 import { Component, Node, Size, Sprite, SpriteAtlas, UITransform, Vec3, _decorator, size, v3 } from 'cc'
 
-
 const { ccclass, property } = _decorator
-
-
 
 const K_P_Low = 'squareRed'
 const K_P_Mid = 'squareYellow'

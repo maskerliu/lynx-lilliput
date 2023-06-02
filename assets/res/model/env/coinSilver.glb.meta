@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "3facf403-80ec-432d-be64-1ce9e3ee650d",
+  "files": [],
+  "subMetas": {
+    "977b8": {
+      "importer": "gltf-mesh",
+      "uuid": "3facf403-80ec-432d-be64-1ce9e3ee650d@977b8",
+      "displayName": "",
+      "id": "977b8",
+      "name": "coinSilver.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "958e8": {
+      "importer": "gltf-scene",
+      "uuid": "3facf403-80ec-432d-be64-1ce9e3ee650d@958e8",
+      "displayName": "",
+      "id": "958e8",
+      "name": "coinSilver.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "3facf403-80ec-432d-be64-1ce9e3ee650d@958e8",
+    "assetFinder": {
+      "meshes": [
+        "3facf403-80ec-432d-be64-1ce9e3ee650d@977b8"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1"
+      ],
+      "scenes": [
+        "3facf403-80ec-432d-be64-1ce9e3ee650d@958e8"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

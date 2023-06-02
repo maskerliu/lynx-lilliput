@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "b55ee927-8256-4b2f-8fb3-8f105d9bde99",
+  "files": [],
+  "subMetas": {
+    "1400f": {
+      "importer": "gltf-mesh",
+      "uuid": "b55ee927-8256-4b2f-8fb3-8f105d9bde99@1400f",
+      "displayName": "",
+      "id": "1400f",
+      "name": "coinGold.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "5ec8d": {
+      "importer": "gltf-scene",
+      "uuid": "b55ee927-8256-4b2f-8fb3-8f105d9bde99@5ec8d",
+      "displayName": "",
+      "id": "5ec8d",
+      "name": "coinGold.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "b55ee927-8256-4b2f-8fb3-8f105d9bde99@5ec8d",
+    "assetFinder": {
+      "meshes": [
+        "b55ee927-8256-4b2f-8fb3-8f105d9bde99@1400f"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "00b382a7-3b91-41b9-b95b-589587477edd",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1"
+      ],
+      "scenes": [
+        "b55ee927-8256-4b2f-8fb3-8f105d9bde99@5ec8d"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

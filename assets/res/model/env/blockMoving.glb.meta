@@ -1,0 +1,62 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5ea83841-5352-4ed6-9678-42ed57a48485",
+  "files": [],
+  "subMetas": {
+    "c18f6": {
+      "importer": "gltf-mesh",
+      "uuid": "5ea83841-5352-4ed6-9678-42ed57a48485@c18f6",
+      "displayName": "",
+      "id": "c18f6",
+      "name": "blockMoving.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b0450": {
+      "importer": "gltf-scene",
+      "uuid": "5ea83841-5352-4ed6-9678-42ed57a48485@b0450",
+      "displayName": "",
+      "id": "b0450",
+      "name": "blockMoving.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "5ea83841-5352-4ed6-9678-42ed57a48485@b0450",
+    "assetFinder": {
+      "meshes": [
+        "5ea83841-5352-4ed6-9678-42ed57a48485@c18f6"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "00b382a7-3b91-41b9-b95b-589587477edd",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1"
+      ],
+      "scenes": [
+        "5ea83841-5352-4ed6-9678-42ed57a48485@b0450"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

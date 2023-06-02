@@ -2,12 +2,16 @@ import {
   Component, EventHandler, Node, Prefab, ScrollView, Sprite,
   SpriteAtlas, Toggle, ToggleContainer, UITransform, Vec3, _decorator, instantiate, screen, size, tween, v3
 } from 'cc'
-import { Terrain } from '../model'
-import { TerrainEditHandler } from './EnvEditHandler'
-import IslandAssetMgr from './IslandAssetMgr'
+import { Terrain } from '../common/Terrain'
+import ToggleMgr from '../common/ToggleMgr'
+import LilliputAssetMgr from './LilliputAssetMgr'
+import { Lilliput } from './LilliputEvents'
 
 
 const { ccclass, property } = _decorator
+
+
+const IslandItemChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnItemChanged)
 
 @ccclass('TerrainItemBarMgr')
 export default class TerrainItemBarMgr extends Component {
@@ -22,17 +26,15 @@ export default class TerrainItemBarMgr extends Component {
   private itemsContainer: ToggleContainer
 
   @property(Prefab)
-  private prefab: Prefab
+  private togglePrefab: Prefab
 
   @property(SpriteAtlas)
-  private atlas: SpriteAtlas
+  private uiAtlas: SpriteAtlas
 
   private dstPos: Vec3
   private scrollView: ScrollView
   private selectedPropSnap: Sprite
-  private modelType: Terrain.ModelType = Terrain.ModelType.BlockGrass
-
-  editHandler: TerrainEditHandler
+  private modelType: Terrain.ModelGroup = Terrain.ModelGroup.Ground
 
   onLoad() {
     this.scrollView = this.getComponent(ScrollView)
@@ -53,12 +55,35 @@ export default class TerrainItemBarMgr extends Component {
     this.itemsContainer.checkEvents.push(itemSelectHandler)
   }
 
+  protected start(): void {
+    this.initTerrainGroup()
+    this.loadTrrainGroupItems()
+  }
+
+  private initTerrainGroup() {
+    let p = v3()
+    let s = size(80, 80)
+    for (let i = 0; i < 3; ++i) {
+      p.set(20 * (i + 1) + s.width * (i + 0.5), 50)
+      let toggle = instantiate(this.togglePrefab)
+      toggle.position = p
+      toggle.getComponent(UITransform).contentSize = s
+      let mgr = toggle.addComponent(ToggleMgr)
+      mgr.customData = i
+      let iconNode = toggle.getChildByName('Icon')
+      let sprite = iconNode.getComponent(Sprite)
+      sprite.spriteFrame = this.uiAtlas.getSpriteFrame('box')
+      // let contentSize = sprite.getComponent(UITransform).contentSize
+      this.itemGroup.node.addChild(toggle)
+    }
+  }
+
   show(show: boolean) {
     this.dstPos.y = show ? 280 : -160
     tween(this.node).to(0.5, { position: this.dstPos }, {
       easing: 'bounceOut', onComplete: () => {
         if (show) {
-          this.loadTrrainScrollBarItems()
+          this.loadTrrainGroupItems()
           this.scrollView.scrollToLeft(0.2)
           this.onTerrainItemSelected(this.itemsContainer.toggleItems[0])
         } else {
@@ -69,59 +94,43 @@ export default class TerrainItemBarMgr extends Component {
   }
 
   onTerrainGroupChanged(event: Toggle) {
-
-    switch (event.node.name) {
-      case 'Default':
-        this.modelType = Terrain.ModelType.BlockGrass
-        break
-      case 'Snow':
-        this.modelType = Terrain.ModelType.BlockSnow
-        break
-      case 'Dirt':
-        this.modelType = Terrain.ModelType.BlockDirt
-        break
-      case 'Skinnable':
-        this.modelType = Terrain.ModelType.Skinnable
-        break
-      case 'Props':
-        this.modelType = Terrain.ModelType.Prop
-        break
-      case 'Weapon':
-        this.modelType = Terrain.ModelType.Weapon
-    }
-
-    this.loadTrrainScrollBarItems()
+    let mgr = event.node.getComponent(ToggleMgr)
+    this.modelType = mgr.customData
+    this.loadTrrainGroupItems()
     this.scrollView.scrollToLeft(0.2)
     this.onTerrainItemSelected(this.itemsContainer.toggleItems[0])
   }
 
   onTerrainItemSelected(event: Toggle) {
-    // let atlas = IslandAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
-    this.selectedPropSnap.spriteFrame = this.atlas.getSpriteFrame(event.target.name)
+    // let atlas = LilliputAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
+    this.selectedPropSnap.spriteFrame = this.uiAtlas.getSpriteFrame(`snap/${event.target.name}`)
     let contentSize = this.selectedPropSnap.getComponent(UITransform).contentSize
     let scaleX = 80 / contentSize.width
     let scaleY = 80 / contentSize.height
     let scale = scaleX > scaleY ? scaleY : scaleX
     this.selectedPropSnap.node.scale = v3(scale, scale)
-    this.editHandler?.onEditItemChanged(event.target.name)
+
+    IslandItemChangedEvent.customData = { prefab: event.target.name }
+    this.node.dispatchEvent(IslandItemChangedEvent)
   }
 
-  private loadTrrainScrollBarItems() {
-    let configs = IslandAssetMgr.getModelCongfigs(this.modelType)
-    // let atlas = IslandAssetMgr.getTexture('TerrainItemSnaps') as SpriteAtlas
+  private loadTrrainGroupItems() {
+    let configs = LilliputAssetMgr.getModelCongfigs(this.modelType)
     let s = size(configs.length * 115 - 15, 140)
     this.scrollView.content.getComponent(UITransform).setContentSize(s)
     this.itemsContainer.node.getComponent(UITransform).setContentSize(s)
     this.itemsContainer.node.removeAllChildren()
     s = size(100, 130)
+    let p = v3()
     for (let i = 0; i < configs.length; ++i) {
-      const node = instantiate(this.prefab)
+      const node = instantiate(this.togglePrefab)
       node.getComponent(UITransform).contentSize = s
-      node.position = v3(115 * i + 50, 70, 0)
+      p.set(115 * i + 50, 70, 0)
+      node.position = p
       node.name = configs[i].name
-      let iconNode = node.getChildByName('Snap')
+      let iconNode = node.getChildByName('Icon')
       let sprite = iconNode.getComponent(Sprite)
-      sprite.spriteFrame = this.atlas.getSpriteFrame(configs[i].name)
+      sprite.spriteFrame = this.uiAtlas.getSpriteFrame(`snap/${configs[i].name}`)
       let contentSize = sprite.getComponent(UITransform).contentSize
       let scaleX = 80 / contentSize.width
       let scaleY = 80 / contentSize.height

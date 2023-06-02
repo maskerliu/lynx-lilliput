@@ -24,9 +24,6 @@ export default class SpikesMgr extends TerrainItemMgr {
       }
     }).repeatForever().start()
   }
-
-  // translucent(did: boolean) {
-  // }
 }
 
 SpikesMgr.ItemName = 'spikes'

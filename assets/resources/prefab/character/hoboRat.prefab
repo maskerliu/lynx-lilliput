@@ -2599,6 +2599,18 @@
       {
         "__uuid__": "047b49d2-eda5-4a68-848f-d01a228b17c1@6395e",
         "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "047b49d2-eda5-4a68-848f-d01a228b17c1@539a9",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "047b49d2-eda5-4a68-848f-d01a228b17c1@e23ce",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "047b49d2-eda5-4a68-848f-d01a228b17c1@947a2",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {

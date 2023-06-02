@@ -1,7 +1,5 @@
-import { Common } from '.'
 
 export namespace Game {
-
 
   export enum CharacterState {
     None,
@@ -21,39 +19,13 @@ export namespace Game {
     BwolingThrow,
     FrisbeeThrow,
     TreadWater,
+    Swim,
+    Kneel,
   }
 
-  export enum IslandStatus {
-    None,
-    Open,
-    Close,
-    Private
-  }
-
-  export interface Island {
-    id: string
-    owner?: string
-    map: Array<MapItem>
-    status: IslandStatus
-  }
-
-  export interface BattleRoom extends Common.DBDoc {
+  export interface BattleRoom {
     island: string
     online: Array<string>
-  }
-
-  export interface MapItemSkin {
-    orginPart: string
-    skin: string
-  }
-
-  export interface MapItem {
-    x: number
-    y: number
-    z: number
-    prefab: string
-    angle: number
-    skin?: string
   }
 
   export interface Msg {
@@ -68,6 +40,7 @@ export namespace Game {
   }
 
   export enum PlayerMsgType {
+    Local,
     Sync, // 指令动作
     Enter, // 进入
     Leave, // 离开
@@ -77,6 +50,7 @@ export namespace Game {
     uid?: string
     cmd: PlayerMsgType
     state?: CharacterState
+    interactObj?: number // 互动对象ID
     pos?: { x: number, y: number, z: number }
     dir?: { x: number, y: number, z: number }
   }

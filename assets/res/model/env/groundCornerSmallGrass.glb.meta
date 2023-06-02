@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "ec62dce3-ccf3-4b63-88ce-ecbb0e66ea6b",
+  "files": [],
+  "subMetas": {
+    "6e992": {
+      "importer": "gltf-mesh",
+      "uuid": "ec62dce3-ccf3-4b63-88ce-ecbb0e66ea6b@6e992",
+      "displayName": "",
+      "id": "6e992",
+      "name": "groundCornerSmallGrass.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "805e2": {
+      "importer": "gltf-scene",
+      "uuid": "ec62dce3-ccf3-4b63-88ce-ecbb0e66ea6b@805e2",
+      "displayName": "",
+      "id": "805e2",
+      "name": "groundCornerSmallGrass.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "ec62dce3-ccf3-4b63-88ce-ecbb0e66ea6b@805e2",
+    "assetFinder": {
+      "meshes": [
+        "ec62dce3-ccf3-4b63-88ce-ecbb0e66ea6b@6e992"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "2b81a6c0-1301-43e3-8d14-f8b00da23818"
+      ],
+      "scenes": [
+        "ec62dce3-ccf3-4b63-88ce-ecbb0e66ea6b@805e2"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

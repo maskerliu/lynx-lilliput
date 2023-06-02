@@ -1,13 +1,13 @@
-import { Component, _decorator, Node, instantiate, v3, RigidBody, MeshRenderer, MeshCollider, PhysicMaterial, CylinderCollider, ITriggerEvent } from 'cc'
-import { PhyEnvGroup } from '../common/Misc'
+import { Component, CylinderCollider, ITriggerEvent, MeshCollider, MeshRenderer, Node, PhysicMaterial, RigidBody, _decorator, instantiate, v3 } from 'cc'
+import { Terrain } from '../common/Terrain'
 
 const { ccclass, property } = _decorator
 
-const BasketballStandMtl = new PhysicMaterial()
-BasketballStandMtl.setValues(0.2, 0, 0, 0.6)
+// const BasketballStandMtl = new PhysicMaterial()
+// BasketballStandMtl.setValues(0.2, 0, 0, 0.6)
 
-const BasketballMtl = new PhysicMaterial()
-BasketballMtl.setValues(0.2, 0, 0, 0.8)
+// const BasketballMtl = new PhysicMaterial()
+// BasketballMtl.setValues(0.2, 0, 0, 0.8)
 
 @ccclass('BasketballMgr')
 export default class BasketballMgr extends Component {
@@ -35,18 +35,18 @@ export default class BasketballMgr extends Component {
     this.node.position = this.standsPos
     let rigidBody = this.node.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player)
+    rigidBody.group = Terrain.PhyEnvGroup.Prop
+    rigidBody.setMask(Terrain.PropMask)
 
     let collider = this.node.addComponent(MeshCollider)
     collider.mesh = this.node.getComponent(MeshRenderer).mesh
-    collider.material = BasketballStandMtl
+    collider.material.setValues(0.2, 0, 0, 0.6) // = BasketballStandMtl
 
     let net = this.node.getChildByName('net')
     rigidBody = net.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Player | PhyEnvGroup.Prop)
+    rigidBody.group = Terrain.PhyEnvGroup.Prop
+    rigidBody.setMask(Terrain.PropMask)
 
     let cyCollider = net.addComponent(CylinderCollider)
     cyCollider.isTrigger = true

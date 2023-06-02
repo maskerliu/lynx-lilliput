@@ -1,41 +1,56 @@
 import {
-  BoxCollider, Component, CylinderCollider,
-  DirectionalLight, Event, ICollisionEvent,
-  ITriggerEvent, Node, PhysicMaterial, Quat,
+  Component, CylinderCollider, ICollisionEvent, ITriggerEvent, Node,
+  Prefab, Quat,
   RigidBody, SkeletalAnimation, SkinnedMeshRenderer, Texture2D,
-  Vec2, Vec3, _decorator, instantiate, quat, tween, v2, v3
+  Vec2, Vec3, _decorator,
+  instantiate, quat, resources, tween, v2, v3
 } from 'cc'
-import IslandAssetMgr from '../lilliput/IslandAssetMgr'
+import IslandMgr from '../lilliput/IslandMgr'
+import LilliputAssetMgr from '../lilliput/LilliputAssetMgr'
+import TerrainItemMgr from '../lilliput/TerrainItemMgr'
 import LadderMgr from '../lilliput/prop/LadderMgr'
-import { isDebug } from '../misc/Utils'
-import { Game, User } from '../model'
-import { PhyEnvGroup } from './Misc'
-
+import { PropMgrs } from '../lilliput/prop/Props'
+import { Game, PlayerState, User } from '../model'
+import { Terrain } from './Terrain'
 
 const { ccclass, property } = _decorator
 
-export class PlayerEvent extends Event {
-
-  action: Game.CharacterState
-  interactProp: number
-
-  static Type = {
-    OnAction: 'OnAction'
-  }
-
-  constructor(type: string, action: Game.CharacterState, interactProp: number = -1) {
-    super(type, true)
-    this.action = action
-    this.interactProp = interactProp
-  }
-}
 
 // export const Move_Speed = 1.5
 export const Walk_Speed = 1
 export const Push_Speed = 0.8
 export const Climb_Speed = 0.4
+export const Swim_Speed = 1.5
 export const Roate_Speed = 8
 export const QuatNeg = new Quat(0, -2, 0, 1)
+
+export const SyncableStates = [
+  Game.CharacterState.Idle,
+  Game.CharacterState.Run,
+  Game.CharacterState.TreadWater,
+  Game.CharacterState.Swim
+]
+
+export const InteractStates = [
+  Game.CharacterState.Attack,
+  Game.CharacterState.Climb,
+  Game.CharacterState.Grab,
+  Game.CharacterState.Kick,
+  Game.CharacterState.Lift,
+  Game.CharacterState.PickUp,
+  Game.CharacterState.Sit,
+]
+
+const BreakableStates = [
+  Game.CharacterState.None,
+  Game.CharacterState.Idle,
+  Game.CharacterState.Run,
+  Game.CharacterState.TreadWater,
+  Game.CharacterState.Swim,
+  Game.CharacterState.Climb,
+  Game.CharacterState.Sit,
+  Game.CharacterState.JumpLand,
+]
 
 const StateAnim: Map<Game.CharacterState, string> = new Map()
 
@@ -54,72 +69,120 @@ StateAnim.set(Game.CharacterState.Attack, 'AttackDownward')
 StateAnim.set(Game.CharacterState.BwolingThrow, 'BwolingThrow')
 StateAnim.set(Game.CharacterState.FrisbeeThrow, 'FrisbeeThrow')
 StateAnim.set(Game.CharacterState.GunFire, 'GunFire')
+StateAnim.set(Game.CharacterState.Swim, 'Swim')
 StateAnim.set(Game.CharacterState.TreadWater, 'TreadWater')
-
-const PlayerPhyMtl = new PhysicMaterial()
-PlayerPhyMtl.setValues(0.1, 0, 0, 1)
+StateAnim.set(Game.CharacterState.Kneel, 'Kneel')
 
 export default class PlayerMgr extends Component {
-
-  @property(Node)
-  dirNode: Node
 
   rightProp: Node
   leftProp: Node
   headProp: Node
 
   followCamera: Node
-  profile: User.Profile
 
-  protected _state: Game.CharacterState = Game.CharacterState.Idle
-  protected _postState: Game.CharacterState = Game.CharacterState.None
-  get state() { return this._state }
-
-  protected _curDir: Vec2 = v2()
-  get curDir() { return this._curDir }
-
-  protected _rotation: Quat = quat(QuatNeg)
-
-  protected v3_pos = v3(Vec3.NEG_ONE)
   protected dstPos = v3(Vec3.NEG_ONE)
   protected dstForward = v3(Vec3.NEG_ONE)
+  protected dstState: Game.CharacterState = Game.CharacterState.None
 
+  protected q_rotation: Quat = quat(QuatNeg)
   protected v3_dir = v3()
   protected v3_speed = v3()
+  protected v3_pos = v3(Vec3.NEG_ONE)
 
   protected rigidBody: RigidBody
   protected collider: CylinderCollider
   protected animation: SkeletalAnimation
   protected meshRenderer: SkinnedMeshRenderer
 
-  private _tmpTriggers = []
-  private _tmpCollisions = []
-  protected curInteractProp: Node = null
+  protected _profile: User.Profile
+  get profile() { return this._profile }
 
+  protected _playerState: PlayerState
+  protected _state: Game.CharacterState = Game.CharacterState.Idle
 
-  protected _isEdit: boolean = false
+  protected _curDir: Vec2 = v2()
+  protected _tmpTriggers: Map<number, string> = new Map()
+  protected _interactObj: TerrainItemMgr
   protected _canClimb: boolean = false
-  protected _canSync: boolean = true
-  get canSync() { return this._canSync }
+  protected _inWater: boolean = false
 
-  protected character: string = 'human'
-  private skin: string = null
-
-  onLoad() { }
+  protected _islandMgr: IslandMgr
 
   start() {
+    this.node.getChildByName('Debug').active = true
+    // if (debugNode) debugNode.active = isDebug
+  }
+
+  update(dt: number) {
+
+    if (this.rigidBody == null) return
+
+    if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
+      let forward = this.node.forward.negative()
+      this.v3_dir.set(forward.x, 0, forward.z)
+      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
+      this.node.rotation = this.q_rotation
+      this.q_rotation.set(QuatNeg)
+    }
+
+    if (!this.animState()) {
+      if (this._state == Game.CharacterState.JumpUp) {
+        this.state = Game.CharacterState.JumpLand
+      } else {
+        this.state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
+      }
+    }
+  }
+
+  resume() {
+    this.rigidBody.clearState()
+    this.rigidBody.useGravity = true
+
+    this._state = Game.CharacterState.Idle
+    this.animation?.crossFade(StateAnim.get(this._state), 0)
+
+    this.q_rotation.set(QuatNeg)
+    this.v3_dir.set(Vec3.ZERO)
+    this.v3_speed.set(Vec3.ZERO)
+
+    this.dstPos.set(Vec3.NEG_ONE)
+
+    this._interactObj = null
+    this._canClimb = false
+  }
+
+  enter(island: IslandMgr, state: PlayerState) {
+    this._playerState = state
+    this._islandMgr = island
+    this.node.position = v3(state.px, state.py, state.pz)
+    island.node.addChild(this.node)
+    this.node.active = true
+    this.resume()
+  }
+
+  leave() {
+    this.node.removeFromParent()
+    this.node.active = false
+    this.rigidBody.sleep()
+    this._playerState = null
+  }
+
+  init(profile: User.Profile) {
+    this._profile = profile
+
     this.rigidBody = this.addComponent(RigidBody)
     this.rigidBody.type = RigidBody.Type.DYNAMIC
-    this.rigidBody.group = PhyEnvGroup.Player
+    this.rigidBody.group = Terrain.PhyEnvGroup.Player
     this.rigidBody.useGravity = true
     this.rigidBody.useCCD = true
     this.rigidBody.mass = 1
-    this.rigidBody.setMask(PhyEnvGroup.Terrain | PhyEnvGroup.Prop | PhyEnvGroup.Vehicle)
+    this.rigidBody.setMask(Terrain.PlayerMask)
 
     this.collider = this.addComponent(CylinderCollider)
     this.collider.radius = 0.12
     this.collider.height = 1
-    this.collider.material = PlayerPhyMtl
+    this.collider.material = LilliputAssetMgr.getPhyMtl('player')
     this.collider.direction = CylinderCollider.Axis.Y_AXIS
 
     this.collider.on('onCollisionEnter', this.onCollisionEnter, this)
@@ -130,116 +193,58 @@ export default class PlayerMgr extends Component {
     this.collider.on('onTriggerStay', this.onTriggerStay, this)
     this.collider.on('onTriggerExit', this.onTriggerExit, this)
 
+
+    if (profile.prefab) {
+      let prefab = LilliputAssetMgr.getCharacter(profile.prefab)
+      if (prefab == null) {
+        resources.load(`prefab/character/${profile.prefab}`, Prefab, (err, data) => {
+          LilliputAssetMgr.addCharacter(profile.prefab, data)
+          this._init(data)
+        })
+      } else {
+        this._init(prefab)
+      }
+    }
+
+    return this
+  }
+
+  private _init(prefab: Prefab) {
+    this.node.getChildByName('Debug').active = false
+    let character = instantiate(prefab)
+    character.position = v3(0, -0.5, 0)
+    this.node.addChild(character)
     this.animation = this.getComponentInChildren(SkeletalAnimation)
     this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
+
 
     this.headProp = this.animation.sockets[0].target.getChildByName('HeadProp')
     this.leftProp = this.animation.sockets[1].target.getChildByName('LeftHandProp')
     this.rightProp = this.animation.sockets[2].target.getChildByName('RightHandProp')
 
-    let debugNode = this.node.getChildByName('Debug')
-    if (debugNode) debugNode.active = isDebug
-
-    if (this.skin) {
-      this.meshRenderer.material.setProperty('mainTexture', IslandAssetMgr.getTexture(this.skin) as Texture2D)
-    }
-  }
-
-  sleep() {
-    this.rigidBody.clearState()
-    this.rigidBody.sleep()
-    this.rigidBody.useGravity = false
-  }
-
-  resume() {
-    this.rigidBody.clearState()
-    this.rigidBody.useGravity = true
-
-    this._state = Game.CharacterState.Idle
-    this.animation?.crossFade(StateAnim.get(this._state), 0)
-
-    this._rotation.set(QuatNeg)
-    this.v3_dir.set(Vec3.ZERO)
-    this.v3_speed.set(Vec3.ZERO)
-
-    this.dstPos.set(Vec3.NEG_ONE)
-
-    this.curInteractProp = null
-    this._canClimb = false
-  }
-
-  init(profile: User.Profile, prefab: Node) {
-    this.profile = profile
-
-    switch (this.profile.id) {
-      case '8f4e7438-4285-4268-910c-3898fb8d6d96':
-        this.character = 'hoboRat'
-        this.skin = 'hoboRatRed'
-        break
-      case 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608':
-        this.character = 'hotdog'
-        this.skin = null
-        break
-      case '5ee13634-340c-4741-b075-7fe169e38a13':
-        this.character = 'human'
-        this.skin = 'cyborgFemaleA'
-        break
-      case '4e6434d1-5910-46c3-879d-733c33ded257':
-        this.character = 'hoboRat'
-        this.skin = 'hoboRatGreen'
-        break
-      case 'b09272b8-d6a4-438b-96c3-df50ac206706':
-        this.character = 'human'
-        this.skin = 'skaterMaleA'
-        break
-      default:
-        this.character = 'human'
-        this.skin = 'zombieA'
-        break
-    }
-
-    let character = instantiate(prefab)
-    character.position = v3(0, -0.5, 0)
-    this.node.addChild(character)
-
-    return this
-  }
-
-  update(dt: number) {
-
-    if (this.rigidBody == null) return
-
-    if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
-      let forward = this.node.forward.negative()
-      this.v3_dir.set(forward.x, 0, forward.z)
-      Quat.fromViewUp(this._rotation, this.v3_dir.normalize())
-      this.node.rotation = this._rotation
-      this._rotation.set(QuatNeg)
-    }
-
-    if (!this.animState()) {
-      if (this._state == Game.CharacterState.JumpUp) {
-        this.state = Game.CharacterState.JumpLand
+    if (this.profile.skin) {
+      let texture = LilliputAssetMgr.getTexture(this.profile.skin)
+      if (texture == null) {
+        resources.load(`texture/character/${this.profile.prefab}/${this.profile.skin}/texture`, Texture2D, (err, texture) => {
+          LilliputAssetMgr.addTexture(this.profile.skin, texture)
+          this.meshRenderer.material.setProperty('mainTexture', texture)
+        })
       } else {
-        this.state = Game.CharacterState.Idle
+        this.meshRenderer.material.setProperty('mainTexture', texture as Texture2D)
       }
     }
   }
 
   onAction(msg: Game.PlayerMsg) {
-    this._postState = Game.CharacterState.None
+    this.dstState = Game.CharacterState.None
     switch (msg.state) {
       case Game.CharacterState.Run:
-        this.dstPos.set(msg.pos.x, msg.pos.y, msg.pos.z)
-        this.dstForward.set(msg.dir.x, msg.dir.y, msg.dir.z)
-        this.state = msg.state
-        this._postState = msg.state
-        break
+      case Game.CharacterState.Swim:
       case Game.CharacterState.Idle:
+      case Game.CharacterState.TreadWater:
         this.dstPos.set(msg.pos.x, msg.pos.y, msg.pos.z)
         this.dstForward.set(msg.dir.x, msg.dir.y, msg.dir.z)
-        this.state = Game.CharacterState.Run
-        this._postState = msg.state
+        this.dstState = msg.state
         break
       case Game.CharacterState.Climb:
         this.climb()
@@ -271,22 +276,11 @@ export default class PlayerMgr extends Component {
     }
   }
 
-  onEditModel(edit: boolean, x: number, y: number, z: number) {
-    this._isEdit = edit
-    this.rigidBody.useGravity = !edit
-    if (!edit) this.resume()
-    this.v3_pos.set(x, y, z)
-    this.node.position = this.v3_pos
-    this.rigidBody.type = edit ? RigidBody.Type.STATIC : RigidBody.Type.DYNAMIC
-  }
-
   private onCollisionEnter(event: ICollisionEvent) {
     this.rigidBody.clearState()
   }
 
-  private onCollisionExit(event: ICollisionEvent) {
-
-  }
+  private onCollisionExit(event: ICollisionEvent) { }
 
   private onCollisionStay(event: ICollisionEvent) {
     switch (this._state) {
@@ -294,54 +288,69 @@ export default class PlayerMgr extends Component {
       case Game.CharacterState.Climb:
       case Game.CharacterState.JumpLand:
         break
-      case Game.CharacterState.TreadWater:
-        this.state = Game.CharacterState.TreadWater
-        break
-      case Game.CharacterState.Idle:
-        if (event.otherCollider.node.name == 'airWall') break
-      case Game.CharacterState.Run:
-
       default:
         this.rigidBody.clearState()
         break
     }
   }
 
-  private onTriggerEnter(event: ITriggerEvent) {
-    this._tmpTriggers.push(event.otherCollider.shape['sharedBody'].id)
-    this.curInteractProp = event.otherCollider.node
-    if (this.curInteractProp.name == LadderMgr.ItemName) {
-      this._canClimb = true
+  protected onTriggerEnter(event: ITriggerEvent) {
+    let name = event.otherCollider.node.name
+    if (name == 'Water') {
+      this._inWater = true
+      return
     }
+    this.updateInteractObj(event, true)
+  }
 
-    if (event.otherCollider.node.name == 'Water') {
-      this.state = Game.CharacterState.TreadWater
-
+  protected onTriggerStay(event: ITriggerEvent) {
+    let name = event.otherCollider.node.name
+    if (name == 'Water') {
       this.v3_pos.set(this.node.position)
-      this.v3_pos.y = event.otherCollider.node.position.y - 0.1
+      this.v3_pos.y = event.otherCollider.node.position.y - 0.2
       this.node.position = this.v3_pos
+      this._inWater = true
     }
   }
 
-  private onTriggerStay(event: ITriggerEvent) {
-    // this._canClimb = event.otherCollider.node.name == LadderMgr.ItemName
-    // // if (event.otherCollider.node.name == LadderMgr.ItemName) { this._canClimb = true }
+  protected onTriggerExit(event: ITriggerEvent) {
+    if (event.otherCollider.node.name == 'Water') this._inWater = false
+    this.updateInteractObj(event, false)
   }
 
-  private onTriggerExit(event: ITriggerEvent) {
-    let idx = this._tmpTriggers.indexOf(event.otherCollider.shape['sharedBody'].id)
-    this._tmpTriggers.splice(idx, 1)
+  protected updateInteractObj(event: ITriggerEvent, enter: boolean) {
+    if (this._islandMgr == null) {
+      this._interactObj = null
+      return
+    }
+    let name = event.otherCollider.node.name
 
-    if (this.curInteractProp == null) {
-      this._canClimb = false
-    } else if (this.curInteractProp == event.otherCollider.node) {
-      this.curInteractProp = null
-      this._canClimb = false
-    } else if (this.curInteractProp.name == LadderMgr.ItemName) {
-      this._canClimb = true
+    let clazz = PropMgrs.has(name) ? PropMgrs.get(name) : TerrainItemMgr
+    let mgr: TerrainItemMgr = event.otherCollider.node.getComponent(clazz)
+
+    if (mgr == null) return
+
+    this._tmpTriggers.set(mgr.index, name)
+
+    if (enter) {
+      this._tmpTriggers.set(mgr.index, name)
+    } else {
+      this._tmpTriggers.delete(mgr.index)
     }
 
-    this._canClimb = this.curInteractProp?.name == LadderMgr.ItemName
+    let distance = 100, curTrriger = Number.MIN_VALUE, canClimb = false
+    for (let [idx, item] of this._tmpTriggers) {
+      mgr = this._islandMgr.mapInfo(idx)
+      if (mgr == null) continue
+      curTrriger = distance > Vec3.distance(this.node.position, mgr.node.position) ? idx : curTrriger
+    }
+
+    this._interactObj = this._islandMgr.mapInfo(curTrriger)
+    if (this._interactObj == null || this._interactObj.config.interaction == null) {
+      this._canClimb = false
+    } else {
+      this._canClimb = this._interactObj.config.interaction.findIndex((it) => it == Terrain.InteractType.Climb) != -1
+    }
   }
 
   protected runTo() { }
@@ -364,9 +373,7 @@ export default class PlayerMgr extends Component {
   }
 
   protected lift() {
-    if (this.curInteractProp == null) return
     this.state = Game.CharacterState.Lift
-
     // this.curInteractProp.getComponent(TerrainItemMgr).beenCollected()
     // this.propNode.removeAllChildren()
     // this.propNode.addChild(this.curInteractProp)
@@ -390,8 +397,7 @@ export default class PlayerMgr extends Component {
   }
 
   protected kick() {
-    if (this.curInteractProp == null) return
-    Vec3.subtract(this.v3_dir, this.curInteractProp.position, this.node.position)
+    // Vec3.subtract(this.v3_dir, this.curInteractProp.position, this.node.position)
     Quat.fromViewUp(this.node.rotation, this.v3_dir)
 
     this.state = Game.CharacterState.Kick
@@ -399,14 +405,15 @@ export default class PlayerMgr extends Component {
 
   protected climb() {
     if (!this._canClimb) return
+    if (this._interactObj == null) return
 
-    let ladderMgr = this.curInteractProp.getComponent(LadderMgr)
-    Vec3.subtract(this.v3_dir, this.node.position, this.curInteractProp.position)
+    // let ladderMgr = this._interactObj.getComponent(LadderMgr)
+    Vec3.subtract(this.v3_dir, this.node.position, this._interactObj.node.position)
     let rotation = quat()
-    Quat.rotateY(rotation, rotation, (ladderMgr.info.angle - 180) * Math.PI / 180)
+    Quat.rotateY(rotation, rotation, (this._interactObj.info.angle - 180) * Math.PI / 180)
     this.node.rotation = rotation
 
-    this.v3_pos.set(ladderMgr.ladderPos)
+    this.v3_pos.set((this._interactObj as LadderMgr).ladderPos)
     this.v3_pos.y = this.node.position.y
     this.node.position = this.v3_pos
     this.state = Game.CharacterState.Climb
@@ -414,13 +421,13 @@ export default class PlayerMgr extends Component {
 
   protected grab() {
     this.state = Game.CharacterState.Grab
-    if (this.curInteractProp) {
+    if (this._interactObj) {
       this.headProp.removeAllChildren()
-      let prop = instantiate(this.curInteractProp)
-      prop.getComponent(RigidBody).enabled = false
-      prop.getComponent(BoxCollider).enabled = false
-      prop.position = v3()
-      this.headProp.addChild(prop)
+      // let prop = instantiate(this._interactObj)
+      // prop.getComponent(RigidBody).enabled = false
+      // prop.getComponent(BoxCollider).enabled = false
+      // prop.position = v3()
+      // this.headProp.addChild(prop)
     }
   }
 
@@ -448,17 +455,16 @@ export default class PlayerMgr extends Component {
   protected set state(state: Game.CharacterState) {
     // same state, not work
     if (this._state == state) return
-
     // on action ongoing, can not break except idle or run
-    if (this._state != Game.CharacterState.Idle &&
-      this._state != Game.CharacterState.Run &&
-      this._state != Game.CharacterState.TreadWater &&
-      this._state != Game.CharacterState.Climb &&
-      this.animState())
-      return
+    if (BreakableStates.findIndex(it => it == state) == -1) return
 
-    this.animation?.crossFade(StateAnim.get(state), 0)
-    this._state = state
+    if (state == Game.CharacterState.None) {
+      this._state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
+    } else {
+      this._state = state
+    }
+
+    this.animation?.crossFade(StateAnim.get(this._state), 0)
     this.rigidBody.useGravity = true
 
     switch (this._state) {
@@ -469,6 +475,10 @@ export default class PlayerMgr extends Component {
         this.dstPos.set(Vec3.NEG_ONE)
         break
       case Game.CharacterState.TreadWater:
+        this.rigidBody.useGravity = false
+        this.rigidBody.setLinearVelocity(Vec3.ZERO)
+        break
+      case Game.CharacterState.Swim:
         this.rigidBody.useGravity = false
         break
       case Game.CharacterState.Lift:

@@ -1,9 +1,16 @@
-import { BoxCollider, Collider, Component, Mesh, MeshCollider, MeshRenderer, RigidBody, Widget, _decorator, color, renderer, v3, view } from "cc"
-import { DynamicPropPhyMtl, PhyEnvGroup } from "../common/Misc"
+import { BoxCollider, Component, MeshCollider, MeshRenderer, RigidBody, _decorator, renderer, v3 } from "cc"
+import { Terrain } from "../common/Terrain"
 const { ccclass, property } = _decorator
 
 @ccclass('MafiaPropMgr')
 export default class MafiaPropMgr extends Component {
+
+
+  // static DynamicPropPhyMtl = new PhysicMaterial()
+
+  // static {
+  //   MafiaPropMgr.DynamicPropPhyMtl.setValues(1, 0, 0, 0.5)
+  // }
 
   static PropName: string
 
@@ -15,7 +22,7 @@ export default class MafiaPropMgr extends Component {
 
   }
 
-  init(type: RigidBody.Type, group: PhyEnvGroup) {
+  init(type: RigidBody.Type, group: Terrain.PhyEnvGroup) {
     this.model = this.node.getComponent(MeshRenderer).model
 
     this.node.addComponent(RigidBody)
@@ -23,7 +30,7 @@ export default class MafiaPropMgr extends Component {
     this.rigidBody = this.node.getComponent(RigidBody)
     this.rigidBody.type = type
     this.rigidBody.group = group
-    this.rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle | PhyEnvGroup.Terrain)
+    this.rigidBody.setMask(Terrain.PropMask)
 
     this.node.addComponent(BoxCollider)
     this.triggerCollider = this.node.getComponent(BoxCollider)
@@ -35,6 +42,6 @@ export default class MafiaPropMgr extends Component {
     this.node.addComponent(MeshCollider)
     let collider = this.node.getComponent(MeshCollider)
     collider.mesh = this.node.getComponent(MeshRenderer).mesh
-    collider.material = DynamicPropPhyMtl
+    collider.material.setValues(1, 0, 0, 0.5)
   }
 }

@@ -1,0 +1,82 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b",
+  "files": [],
+  "subMetas": {
+    "78599": {
+      "importer": "gltf-mesh",
+      "uuid": "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@78599",
+      "displayName": "",
+      "id": "78599",
+      "name": "machinegunLauncher.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "158d2": {
+      "importer": "gltf-mesh",
+      "uuid": "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@158d2",
+      "displayName": "",
+      "id": "158d2",
+      "name": "ammoPistol.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "6dcdd": {
+      "importer": "gltf-scene",
+      "uuid": "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@6dcdd",
+      "displayName": "",
+      "id": "6dcdd",
+      "name": "machinegun.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@6dcdd",
+    "assetFinder": {
+      "meshes": [
+        "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@158d2",
+        "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@78599"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "00b382a7-3b91-41b9-b95b-589587477edd",
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "9a9b022a-0f0b-43a8-9fab-a17ce86b5cd1",
+        "4c5e9edf-b792-4155-b483-a4b619bb102f"
+      ],
+      "scenes": [
+        "4e98e6f1-13ba-4149-a8d0-8285b5d91c1b@6dcdd"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

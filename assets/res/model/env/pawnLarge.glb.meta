@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "1e1e39ba-aab4-46cf-88aa-493e4eb57e09",
+  "files": [],
+  "subMetas": {
+    "a7582": {
+      "importer": "gltf-mesh",
+      "uuid": "1e1e39ba-aab4-46cf-88aa-493e4eb57e09@a7582",
+      "displayName": "",
+      "id": "a7582",
+      "name": "pawnLarge.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "9b2f1": {
+      "importer": "gltf-scene",
+      "uuid": "1e1e39ba-aab4-46cf-88aa-493e4eb57e09@9b2f1",
+      "displayName": "",
+      "id": "9b2f1",
+      "name": "pawnLarge.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "1e1e39ba-aab4-46cf-88aa-493e4eb57e09@9b2f1",
+    "assetFinder": {
+      "meshes": [
+        "1e1e39ba-aab4-46cf-88aa-493e4eb57e09@a7582"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9ec81cb2-b6fc-4da0-ad7b-0d25d6d26bb9"
+      ],
+      "scenes": [
+        "1e1e39ba-aab4-46cf-88aa-493e4eb57e09@9b2f1"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

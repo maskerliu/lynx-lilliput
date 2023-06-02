@@ -1,5 +1,5 @@
 import { BoxCollider, ICollisionEvent, MeshRenderer, Node, Quat, _decorator, quat } from 'cc'
-import IslandAssetMgr from '../IslandAssetMgr'
+import LilliputAssetMgr from '../LilliputAssetMgr'
 import TerrainItemMgr from '../TerrainItemMgr'
 
 
@@ -61,13 +61,13 @@ export default class LeverMgr extends TerrainItemMgr {
     for (let i = 0; i < this.leverMeshRenderer.materials.length; ++i) {
       let name = this.leverMeshRenderer.materials[i].parent.name.split('-translucent')[0]
       name = !this.isTranslucent && did ? `${name}-translucent` : name
-      this.leverMeshRenderer.setMaterial(IslandAssetMgr.getMaterial(name), i)
+      this.leverMeshRenderer.setMaterial(LilliputAssetMgr.getMaterial(name), i)
     }
 
     for (let i = 0; i < this.handleMeshRenderer.materials.length; ++i) {
       let name = this.handleMeshRenderer.materials[i].parent.name.split('-translucent')[0]
       name = !this.isTranslucent && did ? `${name}-translucent` : name
-      this.handleMeshRenderer.setMaterial(IslandAssetMgr.getMaterial(name), i)
+      this.handleMeshRenderer.setMaterial(LilliputAssetMgr.getMaterial(name), i)
     }
 
     this.isTranslucent = did

@@ -1,0 +1,80 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "f65cd8f6-ad00-40f0-9778-d8a06a553bba",
+  "files": [],
+  "subMetas": {
+    "dc49b": {
+      "importer": "gltf-mesh",
+      "uuid": "f65cd8f6-ad00-40f0-9778-d8a06a553bba@dc49b",
+      "displayName": "",
+      "id": "dc49b",
+      "name": "prickle.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a5d44": {
+      "importer": "gltf-mesh",
+      "uuid": "f65cd8f6-ad00-40f0-9778-d8a06a553bba@a5d44",
+      "displayName": "",
+      "id": "a5d44",
+      "name": "spikes.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "215f3": {
+      "importer": "gltf-scene",
+      "uuid": "f65cd8f6-ad00-40f0-9778-d8a06a553bba@215f3",
+      "displayName": "",
+      "id": "215f3",
+      "name": "spikes.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "f65cd8f6-ad00-40f0-9778-d8a06a553bba@215f3",
+    "assetFinder": {
+      "meshes": [
+        "f65cd8f6-ad00-40f0-9778-d8a06a553bba@dc49b",
+        "f65cd8f6-ad00-40f0-9778-d8a06a553bba@a5d44"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "497541f7-bb36-4a45-a20a-71388d8982f9",
+        "4c5e9edf-b792-4155-b483-a4b619bb102f"
+      ],
+      "scenes": [
+        "f65cd8f6-ad00-40f0-9778-d8a06a553bba@215f3"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

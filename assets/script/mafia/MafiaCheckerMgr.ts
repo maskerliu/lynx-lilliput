@@ -1,6 +1,5 @@
-import { Component, MeshRenderer, Node, Touch, PhysicsSystem, _decorator, instantiate, renderer, v3, geometry, Camera, EventTouch, Vec3, UITransform, RigidBody, BoxCollider, Mesh } from "cc"
-import MafiaPropMgr from "./MafiaPropMgr"
-import { PhyEnvGroup } from "../common/Misc"
+import { BoxCollider, Camera, Component, EventTouch, MeshRenderer, Node, PhysicsSystem, RigidBody, Touch, UITransform, Vec3, _decorator, geometry, instantiate, renderer, v3 } from "cc"
+import { Terrain } from "../common/Terrain"
 const { ccclass, property } = _decorator
 
 @ccclass('MafiaCheckerMgr')
@@ -48,8 +47,8 @@ export default class MafiaCheckerMgr extends Component {
 
     let rigidBody = this.node.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Prop
-    rigidBody.addMask(PhyEnvGroup.Player | PhyEnvGroup.Terrain)
+    rigidBody.group = Terrain.PhyEnvGroup.Prop
+    rigidBody.addMask(Terrain.PropMask)
   }
 
   protected start(): void {
@@ -75,7 +74,6 @@ export default class MafiaCheckerMgr extends Component {
     let checker = this.node.getChildByName('checker')
 
     let materials = checker.getComponent(MeshRenderer).materials
-    console.log(materials)
 
     checker.active = false
     for (let i = 0; i < 8; i++) {

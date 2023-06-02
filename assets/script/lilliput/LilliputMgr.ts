@@ -1,20 +1,18 @@
 import {
-  AmbientInfo, Camera, Component, DirectionalLight, MeshCollider, MeshRenderer,
-  Node, Prefab, RigidBody, SkyboxInfo, _decorator, director, instantiate, quat, v3
+  AmbientInfo, Camera, Component, DirectionalLight, Node, Prefab,
+  SkyboxInfo, UITransform, _decorator, director, instantiate, quat, v3
 } from 'cc'
-import { PhyEnvGroup } from '../common/Misc'
 import OrbitCamera from '../common/OrbitCamera'
-import { PlayerEvent } from '../common/PlayerMgr'
 import LocalPrefs from '../misc/LocalPrefs'
-import { Game } from '../model'
-import BalloonMgr from './BalloonMgr'
+import { Game, PlayerState, User } from '../model'
 import BattleService from './BattleService'
-import IslandAssetMgr from './IslandAssetMgr'
-import IslandMgr, { IslandEvent } from './IslandMgr'
-import LilliputUIMgr, { LilliputUIEvent } from './LilliputUIMgr'
-import { PropEvent } from './TerrainItemMgr'
+import IslandMgr from './IslandMgr'
+import LilliputAssetMgr from './LilliputAssetMgr'
+import { Lilliput } from './LilliputEvents'
+import LilliputUIMgr from './LilliputUIMgr'
 import UserService from './UserService'
 import MyselfMgr from './player/MySelfMgr'
+import OtherMgr from './player/OtherMgr'
 
 
 const { ccclass, property } = _decorator
@@ -52,43 +50,36 @@ export default class LilliputMgr extends Component {
 
   private worldTime: number = 0
   private isDay: boolean = false
-  private timecost: number = 0
 
   onLoad() {
     this.ambientInfo = director.getScene().globals.ambient
     this.skyboxInfo = director.getScene().globals.skybox
-    BattleService.playerPrefab = this.playerPrefab
 
     this.uiMgr = this.getComponentInChildren(LilliputUIMgr)
-    this.orbitCamera.reactArea = this.uiMgr.reactArea
-
-    IslandAssetMgr.env = this.node.getChildByName('Env')
-
-    this.registerUIEvent()
+    this.orbitCamera.reactArea = this.uiMgr?.reactArea
   }
 
-  start() {
-    IslandAssetMgr.preload()
-    this.timecost = Date.now()
+  async start() {
+    LilliputAssetMgr.preload()
     this.orbitCamera.target = this.bornNode
+    this.uiMgr?.canEdit(false, false)
+    this.registerUIEvent()
+    this.schedule(this.onPreloaded, 0.5)
+  }
 
-    this.uiMgr.canEdit(false)
-    this.uiMgr.updateEditMode(false)
+  private async onPreloaded() {
+    if (LilliputAssetMgr.preloaded) {
+      try {
+        await this.preload()
+      } catch (err) {
+        console.error(err)
+      }
+
+      this.unschedule(this.onPreloaded)
+    }
   }
 
   async update(dt: number) {
-    if (!IslandAssetMgr.isPreloaded) {
-      this.uiMgr?.updateLoading(true, `资源（${IslandAssetMgr.preloadCount}/${IslandAssetMgr.resouceCount}）加载中。。。`)
-    } else {
-      if (this.once) {
-        this.once = false
-        this.uiMgr?.updateLoading(false)
-
-        console.log('resouce load cost:', Date.now() - this.timecost)
-        await this.preload()
-      }
-    }
-
     if (this.isDay) {
       if (this.mainLight.illuminance < 80000) {
         this.mainLight.illuminance += 100
@@ -111,150 +102,185 @@ export default class LilliputMgr extends Component {
   }
 
   onDestroy() {
-    console.log('destroy')
+    console.log('lilliput destroy')
+    this.unregisterUIEvent()
   }
 
   private registerUIEvent() {
+    this.node.on(Lilliput.UIEvent.Type.UserInfoBind, this.onUserInfoBind, this)
 
-    this.node.on(LilliputUIEvent.Type.TerrainEdit, () => {
-      this.onEditTerrain()
-    }, this)
+    this.node.on(Lilliput.IslandEvent.Type.SkinMenu, this.uiMgr?.showSkinMenu, this.uiMgr)
+    this.node.on(Lilliput.PropEvent.Type.ShowInteractMenu, this.uiMgr?.updateActions, this.uiMgr)
 
-    this.node.on(LilliputUIEvent.Type.UserInfoBind, (event: LilliputUIEvent) => {
-      this.onUserInfoBind()
-    }, this)
-
-    this.node.on(LilliputUIEvent.Type.EnterIsland, (event: LilliputUIEvent) => {
-      this.onEnterIsland(event.customData)
-      console.log(event.customData)
-    }, this)
-
-    this.node.on(IslandEvent.Type.SkinMenu, (event: IslandEvent) => {
-      this.uiMgr.showSkinMenu(event.customData)
-    }, this)
-
-    this.node.on(PropEvent.Type.ShowInteraction, (event: PropEvent) => {
-      this.uiMgr.updateActions(event.interactions)
-    }, this)
-
-    this.node.on(PlayerEvent.Type.OnAction, (event: PlayerEvent) => {
-      let msg: Game.PlayerMsg = { cmd: Game.PlayerMsgType.Sync, state: event.action }
-      BattleService.player().onAction(msg)
-    }, this)
+    this.node.on(Lilliput.PlayerEvent.Type.TryEnter, this.onTryEnter, this)
+    this.node.on(Lilliput.PlayerEvent.Type.DidEnter, this.onDidEnter, this)
+    this.node.on(Lilliput.PlayerEvent.Type.OnLeave, this.onLeave, this)
+    this.node.on(Lilliput.PlayerEvent.Type.OnAction, this.onPlayerEvent, this)
   }
 
-  onEditTerrain() {
-    let island = BattleService.island()
-    if (island == null) return
-    this.uiMgr.editHandler = island
-    island.isEdit = !island.isEdit
-    this.uiMgr.updateEditMode(island.isEdit)
+  private unregisterUIEvent() {
+    this.node.off(Lilliput.UIEvent.Type.UserInfoBind, this.onUserInfoBind, this)
+
+
+    this.node.off(Lilliput.IslandEvent.Type.SkinMenu, this.uiMgr?.showSkinMenu, this.uiMgr)
+    this.node.off(Lilliput.PropEvent.Type.ShowInteractMenu, this.uiMgr?.updateActions, this.uiMgr)
+
+    this.node.off(Lilliput.PlayerEvent.Type.TryEnter, this.onTryEnter, this)
+    this.node.off(Lilliput.PlayerEvent.Type.DidEnter, this.onDidEnter, this)
+    this.node.off(Lilliput.PlayerEvent.Type.OnLeave, this.onLeave, this)
+    this.node.off(Lilliput.PlayerEvent.Type.OnAction, this.onPlayerEvent, this)
+  }
+
+  private registerIslandEvent() {
+    let island = BattleService.instance.island()
+    this.node.on(Lilliput.IslandEvent.Type.OnEditChanged, island.onEditModeChanged, island)
+    this.node.on(Lilliput.IslandEvent.Type.OnItemChanged, island.onEditItemChanged, island)
+    this.node.on(Lilliput.IslandEvent.Type.OnActionChanged, island.onEditActionChanged, island)
+    this.node.on(Lilliput.IslandEvent.Type.OnLayerChanged, island.onEditLayerChanged, island)
+    this.node.on(Lilliput.IslandEvent.Type.OnRotate, island.onRotate, island)
+    this.node.on(Lilliput.IslandEvent.Type.OnSkinChanged, island.onSkinChanged, island)
+  }
+
+  private unregisterIslandEvent() {
+    let island = BattleService.instance.island()
+    this.node.off(Lilliput.IslandEvent.Type.OnEditChanged, island?.onEditModeChanged, island)
+    this.node.off(Lilliput.IslandEvent.Type.OnItemChanged, island?.onEditItemChanged, island)
+    this.node.off(Lilliput.IslandEvent.Type.OnActionChanged, island?.onEditActionChanged, island)
+    this.node.off(Lilliput.IslandEvent.Type.OnLayerChanged, island?.onEditLayerChanged, island)
+    this.node.off(Lilliput.IslandEvent.Type.OnRotate, island?.onRotate, island)
+    this.node.off(Lilliput.IslandEvent.Type.OnSkinChanged, island?.onSkinChanged, island)
   }
 
   async onUserInfoBind() {
     let profile = await UserService.profile()
-    await BattleService.init()
+    BattleService.instance.init(profile.id, this.node)
 
-    let player = BattleService.player(profile.id)
-    if (player == null) {
-      let player = instantiate(this.playerPrefab)
-      player.position = v3(1, 3, 1)
-      player.name = 'myself'
-      this.node.addChild(player)
-      let mgr = player.addComponent(MyselfMgr)
-      mgr.init(profile, IslandAssetMgr.getCharacter(profile.id))
-      mgr.followCamera = this.orbitCamera.node
-
-      BattleService.addPlayer(profile.id, mgr)
-      this.orbitCamera.target = mgr.node
-      this.uiMgr.rockerTarget = mgr
-    }
+    let player = this.genreatorPlayer(profile)
+    player.node.position = v3(1, 3, 1)
   }
 
-  async onEnterIsland(id: string, uid?: string) {
-    let islandId: string = null
-    let timestamp: number = 0
-    let mgr = BattleService.island(id)
+  async onTryEnter(event: Lilliput.UIEvent) {
+    let mgr = BattleService.instance.island(event.customData.islandId)
     if (mgr == null) {
       let node = instantiate(this.islandPrefab)
 
-      node.position = BattleService.randomPos()
+      node.position = BattleService.instance.randomPos
       mgr = node.addComponent(IslandMgr)
-      islandId = await mgr.init(id)
-      BattleService.addIsland(mgr)
+      await mgr.init(event.customData.islandId)
+      mgr.camera = this.orbitCamera.getComponent(Camera)
+      mgr.reactArea = this.uiMgr.reactArea
+      BattleService.instance.addIsland(mgr)
     }
 
-    mgr.camera = this.orbitCamera.getComponent(Camera)
-    mgr.reactArea = this.uiMgr.reactArea
-
-    timestamp = Date.now()
-    await BattleService.enter(BattleService.player(), mgr)
-    this.uiMgr.canEdit(mgr.canEdit(BattleService.player().profile.id))
+    let player = BattleService.instance.player()
+    await BattleService.instance.tryEnter(player.profile.id, mgr.senceInfo.id, event.customData.pos)
   }
 
-  async onLeaveIsland() {
-    BattleService.leave()
+  async onDidEnter(event: Lilliput.PlayerEvent) {
+    let state = event.customData as PlayerState
+    let profile = await UserService.profile(state.profile.uid)
+    let player = this.genreatorPlayer(profile)
+
+    let island = BattleService.instance.island()
+    await BattleService.instance.didEnter(player, island)
+
+    if (BattleService.instance.isMyself(profile.id)) {
+
+      // Add shadow for Debug 
+      let newProfile = Object.assign({}, profile)
+      newProfile.id = 'shadow'
+      newProfile.prefab = 'human'
+      newProfile.skin = 'zombieMaleA'
+      let shadow = this.genreatorPlayer(newProfile)
+      await BattleService.instance.didEnter(shadow, island)
+
+      let canEdit = island.canEdit(profile.id)
+      this.uiMgr.canEdit(canEdit, island.isEdit)
+      if (canEdit) {
+        this.registerIslandEvent()
+      } else {
+        this.unregisterIslandEvent()
+      }
+    }
   }
 
-  private async onReload() {
-    BattleService.removeAllIsland()
+  async onLeave(event: Lilliput.PlayerEvent) {
+    let player = BattleService.instance.player(event.customData)
 
-    await this.preload()
+    if (BattleService.instance.isMyself(player.profile.id)) {
+      await BattleService.instance.stop()
+      let pos = this.node.getComponent(UITransform).convertToNodeSpaceAR(player.node.worldPosition)
+      player.leave()
+      this.node.addChild(player.node)
+      player.node.position = pos
+      player.node.active = true
+
+      BattleService.instance.player('shadow')?.leave()
+
+      this.uiMgr.canEdit(false, false)
+      this.unregisterIslandEvent()
+    } else {
+      player.leave()
+    }
+
+  }
+
+  private genreatorPlayer(profile: User.Profile) {
+    let player = BattleService.instance.player(profile.id)
+    if (player == null) {
+      let node = instantiate(this.playerPrefab)
+      this.node.addChild(node)
+      if (BattleService.instance.isMyself(profile.id)) {
+        node.name = 'myself'
+        player = node.addComponent(MyselfMgr)
+        player.followCamera = this.orbitCamera.node
+        this.orbitCamera.target = player.node
+        this.uiMgr.rockerTarget = player as MyselfMgr
+      } else {
+        node.name = 'other'
+        player = node.addComponent(OtherMgr)
+      }
+      player.init(profile)
+    }
+
+    BattleService.instance.addPlayer(player)
+
+    return player
+  }
+
+  async onPlayerEvent(event: Lilliput.PlayerEvent) {
+    let msg: Game.PlayerMsg = { cmd: Game.PlayerMsgType.Sync, state: event.action }
+    BattleService.instance.player().onAction(msg)
   }
 
   private async preload() {
-    let island = instantiate(IslandAssetMgr.getPrefab('bornIsland'))
-
-    island.scale = v3(2, 2, 2)
-    island.position = v3(0, 0.6, 0)
-    this.node.addChild(island)
-
-    let rigidBody = island.addComponent(RigidBody)
-    rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Player | PhyEnvGroup.Prop)
-    let collider = island.addComponent(MeshCollider)
-    collider.mesh = island.getComponent(MeshRenderer).mesh
-    collider.convex = true
-
-    let lighthouse = instantiate(IslandAssetMgr.getPrefab('lighthouse'))
-    lighthouse.position = v3(4, 0.3, -4)
-    lighthouse.scale = v3(1.5, 1.5, 1.5)
-    this.node.addChild(lighthouse)
-
-    let airBalloon = instantiate(IslandAssetMgr.getPrefab('hotAirBalloon'))
-    airBalloon.position = v3(2, 3, -3)
-    airBalloon.addComponent(BalloonMgr)
-    this.node.addChild(airBalloon)
-
     if (LocalPrefs.myself) {
       this.onUserInfoBind()
     }
 
     let uids = [
-      '645e0003955ff9912366489a'
-      // '8f4e7438-4285-4268-910c-3898fb8d6d96',
-      // 'f947ed55-7e34-4a82-a9db-8a9cf6f2e608',
-      // '5ee13634-340c-4741-b075-7fe169e38a13',
-      // '4e6434d1-5910-46c3-879d-733c33ded257',
-      // 'b09272b8-d6a4-438b-96c3-df50ac206706'
+      '645e0003955ff9912366489a',
+      '64747cf4416e939f6e59be40',
+      '6479bbca8a1168a1d41d7c14',
+      '6479be158a1168a1d41d7c17',
+      '6479bf0d8a1168a1d41d7c19',
+      '6479bf598a1168a1d41d7c1c',
     ]
 
-    let ids = [
-      '645f068dabba9d94a8b73920'
-    ]
+    if (LocalPrefs.myself && !uids.includes(LocalPrefs.myself.id)) {
+      uids.push(LocalPrefs.myself.id)
+    }
 
     for (let uid of uids) {
-      let mgr = BattleService.island(null, uid)
+      let mgr = BattleService.instance.island(null, uid)
       if (mgr == null) {
         let island = instantiate(this.islandPrefab)
-        island.position = BattleService.randomPos()
+        island.position = BattleService.instance.randomPos
         this.node.addChild(island)
         let mgr = island.getComponent(IslandMgr)
-        await mgr.init(null, uid)
-        // mgr.camera = this.mainCamera
-        // mgr.editReactArea = this.uiMgr.editReactArea
-        BattleService.addIsland(mgr)
+        await mgr.init(this.orbitCamera.node.getComponent(Camera), null, uid)
+        mgr.reactArea = this.uiMgr.reactArea
+        BattleService.instance.addIsland(mgr)
       }
     }
   }

@@ -62,7 +62,7 @@
         "_value": false
       },
       "intersection-2d": {
-        "_value": true
+        "_value": false
       },
       "primitive": {
         "_value": true
@@ -131,7 +131,6 @@
       "base",
       "gfx-webgl",
       "gfx-webgl2",
-      "intersection-2d",
       "particle",
       "physics-ammo",
       "primitive",

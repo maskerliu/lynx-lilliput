@@ -1,0 +1,61 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "1fca74cc-8954-4ac2-99b1-5fae642b2347",
+  "files": [],
+  "subMetas": {
+    "60206": {
+      "importer": "gltf-scene",
+      "uuid": "1fca74cc-8954-4ac2-99b1-5fae642b2347@60206",
+      "displayName": "",
+      "id": "60206",
+      "name": "heart.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a6645": {
+      "importer": "gltf-mesh",
+      "uuid": "1fca74cc-8954-4ac2-99b1-5fae642b2347@a6645",
+      "displayName": "",
+      "id": "a6645",
+      "name": "heart.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "redirect": "1fca74cc-8954-4ac2-99b1-5fae642b2347@60206",
+    "assetFinder": {
+      "meshes": [
+        "1fca74cc-8954-4ac2-99b1-5fae642b2347@a6645"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "9ec81cb2-b6fc-4da0-ad7b-0d25d6d26bb9"
+      ],
+      "scenes": [
+        "1fca74cc-8954-4ac2-99b1-5fae642b2347@60206"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

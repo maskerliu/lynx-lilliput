@@ -1,6 +1,6 @@
 import { Camera, Component, Node, Prefab, RigidBody, _decorator, instantiate, v3 } from "cc"
-import { PhyEnvGroup } from "../common/Misc"
 import OrbitCamera from "../common/OrbitCamera"
+import { Terrain } from "../common/Terrain"
 import MafiaBilliardMgr from "./MafiaBilliardMgr"
 import MafiaCheckerMgr from "./MafiaCheckerMgr"
 import MafiaDiceMgr from "./MafiaDiceMgr"
@@ -75,26 +75,26 @@ export default class MafiaRoomMgr extends Component {
 
 
   init() {
-    this.addMeshCollider('room', RigidBody.Type.STATIC, PhyEnvGroup.Terrain)
-    this.addMeshCollider('bar', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
-    this.addMeshCollider('cabinet', RigidBody.Type.STATIC, PhyEnvGroup.Terrain)
+    this.addMeshCollider('room', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Terrain)
+    this.addMeshCollider('bar', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
+    this.addMeshCollider('cabinet', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Terrain)
 
-    this.addMeshCollider('chair1', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
-    this.addMeshCollider('chair2', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
-    this.addMeshCollider('chair3', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
-    this.addMeshCollider('chair4', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('chair1', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
+    this.addMeshCollider('chair2', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
+    this.addMeshCollider('chair3', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
+    this.addMeshCollider('chair4', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
 
-    this.addMeshCollider('pokerTable', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
-    this.addMeshCollider('armchair1', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
-    this.addMeshCollider('armchair2', RigidBody.Type.STATIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('pokerTable', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
+    this.addMeshCollider('armchair1', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
+    this.addMeshCollider('armchair2', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Prop)
 
-    this.addMeshCollider('dice', RigidBody.Type.DYNAMIC, PhyEnvGroup.Prop)
+    this.addMeshCollider('dice', RigidBody.Type.DYNAMIC, Terrain.PhyEnvGroup.Prop)
 
-    this.addMeshCollider('swimmingPool', RigidBody.Type.STATIC, PhyEnvGroup.Terrain)
+    this.addMeshCollider('swimmingPool', RigidBody.Type.STATIC, Terrain.PhyEnvGroup.Terrain)
   }
 
 
-  private addMeshCollider(name: string, type: RigidBody.Type, group: PhyEnvGroup) {
+  private addMeshCollider(name: string, type: RigidBody.Type, group: Terrain.PhyEnvGroup) {
 
     try {
       let node = this.mafiaRoom.getChildByName(name)

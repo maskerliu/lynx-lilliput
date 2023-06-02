@@ -1,0 +1,154 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "2f182d75-26df-4725-844c-f30b815abdbb",
+  "files": [],
+  "subMetas": {
+    "15530": {
+      "importer": "gltf-embeded-image",
+      "uuid": "2f182d75-26df-4725-844c-f30b815abdbb@15530",
+      "displayName": "",
+      "id": "15530",
+      "name": "chairFrog_normal.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "86655": {
+      "importer": "gltf-embeded-image",
+      "uuid": "2f182d75-26df-4725-844c-f30b815abdbb@86655",
+      "displayName": "",
+      "id": "86655",
+      "name": "chairFrog.image",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "cb44b": {
+      "importer": "gltf-mesh",
+      "uuid": "2f182d75-26df-4725-844c-f30b815abdbb@cb44b",
+      "displayName": "",
+      "id": "cb44b",
+      "name": "chairFrog.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3effa": {
+      "importer": "texture",
+      "uuid": "2f182d75-26df-4725-844c-f30b815abdbb@3effa",
+      "displayName": "",
+      "id": "3effa",
+      "name": "UnnamedTexture-0.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "2f182d75-26df-4725-844c-f30b815abdbb@15530"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "221a5": {
+      "importer": "texture",
+      "uuid": "2f182d75-26df-4725-844c-f30b815abdbb@221a5",
+      "displayName": "",
+      "id": "221a5",
+      "name": "UnnamedTexture-1.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "2f182d75-26df-4725-844c-f30b815abdbb@86655"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "9b3e3": {
+      "importer": "gltf-scene",
+      "uuid": "2f182d75-26df-4725-844c-f30b815abdbb@9b3e3",
+      "displayName": "",
+      "id": "9b3e3",
+      "name": "chairFrog.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "chairFrog_normal",
+        "uri": "2f182d75-26df-4725-844c-f30b815abdbb@15530"
+      },
+      {
+        "name": "chairFrog",
+        "uri": "2f182d75-26df-4725-844c-f30b815abdbb@86655"
+      }
+    ],
+    "redirect": "2f182d75-26df-4725-844c-f30b815abdbb@9b3e3",
+    "assetFinder": {
+      "meshes": [
+        "2f182d75-26df-4725-844c-f30b815abdbb@cb44b"
+      ],
+      "skeletons": [],
+      "textures": [
+        "2f182d75-26df-4725-844c-f30b815abdbb@3effa",
+        "2f182d75-26df-4725-844c-f30b815abdbb@221a5"
+      ],
+      "materials": [
+        "2b81a6c0-1301-43e3-8d14-f8b00da23818",
+        "1eade79f-340f-4c55-a986-6f8cc3205153"
+      ],
+      "scenes": [
+        "2f182d75-26df-4725-844c-f30b815abdbb@9b3e3"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

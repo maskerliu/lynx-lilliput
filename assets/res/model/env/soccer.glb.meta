@@ -1,0 +1,153 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d",
+  "files": [],
+  "subMetas": {
+    "4678d": {
+      "importer": "gltf-mesh",
+      "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@4678d",
+      "displayName": "",
+      "id": "4678d",
+      "name": "soccer.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3d773": {
+      "importer": "gltf-embeded-image",
+      "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@3d773",
+      "displayName": "",
+      "id": "3d773",
+      "name": "Image_1.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".jpg",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "21c1b": {
+      "importer": "gltf-embeded-image",
+      "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@21c1b",
+      "displayName": "",
+      "id": "21c1b",
+      "name": "soccer.image",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".jpg",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3effa": {
+      "importer": "texture",
+      "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@3effa",
+      "displayName": "",
+      "id": "3effa",
+      "name": "UnnamedTexture-0.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@3d773"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "221a5": {
+      "importer": "texture",
+      "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@221a5",
+      "displayName": "",
+      "id": "221a5",
+      "name": "UnnamedTexture-1.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@21c1b"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e2bf8": {
+      "importer": "gltf-scene",
+      "uuid": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@e2bf8",
+      "displayName": "",
+      "id": "e2bf8",
+      "name": "soccer.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "Image_1",
+        "uri": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@3d773"
+      },
+      {
+        "name": "soccer",
+        "uri": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@21c1b"
+      }
+    ],
+    "redirect": "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@e2bf8",
+    "assetFinder": {
+      "meshes": [
+        "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@4678d"
+      ],
+      "skeletons": [],
+      "textures": [
+        "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@3effa",
+        "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@221a5"
+      ],
+      "materials": [
+        "a9ae1543-912e-45b6-9a01-ede87d92aaba"
+      ],
+      "scenes": [
+        "75c7dbfb-f33c-4e49-8a1e-e7af255ba77d@e2bf8"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

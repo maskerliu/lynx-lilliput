@@ -1,6 +1,11 @@
-import { BoxCollider, Camera, Component, CylinderCollider, EventTouch, ICollisionEvent, ITriggerEvent, MeshCollider, MeshRenderer, Node, PhysicMaterial, PhysicsSystem, Prefab, RigidBody, SphereCollider, Vec2, Vec3, _decorator, geometry, instantiate, tween, v2, v3 } from 'cc'
-import { PhyEnvGroup } from '../common/Misc'
+import {
+  BoxCollider, Camera, Component, CylinderCollider, EventTouch,
+  ICollisionEvent, ITriggerEvent, MeshCollider, MeshRenderer, Node,
+  PhysicsSystem, Prefab, RigidBody, SphereCollider,
+  Vec2, Vec3, _decorator, geometry, instantiate, v2, v3
+} from 'cc'
 import OrbitCamera from '../common/OrbitCamera'
+import { Terrain } from '../common/Terrain'
 import ArcadePlayerMgr from './ArcadePlayerMgr'
 import CourtUIMgr from './CourtUIMgr'
 
@@ -12,11 +17,11 @@ const K_Gournd = 'ground'
 const K_Net = 'basketballNet'
 const K_Wall = 'wall'
 
-const BasketballStandMtl = new PhysicMaterial()
-BasketballStandMtl.setValues(0.2, 0, 0, 0.6)
+// const BasketballStandMtl = new PhysicMaterial()
+// BasketballStandMtl.setValues(0.2, 0, 0, 0.6)
 
-const BasketballMtl = new PhysicMaterial()
-BasketballMtl.setValues(0.2, 0, 0, 0.8)
+// const BasketballMtl = new PhysicMaterial()
+// BasketballMtl.setValues(0.2, 0, 0, 0.8)
 
 const StandOffsetHorizontal = 0.8
 const StandOffsetVertial = 0.3
@@ -86,8 +91,8 @@ export class CourtMgr extends Component {
     this.basketballs.forEach(it => {
       let rigidBody = it.addComponent(RigidBody)
       rigidBody.type = RigidBody.Type.DYNAMIC
-      rigidBody.group = PhyEnvGroup.Prop
-      rigidBody.setMask(PhyEnvGroup.Terrain | PhyEnvGroup.Player)
+      rigidBody.group = Terrain.PhyEnvGroup.Prop
+      rigidBody.setMask(Terrain.PropMask)
       rigidBody.mass = 0.6
       rigidBody.useCCD = true
       rigidBody.useGravity = false
@@ -96,7 +101,7 @@ export class CourtMgr extends Component {
 
       let collider = it.addComponent(SphereCollider)
       collider.radius = 0.215
-      collider.material = BasketballMtl
+      collider.material.setValues(0.2, 0, 0, 0.8)
     })
 
     this.randomBall()
@@ -157,18 +162,18 @@ export class CourtMgr extends Component {
     this.stands.position = this.standsPos
     let rigidBody = this.stands.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player)
+    rigidBody.group = Terrain.PhyEnvGroup.Terrain
+    rigidBody.setMask(Terrain.PropMask)
 
     let collider = this.stands.addComponent(MeshCollider)
     collider.mesh = this.stands.getComponent(MeshRenderer).mesh
-    collider.material = BasketballStandMtl
+    collider.material.setValues(0.2, 0, 0, 0.6)
 
     let net = this.stands.getChildByName('net')
     rigidBody = net.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Player | PhyEnvGroup.Prop)
+    rigidBody.group = Terrain.PhyEnvGroup.Terrain
+    rigidBody.setMask(Terrain.PropMask)
 
     let cyCollider = net.addComponent(CylinderCollider)
     cyCollider.isTrigger = true
@@ -180,8 +185,8 @@ export class CourtMgr extends Component {
   private initGround() {
     let rigidBody = this.ground.addComponent(RigidBody)
     rigidBody.type = RigidBody.Type.STATIC
-    rigidBody.group = PhyEnvGroup.Terrain
-    rigidBody.setMask(PhyEnvGroup.Prop | PhyEnvGroup.Player)
+    rigidBody.group = Terrain.PhyEnvGroup.Terrain
+    rigidBody.setMask(Terrain.TerrainMask)
 
     let model = this.ground.getComponent(MeshRenderer).model
     let minPos = v3(), maxPos = v3()
@@ -190,7 +195,7 @@ export class CourtMgr extends Component {
     let collider = this.ground.addComponent(BoxCollider)
     collider.size = maxPos
     collider.center = model.modelBounds.center
-    collider.material = BasketballStandMtl
+    collider.material.setValues(0.2, 0, 0, 0.6)
   }
 
   private registEvent() {

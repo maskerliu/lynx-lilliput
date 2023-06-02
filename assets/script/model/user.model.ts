@@ -1,5 +1,3 @@
-import { Common } from '.'
-
 
 export namespace User {
 
@@ -25,6 +23,8 @@ export namespace User {
     id?: string
     username?: string
     avatar?: string
+    prefab?: string
+    skin?: string
     coins?: number
   }
 }

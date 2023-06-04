@@ -1,4 +1,4 @@
-import { ITriggerEvent, Quat, UITransform, Vec2, Vec3, _decorator, v3 } from 'cc'
+import { ITriggerEvent, Quat, UITransform, Vec2, Vec3, _decorator, quat, v3 } from 'cc'
 import PlayerMgr, { Climb_Speed, QuatNeg, Roate_Speed, SyncableStates } from '../../common/PlayerMgr'
 import { RockerTarget } from '../../common/RockerMgr'
 import { v3ToXYZ } from '../../misc/Utils'
@@ -16,10 +16,12 @@ const TryEnterEvent = new Lilliput.UIEvent(Lilliput.PlayerEvent.Type.TryEnter)
 const LeaveEvent = new Lilliput.UIEvent(Lilliput.PlayerEvent.Type.OnLeave)
 
 const Move_Speed = 2
+const Swim_Speed = 1.5
 
 @ccclass('MyselfMgr')
 export default class MyselfMgr extends PlayerMgr implements RockerTarget {
 
+  private dstRotation: Quat = quat(QuatNeg)
   private frameCount = 0
 
   private lstState = Game.CharacterState.None
@@ -27,25 +29,22 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
 
   update(dt: number) {
 
-    if (QuatNeg.equals(this.q_rotation)) {
+    if (QuatNeg.equals(this.dstRotation)) {
 
     } else {
-      if (this.node.rotation.equals(this.q_rotation, 0.12)) {
-        this.q_rotation.set(QuatNeg)
+      if (this.node.rotation.equals(this.dstRotation, 0.12)) {
+        this.dstRotation.set(QuatNeg)
       } else {
-        this.node.rotation = this.node.rotation.slerp(this.q_rotation, Roate_Speed * dt)
+        this.node.rotation = this.node.rotation.slerp(this.dstRotation, Roate_Speed * dt)
       }
     }
 
-    super.update(dt)
 
-    if (!Vec3.NEG_ONE.equals(this.dstPos)) {
-      this.runTo()
-    }
+
+    super.update(dt)
 
     switch (this._state) {
       case Game.CharacterState.Run:
-        // this.rigidBody.useGravity = true
         this.rigidBody.getLinearVelocity(this.v3_speed)
         let speedY = this.v3_speed.y
         Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Move_Speed)
@@ -53,7 +52,7 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
       case Game.CharacterState.Swim:
-        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Move_Speed)
+        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Swim_Speed)
         this.v3_speed.y = 0
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
@@ -71,29 +70,31 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
   }
 
   lateUpdate(dt: number) {
-    if (this.frameCount < 4) {
-      this.frameCount++
-    } else {
-      this.frameCount = 0
+    if (this.frameCount < 4) this.frameCount++
+    else this.frameCount = 0
 
-      if (!Vec3.NEG_ONE.equals(this.dstPos)) return
-      if (SyncableStates.findIndex(it => it == this._state) == -1) return
+    this.frameCount = this.frameCount < 4 ? this.frameCount + 1 : 0
 
-      if (this.lstState == Game.CharacterState.Idle || this.lstState == Game.CharacterState.TreadWater) {
-        if (this.lstPos.equals(this.node.position, 0.03)) return
+    if (SyncableStates.includes(this._state)) {
+
+      if (this.frameCount == 0) {
+        // try to sync
+        if (this.node.position.equals(this.lstPos, 0.03)) return
+        this.syncStateFrame()
+        this.lstState = this._state
+        this.lstPos.set(this.node.position)
       }
-
-      if (this.lstState == this._state && this.lstPos.equals(this.node.position, 0.03)) return
-      this.lstState = this._state
-      this.lstPos.set(this.node.position)
-      let msg: Game.PlayerMsg = {
-        cmd: Game.PlayerMsgType.Sync,
-        state: this._state,
-        pos: v3ToXYZ(this.node.position),
-        dir: v3ToXYZ(this.node.forward)
-      }
-      BattleService.instance.sendPlayerMsg(msg)
     }
+  }
+
+  syncStateFrame() {
+    let msg: Game.PlayerMsg = {
+      cmd: Game.PlayerMsgType.Sync,
+      state: this._state,
+      pos: v3ToXYZ(this.node.position),
+      dir: v3ToXYZ(this.node.forward)
+    }
+    BattleService.instance.sendPlayerMsg(msg)
   }
 
   enter(island: IslandMgr, state: PlayerState): void {
@@ -106,7 +107,8 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
 
   onAction(msg: Game.PlayerMsg) {
     super.onAction(msg)
-    if (msg.state != Game.CharacterState.Run) {
+
+    if (!SyncableStates.includes(msg.state)) {
       BattleService.instance.sendPlayerMsg(msg)
     }
 
@@ -147,32 +149,9 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
     this.node.dispatchEvent(InteractEvent)
   }
 
-  protected runTo() {
-    if (this.dstPos.equals(this.node.position, 0.016)) {
-      this.dstPos.set(Vec3.NEG_ONE)
-      this.state = this.dstState
-      this.dstState = Game.CharacterState.None
-      return
-    }
-
-    // 当前位置与目标帧出现较大误差，直接跳帧
-    if (Math.abs(this.node.position.y - this.dstPos.y) > 0.1) {
-      this.node.position = this.dstPos
-      this.state = this.dstState
-      this.dstPos.set(Vec3.NEG_ONE)
-      this.dstState = Game.CharacterState.None
-    } else {
-      this.state = Game.CharacterState.Run
-      Vec3.subtract(this.v3_dir, this.dstPos, this.v3_pos)
-      this.v3_dir.y = 0
-      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
-      this.node.rotation = this.q_rotation
-      this.q_rotation.set(QuatNeg)
-    }
-  }
-
   onDirectionChanged(dir: Vec2) {
-    if (SyncableStates.findIndex(it => it == this._state) == -1) return
+    this.dstRotation.set(QuatNeg)
+    if (!SyncableStates.includes(this._state)) return
 
     this._curDir.set(dir)
 
@@ -185,6 +164,6 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
     this.dstPos.set(Vec3.NEG_ONE)
     this.v3_dir.set(this.followCamera.forward)
     Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, dir.signAngle(Vec2.UNIT_Y))
-    Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
+    Quat.fromViewUp(this.dstRotation, this.v3_dir.normalize())
   }
 }

@@ -19,7 +19,7 @@ export default class BattleService {
   private static _instance: BattleService
 
   private constructor() {
-    let offset = 20
+    let offset = 21
     this._positions.push({ pos: v3(offset, 0, offset), existed: false })
     this._positions.push({ pos: v3(offset, 0, -offset), existed: false })
     this._positions.push({ pos: v3(offset, 0, 0), existed: false })
@@ -54,9 +54,9 @@ export default class BattleService {
 
   async stop() {
     if (this._island) {
-      await this._island.leave()
       this._island.removeAllListeners()
       this.unregisterHandlers()
+      await this._island.leave()
       this._island = null
     }
     if (this._timer) clearInterval(this._timer)
@@ -137,6 +137,12 @@ export default class BattleService {
   async didEnter(player: PlayerMgr, island: IslandMgr) {
     player.leave()
     let uid = player.profile.id == 'shadow' ? this._myself : player.profile.id
+
+    if (!this._island.state.players.has(uid)) {
+      console.log('error: not player state ')
+      return
+    }
+
     player.enter(island, this._island.state.players.get(uid))
 
     if (this._timer) clearInterval(this._timer)
@@ -161,7 +167,8 @@ export default class BattleService {
   }
 
   private onLeaveIsland() {
-    BattleService.instance.stop()
+    // BattleService.instance.stop()
+    console.log('island leave')
   }
 
   private onIslandStateChanged() {

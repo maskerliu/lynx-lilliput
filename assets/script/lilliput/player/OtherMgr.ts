@@ -1,6 +1,6 @@
 import { ITriggerEvent, Quat, Vec3, _decorator } from 'cc'
 import PlayerMgr, { Climb_Speed, InteractStates, QuatNeg, SyncableStates } from '../../common/PlayerMgr'
-import { Game, PlayerState } from '../../model'
+import { Game, PlayerState, User } from '../../model'
 import BattleService from '../BattleService'
 import IslandMgr from '../IslandMgr'
 import { DataChange } from '@colyseus/schema'
@@ -8,18 +8,18 @@ import { DataChange } from '@colyseus/schema'
 
 const { ccclass, property } = _decorator
 
-const Speed_Def = 2.5
-const Speed_Fast = 3
-
-const MAX_RAIDUS = Math.PI / 180 * 5
+const Speed_Def = 1
+const Speed_Fast = 2.2
+const Swim_Speed = 2
 
 const FRAME_SIZE = 10
 
 @ccclass('OtherMgr')
 export default class OtherMgr extends PlayerMgr {
-  private _speed = 2.5
+  private _speed = Speed_Def
 
   private _stateFrames: Array<Game.PlayerMsg> = new Array()
+  private _stateFrameCost = 0
 
   private _curIdx = 0
   private _usedIdx = 0
@@ -37,21 +37,16 @@ export default class OtherMgr extends PlayerMgr {
   }
 
   update(dt: number) {
-    this.runTo()
-
     super.update(dt)
+
+    this.popStateFrame()
 
     switch (this._state) {
       case Game.CharacterState.Run:
         this.rigidBody.getLinearVelocity(this.v3_speed)
         let speedY = this.v3_speed.y
-        if (Vec3.NEG_ONE.equals(this.dstPos)) {
-          this.v3_speed.set(Vec3.ZERO)
-        } else {
-          // this._speed = BattleService.instance.playerFrameCount(this.profile.id) > 4 ? Speed_Fast : Speed_Def
-          this._speed = Speed_Def
-          Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), this._speed)
-        }
+        this._speed = Vec3.NEG_ONE.equals(this.dstPos) ? 0 : Speed_Fast
+        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), this._speed)
         this.v3_speed.y = speedY
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
@@ -59,7 +54,7 @@ export default class OtherMgr extends PlayerMgr {
         if (Vec3.NEG_ONE.equals(this.dstPos)) {
           this.v3_speed.set(Vec3.ZERO)
         } else {
-          Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Speed_Def)
+          Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Swim_Speed)
           this.v3_speed.y = 0
         }
         this.rigidBody.setLinearVelocity(this.v3_speed)
@@ -71,19 +66,36 @@ export default class OtherMgr extends PlayerMgr {
         } else {
           Vec3.multiplyScalar(this.dstPos, this.node.forward.negative(), 0.5)
           this.dstPos.add(this.node.position)
-          this.dstState = Game.CharacterState.Run
+          this.dstState = Game.CharacterState.Idle
         }
         break
     }
   }
 
-  protected lateUpdate(dt: number): void {
-    this.popPlayerFrame()
+  protected runTo(): void {
+    if (this._stateFrameCost == 6 && !Vec3.NEG_ONE.equals(this.dstPos)) {
+      this.dstPos.set(Vec3.NEG_ONE)
+      this.dstForward.set(Vec3.NEG_ONE)
+      this.dstState = Game.CharacterState.None
+
+      try { this.popStateFrame() } catch (err) { }
+
+    } else {
+      super.runTo()
+      this._stateFrameCost++
+    }
   }
 
   onAction(msg: Game.PlayerMsg) {
+
+    if (msg.state == Game.CharacterState.JumpUp) {
+      console.log(this._curIdx, this._usedIdx, this._stateFrames)
+    }
+
     if (msg == null) return
     super.onAction(msg)
+
+    this._stateFrameCost = 0
 
     if (this._interactObj && InteractStates.includes(msg.state)) {
       BattleService.instance.island()?.handleInteract(this._interactObj.index, msg.state)
@@ -113,43 +125,15 @@ export default class OtherMgr extends PlayerMgr {
     })
   }
 
-  protected runTo() {
+  init(profile: User.Profile): this {
+    super.init(profile)
 
-    if (Vec3.NEG_ONE.equals(this.dstPos)) return
-
-    if (this.dstPos.equals(this.node.position, 0.032)) {
-      this.state = this.dstState
-      if (this._state == Game.CharacterState.Idle || this._state == Game.CharacterState.TreadWater) {
-        this.node.forward = this.dstForward
-      }
-
-      this.dstState = Game.CharacterState.None
-      this.dstForward.set(Vec3.NEG_ONE)
-      this.dstPos.set(Vec3.NEG_ONE)
-
-      return
-    }
-
-    // 当前位置与目标帧出现较大误差，直接跳帧
-    if (Math.abs(this.node.position.y - this.dstPos.y) > 0.1) { // || BattleService.instance.playerFrameCount(this.profile.id) > 4) {
-      this.node.position = this.dstPos
-      this.state = this.dstState
-      this.dstState = Game.CharacterState.None
-      this.dstPos.set(Vec3.NEG_ONE)
-      this.dstForward.set(Vec3.NEG_ONE)
-    } else {
-      this.state = this._inWater ? Game.CharacterState.Swim : Game.CharacterState.Run
-      Vec3.subtract(this.v3_dir, this.dstPos, this.node.position)
-      this.v3_dir.y = 0
-      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
-
-      if (Vec3.angle(this.node.forward.negative(), this.v3_dir) > MAX_RAIDUS) {
-        this.node.rotation = this.q_rotation
-      }
-    }
+    return this
   }
 
   private onPlayerStateChanged(changes: DataChange[]) {
+
+    let idx = this._usedIdx
     if (this._usedIdx == FRAME_SIZE - 1) {
       this._usedIdx = 0
     } else {
@@ -157,21 +141,16 @@ export default class OtherMgr extends PlayerMgr {
     }
 
     if (this._usedIdx == this._curIdx) {
-      this._curIdx += 4
+      this.dstPos.set(Vec3.NEG_ONE)
+      this.dstForward.set(Vec3.NEG_ONE)
+      this.dstState = Game.CharacterState.None
+      // this.popStateFrame()
 
-      // 跳帧
-      if (this._curIdx >= FRAME_SIZE) { this._curIdx -= FRAME_SIZE }
+      try { this.popStateFrame() } catch (err) { }
     }
 
-    changes.forEach(it => {
-      this._playerState[it.field] = it.value
-    })
-
+    changes.forEach(it => { this._playerState[it.field] = it.value })
     this.updateStateFrame()
-  }
-
-  private get prevUsedIdx() {
-    return this._usedIdx == FRAME_SIZE - 2 ? 0 : this._usedIdx + 1
   }
 
   private updateStateFrame() {
@@ -184,16 +163,11 @@ export default class OtherMgr extends PlayerMgr {
     this._stateFrames[this._usedIdx].state = this._playerState.state
   }
 
-  private popPlayerFrame() {
-    if (SyncableStates.findIndex(it => it == this._state) == -1) return
-    if (!Vec3.NEG_ONE.equals(this.dstPos)) return
+  private popStateFrame(): boolean {
+    if (!Vec3.NEG_ONE.equals(this.dstPos) || !SyncableStates.includes(this._state)) return false
+
     if (this._curIdx == this._usedIdx) {
-      if (this._popped) { return }
-      else {
-        this.onAction(this._stateFrames[this._curIdx])
-        this._popped = true
-        return
-      }
+      return false
     } else {
       this._popped = false
       if (this._curIdx >= FRAME_SIZE - 1) {
@@ -202,6 +176,7 @@ export default class OtherMgr extends PlayerMgr {
         this._curIdx++
       }
       this.onAction(this._stateFrames[this._curIdx])
+      return true
     }
   }
 }

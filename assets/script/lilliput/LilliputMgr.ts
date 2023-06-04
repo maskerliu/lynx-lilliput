@@ -32,9 +32,6 @@ export default class LilliputMgr extends Component {
   @property(Prefab)
   islandPrefab: Prefab
 
-  @property(Prefab)
-  playerPrefab: Prefab
-
   @property(Node)
   test: Node
 
@@ -228,7 +225,7 @@ export default class LilliputMgr extends Component {
   private genreatorPlayer(profile: User.Profile) {
     let player = BattleService.instance.player(profile.id)
     if (player == null) {
-      let node = instantiate(this.playerPrefab)
+      let node = new Node()
       this.node.addChild(node)
       if (BattleService.instance.isMyself(profile.id)) {
         node.name = 'myself'

@@ -52,6 +52,8 @@ const BreakableStates = [
   Game.CharacterState.JumpLand,
 ]
 
+const MAX_RAIDUS = Math.PI / 180 * 5
+
 const StateAnim: Map<Game.CharacterState, string> = new Map()
 
 StateAnim.set(Game.CharacterState.Idle, 'Idle')
@@ -94,6 +96,7 @@ export default class PlayerMgr extends Component {
   protected collider: CylinderCollider
   protected animation: SkeletalAnimation
   protected meshRenderer: SkinnedMeshRenderer
+  protected character: Node
 
   protected _profile: User.Profile
   get profile() { return this._profile }
@@ -110,21 +113,12 @@ export default class PlayerMgr extends Component {
   protected _islandMgr: IslandMgr
 
   start() {
-    this.node.getChildByName('Debug').active = true
-    // if (debugNode) debugNode.active = isDebug
+    // this.node.getChildByName('Debug').active = true
   }
 
   update(dt: number) {
 
     if (this.rigidBody == null) return
-
-    if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
-      let forward = this.node.forward.negative()
-      this.v3_dir.set(forward.x, 0, forward.z)
-      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
-      this.node.rotation = this.q_rotation
-      this.q_rotation.set(QuatNeg)
-    }
 
     if (!this.animState()) {
       if (this._state == Game.CharacterState.JumpUp) {
@@ -133,20 +127,30 @@ export default class PlayerMgr extends Component {
         this.state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
       }
     }
+
+    this.runTo()
+
+    if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
+      let forward = this.node.forward.negative()
+      this.v3_dir.set(forward.x, 0, forward.z)
+      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
+      this.node.rotation = this.q_rotation
+      this.q_rotation.set(QuatNeg)
+    }
   }
 
   resume() {
     this.rigidBody.clearState()
     this.rigidBody.useGravity = true
 
-    this._state = Game.CharacterState.Idle
-    this.animation?.crossFade(StateAnim.get(this._state), 0)
-
+    this.state = Game.CharacterState.Idle
     this.q_rotation.set(QuatNeg)
     this.v3_dir.set(Vec3.ZERO)
     this.v3_speed.set(Vec3.ZERO)
 
     this.dstPos.set(Vec3.NEG_ONE)
+    this.dstForward.set(Vec3.NEG_ONE)
+    this.dstState = Game.CharacterState.None
 
     this._interactObj = null
     this._canClimb = false
@@ -210,10 +214,10 @@ export default class PlayerMgr extends Component {
   }
 
   private _init(prefab: Prefab) {
-    this.node.getChildByName('Debug').active = false
-    let character = instantiate(prefab)
-    character.position = v3(0, -0.5, 0)
-    this.node.addChild(character)
+    // this.node.getChildByName('Debug').active = false
+    this.character = instantiate(prefab)
+    this.character.position = v3(0, -0.5, 0)
+    this.node.addChild(this.character)
     this.animation = this.getComponentInChildren(SkeletalAnimation)
     this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
 
@@ -236,6 +240,8 @@ export default class PlayerMgr extends Component {
   }
 
   onAction(msg: Game.PlayerMsg) {
+    this.dstPos.set(Vec3.NEG_ONE)
+    this.dstForward.set(Vec3.NEG_ONE)
     this.dstState = Game.CharacterState.None
     switch (msg.state) {
       case Game.CharacterState.Run:
@@ -277,7 +283,14 @@ export default class PlayerMgr extends Component {
   }
 
   private onCollisionEnter(event: ICollisionEvent) {
-    this.rigidBody.clearState()
+    switch (this._state) {
+      case Game.CharacterState.JumpUp:
+      case Game.CharacterState.Climb:
+        break
+      default:
+        this.rigidBody.clearState()
+        break
+    }
   }
 
   private onCollisionExit(event: ICollisionEvent) { }
@@ -353,12 +366,50 @@ export default class PlayerMgr extends Component {
     }
   }
 
-  protected runTo() { }
+  protected runTo() {
+    if (Vec3.NEG_ONE.equals(this.dstPos)) return
+
+    if (this.dstPos.equals(this.node.position, 0.1)) {
+      this.state = this.dstState
+      if (this._state == Game.CharacterState.Idle || this._state == Game.CharacterState.TreadWater) {
+        this.node.forward = this.dstForward
+      }
+
+      this.dstPos.set(Vec3.NEG_ONE)
+      this.dstForward.set(Vec3.NEG_ONE)
+      this.dstState = Game.CharacterState.None
+      return
+    }
+
+    // 当前位置与目标帧出现较大误差，直接跳帧
+    if (Math.abs(this.node.position.y - this.dstPos.y) > 0.05) { // || BattleService.instance.playerFrameCount(this.profile.id) > 4) {
+      this.node.position = this.dstPos
+      this.state = this.dstState
+
+      this.dstPos.set(Vec3.NEG_ONE)
+      this.dstForward.set(Vec3.NEG_ONE)
+      this.dstState = Game.CharacterState.None
+    } else {
+      this.state = this._inWater ? Game.CharacterState.Swim : Game.CharacterState.Run
+      Vec3.subtract(this.v3_dir, this.dstPos, this.node.position)
+      this.v3_dir.y = 0
+      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
+
+      if (Vec3.angle(this.node.forward.negative(), this.v3_dir) > MAX_RAIDUS) {
+        this.node.rotation = this.node.rotation.slerp(this.q_rotation, 0.2)
+        if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
+          let forward = this.node.forward.negative()
+          this.v3_dir.set(forward.x, 0, forward.z)
+          Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
+          this.node.rotation = this.q_rotation
+          this.q_rotation.set(QuatNeg)
+        }
+      }
+    }
+  }
 
   protected jump() {
-    if (this.state == Game.CharacterState.JumpUp) return
     this.state = Game.CharacterState.JumpUp
-    if (this._state != Game.CharacterState.JumpUp) return
     setTimeout(() => {
       this.rigidBody.useGravity = true
       let v3Impluse = v3(0, 6, 0)
@@ -456,7 +507,7 @@ export default class PlayerMgr extends Component {
     // same state, not work
     if (this._state == state) return
     // on action ongoing, can not break except idle or run
-    if (BreakableStates.findIndex(it => it == state) == -1) return
+    if (!BreakableStates.includes(this._state) && this.animState()) return
 
     if (state == Game.CharacterState.None) {
       this._state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
@@ -466,7 +517,8 @@ export default class PlayerMgr extends Component {
 
     this.animation?.crossFade(StateAnim.get(this._state), 0)
     this.rigidBody.useGravity = true
-
+    this.v3_pos.set(0, -0.5, 0)
+    this.character.position = this.v3_pos
     switch (this._state) {
       case Game.CharacterState.Idle:
         this.rigidBody.getLinearVelocity(this.v3_speed)
@@ -479,6 +531,8 @@ export default class PlayerMgr extends Component {
         this.rigidBody.setLinearVelocity(Vec3.ZERO)
         break
       case Game.CharacterState.Swim:
+        this.v3_pos.set(0, -0.5, -0.3)
+        this.character.position = this.v3_pos
         this.rigidBody.useGravity = false
         break
       case Game.CharacterState.Lift:

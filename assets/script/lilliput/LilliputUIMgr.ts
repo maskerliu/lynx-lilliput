@@ -3,28 +3,26 @@ import {
   Label, Node, Prefab, Sprite, SpriteAtlas, Toggle, ToggleContainer,
   UITransform, Widget, _decorator, director, instantiate, size, tween, v3, view
 } from 'cc'
+import { BigWorld } from '../common/BigWorld'
 import RockerMgr, { RockerTarget } from '../common/RockerMgr'
-import { Terrain } from '../common/Terrain'
 import ToggleMgr from '../common/ToggleMgr'
 import LocalPrefs from '../misc/LocalPrefs'
 import { Game, Island } from '../model'
 import ActionsMgr from './ActionsMgr'
 import BattleService from './BattleService'
-import { Lilliput } from './LilliputEvents'
 import LilliputLoginMgr from './LilliputLoginMgr'
-import TerrainItemBarMgr from './TerrainItemBarMgr'
-
+import LilliputPropStoreMgr from './LilliputPropStoreMgr'
 
 const { ccclass, property } = _decorator
 
-const TryEnterEvent = new Lilliput.PlayerEvent(Lilliput.PlayerEvent.Type.TryEnter)
-const IslandEditChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnEditChanged)
-const IslandActionChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnActionChanged)
-const IslandLayerChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnLayerChanged)
-const IslandRotateEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnRotate)
-const IslandSkinChangedEvent = new Lilliput.IslandEvent(Lilliput.IslandEvent.Type.OnSkinChanged)
+const TryEnterEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.TryEnter)
+const IslandEditChangedEvent = new BigWorld.IslandEvent(BigWorld.IslandEvent.Type.OnEditChanged)
+const IslandActionChangedEvent = new BigWorld.IslandEvent(BigWorld.IslandEvent.Type.OnActionChanged)
+const IslandLayerChangedEvent = new BigWorld.IslandEvent(BigWorld.IslandEvent.Type.OnLayerChanged)
+const IslandRotateEvent = new BigWorld.IslandEvent(BigWorld.IslandEvent.Type.OnRotate)
+const IslandSkinChangedEvent = new BigWorld.IslandEvent(BigWorld.IslandEvent.Type.OnSkinChanged)
+const PlayerActionEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.OnAction)
 
-const PlayerActionEvent = new Lilliput.PlayerEvent(Lilliput.PlayerEvent.Type.OnAction)
 
 @ccclass('LilliputUIMgr')
 export default class LilliputUIMgr extends Component {
@@ -75,8 +73,8 @@ export default class LilliputUIMgr extends Component {
   @property(Node)
   private network: Node
 
-  @property(Label)
-  private fpsLabel: Label
+  // @property(Label)
+  // private fpsLabel: Label
 
   @property(Node)
   private assetLoadIndicator: Node
@@ -111,7 +109,7 @@ export default class LilliputUIMgr extends Component {
     this.frameTime = Date.now()
     this.node.on(Director.EVENT_AFTER_DRAW, () => {
       if (Date.now() - this.frameTime >= 1000) {
-        this.fpsLabel.string = `FPS:\t ${this.frameCount}`
+        // this.fpsLabel.string = `FPS:\t ${this.frameCount}`
         this.frameTime = Date.now()
         this.frameCount = 0
       } else {
@@ -124,7 +122,7 @@ export default class LilliputUIMgr extends Component {
     this.loginMgr = this.loginPanel.getComponent(LilliputLoginMgr)
 
     this.networkSprite = this.network.getComponent(Sprite)
-    this.networkLabel = this.network.getComponentInChildren(Label)
+    // this.networkLabel = this.network.getComponentInChildren(Label)
 
     let wid = this.node.getComponent(Widget)
     wid.top = -view.getViewportRect().y
@@ -234,32 +232,32 @@ export default class LilliputUIMgr extends Component {
 
   protected onProfile() {
     director.loadScene('profile')
-    BattleService.instance.stop()
+    BattleService.instance.leave()
   }
 
   protected onEnvEditToolbarChanged(event: Toggle) {
     if (this._curToolItem == event.node.name) return
     this._curToolItem = event.node.name
-    let type = Terrain.ActionType.None
+    let type = BigWorld.ActionType.None
     this.layerMenu.active = false
     this.rotateMenu.active = false
     switch (event.node.name) {
       case 'Layers':
         this.showSubMenu(this.layerMenu)
-        type = Terrain.ActionType.Selected
+        type = BigWorld.ActionType.Selected
         break
       case 'Rotate':
         this.showSubMenu(this.rotateMenu)
-        type = Terrain.ActionType.Selected
+        type = BigWorld.ActionType.Selected
         break
       case 'Select':
-        type = Terrain.ActionType.Selected
+        type = BigWorld.ActionType.Selected
         break
       case 'Paint':
-        type = Terrain.ActionType.Add
+        type = BigWorld.ActionType.Add
         break
       case 'Erase':
-        type = Terrain.ActionType.Erase
+        type = BigWorld.ActionType.Erase
         break
     }
 
@@ -302,15 +300,16 @@ export default class LilliputUIMgr extends Component {
 
     let tc = this.terrainEditToolbar.getComponent(ToggleContainer)
     tc.toggleItems[0].isChecked = true
-    // tc.notifyToggleCheck(tc.toggleItems[0])
+    this.onEnvEditToolbarChanged(tc.toggleItems[0])
+
+    this.layerMenu.active = false
+    this.rotateMenu.active = false
 
     tc = this.layerMenu.getComponent(ToggleContainer)
     tc.toggleItems[0].isChecked = true
-    // tc.notifyToggleCheck(tc.toggleItems[0])
 
-    this.terrainItemBar.getComponent(TerrainItemBarMgr).show(this._isEdit)
+    this.terrainItemBar.getComponent(LilliputPropStoreMgr).show(this._isEdit)
     this.rocker.getComponent(RockerMgr).show(!this._isEdit)
-    // this._editHandler?.onEditModeChanged()
   }
 
   updateLoading(show: boolean, content?: string) {
@@ -322,12 +321,11 @@ export default class LilliputUIMgr extends Component {
     }
   }
 
-  updateActions(event: Lilliput.PropEvent) {
-
+  updateActions(event: BigWorld.PropEvent) {
     this.actionsMgr.updateActions(event.interactions)
   }
 
-  showSkinMenu(event: Lilliput.IslandEvent) {
+  showSkinMenu(event: BigWorld.IslandEvent) {
     this.skinMenu.active = event.customData.show
 
     if (event.customData.show) {

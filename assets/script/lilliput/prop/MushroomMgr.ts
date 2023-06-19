@@ -1,11 +1,11 @@
 import { _decorator } from 'cc'
 import { Game } from '../../model'
-import TerrainItemMgr from '../TerrainItemMgr'
+import CommonPropMgr from './CommonPropMgr'
 
 const { ccclass, property } = _decorator
 
 @ccclass('MushroomMgr')
-export default class MushroomMgr extends TerrainItemMgr {
+export default class MushroomMgr extends CommonPropMgr {
 
 
   interact(action: Game.CharacterState) {

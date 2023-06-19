@@ -1,25 +1,27 @@
 import { Asset, Material, PhysicMaterial, Prefab, resources } from 'cc'
 import { AssetMgr } from '../common/AssetMgr'
-import { Terrain } from '../common/Terrain'
-import TerrainItemConfigs from './config/terrain.default.config.json'
+import { BigWorld } from '../common/BigWorld'
+import DecoratorConfigs from './config/terrain.decorator.config.json'
+import GroundConfigs from './config/terrain.ground.config.json'
 import PropConfigs from './config/terrain.prop.config.json'
 import WeaponConfigs from './config/terrain.weapon.config.json'
 
-class LilliputAssetMgr implements AssetMgr {
+export default class LilliputAssetMgr implements AssetMgr {
   private static _instance: LilliputAssetMgr
 
   private _mtls: Map<string | number, Material> = new Map()
   private textures: Map<string, Asset> = new Map()
 
-  private terrainItemConfigs: Array<Terrain.ModelInfo> = TerrainItemConfigs
-  private propConfigs: Array<Terrain.ModelInfo> = PropConfigs
-  private weaponConfigs: Array<Terrain.ModelInfo> = WeaponConfigs
+  private groundConfigs: Array<BigWorld.ModelInfo> = GroundConfigs
+  private propConfigs: Array<BigWorld.ModelInfo> = PropConfigs
+  private weaponConfigs: Array<BigWorld.ModelInfo> = WeaponConfigs
+  private decoratorConfigs: Array<BigWorld.ModelInfo> = DecoratorConfigs
 
   private _phyMtls: Map<string, PhysicMaterial> = new Map()
   private _terrains: Map<string, Prefab> = new Map()
   private _characters: Map<string, Prefab> = new Map()
 
-  static instance() {
+  static get instance() {
     if (LilliputAssetMgr._instance == null) return new LilliputAssetMgr()
     else return LilliputAssetMgr._instance
   }
@@ -28,28 +30,33 @@ class LilliputAssetMgr implements AssetMgr {
     LilliputAssetMgr._instance = this
   }
 
-  get preloaded() { return this._mtls.size + this._phyMtls.size >= (3 + 5) }
+  get preloaded() { return this._mtls.size + this._phyMtls.size + this._terrains.size >= (3 + 5 + 2) }
 
-  getModelConfig(name: string) {
-    for (let item of this.terrainItemConfigs) {
-      if (item.name == name) return item
+  getModelConfig(id: number) {
+    for (let item of this.groundConfigs) {
+      if (item.id == id) return item
     }
     for (let item of this.propConfigs) {
-      if (item.name == name) return item
+      if (item.id == id) return item
     }
     for (let item of this.weaponConfigs) {
-      if (item.name == name) return item
+      if (item.id == id) return item
+    }
+    for (let item of this.decoratorConfigs) {
+      if (item.id == id) return item
     }
   }
 
-  getModelCongfigs(type: Terrain.ModelGroup) {
+  getModelCongfigs(type: BigWorld.ModelGroup) {
     switch (type) {
-      case Terrain.ModelGroup.Ground:
-        return TerrainItemConfigs
-      case Terrain.ModelGroup.Prop:
+      case BigWorld.ModelGroup.Ground:
+        return GroundConfigs
+      case BigWorld.ModelGroup.Prop:
         return PropConfigs
-      case Terrain.ModelGroup.Weapon:
+      case BigWorld.ModelGroup.Weapon:
         return WeaponConfigs
+      case BigWorld.ModelGroup.Decorator:
+        return DecoratorConfigs
     }
   }
 
@@ -75,6 +82,15 @@ class LilliputAssetMgr implements AssetMgr {
   addTexture<T extends Asset>(name: string, asset: T) { this.textures.set(name, asset) }
 
   preload() {
+
+    resources.loadDir(`prefab/terrain/test`, Prefab, (err, assets) => {
+      assets.forEach(it => { this._terrains.set(it.name, it) })
+    })
+
+    resources.load(`prefab/terrain/debug`, Prefab, (err, prefab) => {
+      this._terrains.set('debug', prefab)
+    })
+
     resources.load(`material/misc/translucent`, Material, (err, mtl) => {
       this._mtls.set('translucent', mtl)
     })
@@ -106,13 +122,5 @@ class LilliputAssetMgr implements AssetMgr {
     resources.load(`material/physical/player`, PhysicMaterial, (err, mtl) => {
       this._phyMtls.set('player', mtl)
     })
-
-    // resources.loadDir<Material>(`material/terrain`, (err, data) => {
-    //   data.forEach(it => {
-    //     this.materials.set(it.uuid, it)
-    //   })
-    // })
   }
 }
-
-export default LilliputAssetMgr.instance()

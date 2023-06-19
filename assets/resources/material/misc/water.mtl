@@ -37,11 +37,18 @@
         "__uuid__": "7fb14ae9-230b-4356-a2d3-0ba33f14fb7a@b47c0",
         "__expectedType__": "cc.TextureCube"
       },
-      "fReflect": 0.39,
-      "fresnelPow": 0,
+      "fReflect": 0.4,
+      "fresnelPow": 0.5,
       "noiseTexture": {
         "__uuid__": "60b52f34-201d-491b-8b8c-f7b459ffd583@6c48a",
         "__expectedType__": "cc.Texture2D"
+      },
+      "rimColor": {
+        "__type__": "cc.Color",
+        "r": 66,
+        "g": 180,
+        "b": 176,
+        "a": 255
       }
     }
   ]

@@ -1,21 +1,20 @@
-import { ITriggerEvent, Quat, Vec3, _decorator } from 'cc'
-import PlayerMgr, { Climb_Speed, InteractStates, QuatNeg, SyncableStates } from '../../common/PlayerMgr'
+import { DataChange } from '@colyseus/schema'
+import { Vec3, _decorator } from 'cc'
+import { BigWorld } from '../../common/BigWorld'
 import { Game, PlayerState, User } from '../../model'
 import BattleService from '../BattleService'
-import IslandMgr from '../IslandMgr'
-import { DataChange } from '@colyseus/schema'
-
+import CommonPlayerMgr, { Climb_Speed } from './CommonPlayerMgr'
 
 const { ccclass, property } = _decorator
 
-const Speed_Def = 1
-const Speed_Fast = 2.2
-const Swim_Speed = 2
-
+const Speed_Def = 200
+const Speed_Fast = 100
+const Swim_Speed = 120
 const FRAME_SIZE = 10
 
+
 @ccclass('OtherMgr')
-export default class OtherMgr extends PlayerMgr {
+export default class OtherMgr extends CommonPlayerMgr {
   private _speed = Speed_Def
 
   private _stateFrames: Array<Game.PlayerMsg> = new Array()
@@ -37,6 +36,8 @@ export default class OtherMgr extends PlayerMgr {
   }
 
   update(dt: number) {
+    if (this.rigidBody == null || this.character == null) return
+
     super.update(dt)
 
     this.popStateFrame()
@@ -46,7 +47,7 @@ export default class OtherMgr extends PlayerMgr {
         this.rigidBody.getLinearVelocity(this.v3_speed)
         let speedY = this.v3_speed.y
         this._speed = Vec3.NEG_ONE.equals(this.dstPos) ? 0 : Speed_Fast
-        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), this._speed)
+        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), this._speed * dt)
         this.v3_speed.y = speedY
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
@@ -54,7 +55,7 @@ export default class OtherMgr extends PlayerMgr {
         if (Vec3.NEG_ONE.equals(this.dstPos)) {
           this.v3_speed.set(Vec3.ZERO)
         } else {
-          Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Swim_Speed)
+          Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Swim_Speed * dt)
           this.v3_speed.y = 0
         }
         this.rigidBody.setLinearVelocity(this.v3_speed)
@@ -73,36 +74,30 @@ export default class OtherMgr extends PlayerMgr {
   }
 
   protected runTo(): void {
-    if (this._stateFrameCost == 6 && !Vec3.NEG_ONE.equals(this.dstPos)) {
-      this.dstPos.set(Vec3.NEG_ONE)
-      this.dstForward.set(Vec3.NEG_ONE)
-      this.dstState = Game.CharacterState.None
-
-      try { this.popStateFrame() } catch (err) { }
-
-    } else {
-      super.runTo()
-      this._stateFrameCost++
-    }
+    // if (this._stateFrameCost == 6 && !Vec3.NEG_ONE.equals(this.dstPos)) {
+    //   this.dstPos.set(Vec3.NEG_ONE)
+    //   this.dstForward.set(Vec3.NEG_ONE)
+    //   this.dstState = Game.CharacterState.None
+    //   this.popStateFrame()
+    // } else {
+    super.runTo()
+    this._stateFrameCost++
+    // }
   }
 
   onAction(msg: Game.PlayerMsg) {
-
-    if (msg.state == Game.CharacterState.JumpUp) {
-      console.log(this._curIdx, this._usedIdx, this._stateFrames)
-    }
-
     if (msg == null) return
     super.onAction(msg)
 
     this._stateFrameCost = 0
 
-    if (this._interactObj && InteractStates.includes(msg.state)) {
-      BattleService.instance.island()?.handleInteract(this._interactObj.index, msg.state)
+
+    if (this._curInteractObj != Number.MAX_VALUE && BigWorld.PlayerInteractStates.includes(msg.state)) {
+      BattleService.instance.island()?.handleInteract(this._curInteractObj, msg.state)
     }
   }
 
-  enter(island: IslandMgr, state: PlayerState): void {
+  enter(island: BigWorld.IslandMgr, state: PlayerState): void {
     super.enter(island, state)
 
     this._stateFrames.forEach(it => {
@@ -132,25 +127,19 @@ export default class OtherMgr extends PlayerMgr {
   }
 
   private onPlayerStateChanged(changes: DataChange[]) {
-
-    let idx = this._usedIdx
-    if (this._usedIdx == FRAME_SIZE - 1) {
-      this._usedIdx = 0
-    } else {
-      this._usedIdx++
-    }
+    this._usedIdx = this._usedIdx == FRAME_SIZE - 1 ? 0 : this._usedIdx + 1
 
     if (this._usedIdx == this._curIdx) {
       this.dstPos.set(Vec3.NEG_ONE)
       this.dstForward.set(Vec3.NEG_ONE)
       this.dstState = Game.CharacterState.None
-      // this.popStateFrame()
-
-      try { this.popStateFrame() } catch (err) { }
+      this.popStateFrame()
     }
 
-    changes.forEach(it => { this._playerState[it.field] = it.value })
-    this.updateStateFrame()
+    if (this._playerState) {
+      changes.forEach(it => { this._playerState[it.field] = it.value })
+      this.updateStateFrame()
+    }
   }
 
   private updateStateFrame() {
@@ -164,17 +153,13 @@ export default class OtherMgr extends PlayerMgr {
   }
 
   private popStateFrame(): boolean {
-    if (!Vec3.NEG_ONE.equals(this.dstPos) || !SyncableStates.includes(this._state)) return false
+    if (!Vec3.NEG_ONE.equals(this.dstPos) || !BigWorld.PlayerSyncableStates.includes(this._state)) return false
 
     if (this._curIdx == this._usedIdx) {
       return false
     } else {
       this._popped = false
-      if (this._curIdx >= FRAME_SIZE - 1) {
-        this._curIdx = 0
-      } else {
-        this._curIdx++
-      }
+      this._curIdx = this._curIdx >= FRAME_SIZE - 1 ? 0 : this._curIdx + 1
       this.onAction(this._stateFrames[this._curIdx])
       return true
     }

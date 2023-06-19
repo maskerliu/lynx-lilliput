@@ -46,7 +46,8 @@
     "fixedTimeStep": 0.016667,
     "maxSubSteps": 1,
     "allowSleep": true,
-    "autoSimulation": true
+    "autoSimulation": true,
+    "sleepThreshold": 0.1
   },
   "layer": [
     {

@@ -1,0 +1,122 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "f9c35fb8-3874-410d-bd45-e715a2949368",
+  "files": [],
+  "subMetas": {
+    "bce7f": {
+      "importer": "gltf-mesh",
+      "uuid": "f9c35fb8-3874-410d-bd45-e715a2949368@bce7f",
+      "displayName": "",
+      "id": "bce7f",
+      "name": "hotAirBalloon.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f65ad": {
+      "importer": "gltf-embeded-image",
+      "uuid": "f9c35fb8-3874-410d-bd45-e715a2949368@f65ad",
+      "displayName": "",
+      "id": "f65ad",
+      "name": "hotAirBalloon.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "f9c35fb8-3874-410d-bd45-e715a2949368@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "f9c35fb8-3874-410d-bd45-e715a2949368@f65ad"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "5c8e5": {
+      "importer": "gltf-material",
+      "uuid": "f9c35fb8-3874-410d-bd45-e715a2949368@5c8e5",
+      "displayName": "",
+      "id": "5c8e5",
+      "name": "hotAirBalloon.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "db434": {
+      "importer": "gltf-scene",
+      "uuid": "f9c35fb8-3874-410d-bd45-e715a2949368@db434",
+      "displayName": "",
+      "id": "db434",
+      "name": "hotAirBalloon.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "hotAirBalloon",
+        "uri": "f9c35fb8-3874-410d-bd45-e715a2949368@f65ad"
+      }
+    ],
+    "redirect": "f9c35fb8-3874-410d-bd45-e715a2949368@db434",
+    "assetFinder": {
+      "meshes": [
+        "f9c35fb8-3874-410d-bd45-e715a2949368@bce7f"
+      ],
+      "skeletons": [],
+      "textures": [
+        "f9c35fb8-3874-410d-bd45-e715a2949368@e39f7"
+      ],
+      "materials": [
+        "f9c35fb8-3874-410d-bd45-e715a2949368@5c8e5"
+      ],
+      "scenes": [
+        "f9c35fb8-3874-410d-bd45-e715a2949368@db434"
+      ]
+    }
+  }
+}

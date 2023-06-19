@@ -1,6 +1,6 @@
 {
   "__type__": "cc.Material",
-  "_name": "",
+  "_name": "transparent",
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
@@ -10,39 +10,18 @@
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_INSTANCING": true,
       "USE_ALPHA_TEST": true
-    },
-    {},
-    {}
+    }
   ],
   "_states": [
     {
       "rasterizerState": {},
-      "depthStencilState": {},
       "blendState": {
         "targets": [
           {}
         ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
-    },
-    {
-      "rasterizerState": {},
-      "depthStencilState": {},
-      "blendState": {
-        "targets": [
-          {}
-        ]
-      }
+      },
+      "depthStencilState": {}
     }
   ],
   "_props": [
@@ -53,9 +32,9 @@
         "y": 0.20299498736858368,
         "z": 0.5596485137939453
       },
-      "roughness": 1
-    },
-    {},
-    {}
+      "metallic": 0,
+      "roughness": 1,
+      "alphaThreshold": 0.5
+    }
   ]
 }

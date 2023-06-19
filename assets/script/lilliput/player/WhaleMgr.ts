@@ -1,5 +1,7 @@
 import { Component, quat, Quat, Vec3, _decorator } from 'cc'
+
 const { ccclass, property } = _decorator
+
 
 @ccclass('WhaleMgr')
 export default class WhaleMgr extends Component {

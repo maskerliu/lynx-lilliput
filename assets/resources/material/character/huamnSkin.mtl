@@ -59,11 +59,7 @@
     {
       "occlusion": 0.8,
       "roughness": 1,
-      "specularIntensity": 1,
-      "mainTexture": {
-        "__uuid__": "59f78448-7ac7-4fd6-8034-a528520134cd@6c48a",
-        "__expectedType__": "cc.Texture2D"
-      }
+      "specularIntensity": 1
     },
     {},
     {},

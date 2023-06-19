@@ -9,7 +9,6 @@ const K_P_High = 'squareGreen'
 @ccclass('ProgressMgr')
 export default class ProgressMgr extends Component {
 
-
   @property(SpriteAtlas)
   private uiAtlas: SpriteAtlas
 

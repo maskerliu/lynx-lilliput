@@ -1,5 +1,7 @@
 import { Component, tween, v3, Vec3, _decorator } from 'cc'
+
 const { ccclass, property } = _decorator
+
 
 @ccclass('BalloonMgr')
 export default class BalloonMgr extends Component {

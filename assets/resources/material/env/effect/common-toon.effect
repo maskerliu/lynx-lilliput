@@ -1,0 +1,114 @@
+// Effect Syntax Guide: https://docs.cocos.com/creator/manual/zh/shader/index.html
+
+CCEffect %{
+  techniques:
+  - name: opaque
+    passes:
+    - vert: common-vs:vert # builtin header
+      frag: common-fs:frag
+      properties: &props
+        mainTexture:    { value: white }
+  - name: transparent
+    passes:
+    - vert: common-vs:vert # builtin header
+      frag: common-fs:frag
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      properties: *props
+}%
+
+CCProgram common-vs %{
+  precision mediump float;
+  #include <legacy/input-standard>
+  #include <builtin/uniforms/cc-global>
+  #include <legacy/local-batch>
+  #include <legacy/input-standard>
+  #include <legacy/fog-vs>
+  #include <legacy/shadow-map-vs>
+
+  in vec4 a_color;
+
+  #if HAS_SECOND_UV
+    in vec2 a_texCoord1;
+  #endif
+
+  #if USE_INSTANCING
+    #pragma format(RGBA8)
+    in vec4 a_instanced_color;
+    out vec4 instancedColor;
+    in vec2 a_offset;
+    out vec2 offset;
+  #endif
+
+  out vec3 v_position;
+  out vec3 v_normal;
+  out vec3 v_tangent;
+  out vec3 v_bitangent;
+  out vec2 v_uv;
+  out vec2 v_uv1;
+  out vec4 v_color;
+
+  vec4 vert () {
+    StandardVertInput In;
+    CCVertInput(In);
+
+    #if USE_INSTANCING
+      instancedColor = a_instanced_color;
+      offset = a_offset;
+    #endif
+
+    mat4 matWorld, matWorldIT;
+    CCGetWorldMatrixFull(matWorld, matWorldIT);
+
+    vec4 pos = matWorld * In.position;
+
+    v_position = pos.xyz;
+    v_normal = normalize((matWorldIT * vec4(In.normal, 0.0)).xyz);
+    v_tangent = normalize((matWorld * vec4(In.tangent.xyz, 0.0)).xyz);
+    v_bitangent = cross(v_normal, v_tangent) * In.tangent.w; // note the cross order
+
+    v_uv = a_texCoord;
+    #if HAS_SECOND_UV
+      v_uv1 = a_texCoord1;
+    #endif
+    v_color = a_color;
+
+    CC_TRANSFER_FOG(pos);
+    CC_TRANSFER_SHADOW(pos);
+
+    return cc_matProj * (cc_matView * matWorld) * In.position;
+  }
+}%
+
+CCProgram common-fs %{
+  precision mediump float;
+  #include <builtin/uniforms/cc-global>
+  #include <legacy/fog-fs>
+  #include <legacy/output-standard>
+
+  in vec2 v_uv;
+  in vec3 v_position;
+
+  #if USE_INSTANCING
+    in vec4 instancedColor;
+    in vec2 offset;
+  #endif
+
+  uniform sampler2D mainTexture;
+
+  vec4 frag () {
+    vec2 uv1 = v_uv;
+    #if USE_INSTANCING // when instancing is enabled
+      uv1 += offset;
+    #endif
+    vec4 col = texture(mainTexture, uv1);
+    col *= col;
+    CC_APPLY_FOG(col, v_position);
+    return CCFragOutput(col);
+  }
+}%

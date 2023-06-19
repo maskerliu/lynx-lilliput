@@ -1,5 +1,5 @@
 import { Component, EventMouse, EventTouch, Node, Quat, Vec2, Vec3, _decorator, director, lerp, quat, v2, v3 } from 'cc'
-const { ccclass, property, type } = _decorator
+const { ccclass, property } = _decorator
 
 const DeltaFactor = 1 / 200
 

@@ -1,76 +1,27 @@
-import { BoxCollider, ICollisionEvent, MeshRenderer, Node, Quat, _decorator, quat } from 'cc'
-import LilliputAssetMgr from '../LilliputAssetMgr'
-import TerrainItemMgr from '../TerrainItemMgr'
+import { MeshRenderer, Node, Prefab, Quat, _decorator } from 'cc'
+import CommonPropMgr from './CommonPropMgr'
 
 
 const { ccclass, property } = _decorator
 
 @ccclass('LeverMgr')
-export default class LeverMgr extends TerrainItemMgr {
+export default class LeverMgr extends CommonPropMgr {
 
   private handle: Node
 
   private leverMeshRenderer: MeshRenderer
   private handleMeshRenderer: MeshRenderer
 
-  private q_roatation = quat()
-
-  onLoad() {
-
+  protected addSubModel(prefab: Prefab): void {
+    super.addSubModel(prefab)
     this.handle = this.node.getChildByName('handle')
-
-    this.leverMeshRenderer = this.node.getChildByName('lever').getComponent(MeshRenderer)
     this.handleMeshRenderer = this.handle.getComponent(MeshRenderer)
+    this.leverMeshRenderer = this.node.getChildByName('lever').getComponent(MeshRenderer)
 
-    this.q_roatation.set(this.handle.rotation)
+    CommonPropMgr.q_rotation.set(this.handle.rotation)
 
     let angle = 90
-    Quat.rotateX(this.q_roatation, this.q_roatation, Math.PI / 180 * angle)
-
-    // tween(this.handle).to(0.5, { rotation: this.q_roatation }, {
-    //   easing: 'linear', onComplete: () => {
-    //     angle = -angle
-    //     Quat.rotateX(this.q_roatation, this.q_roatation, Math.PI / 180 * angle)
-    //   }
-    // }).repeatForever().start()
-    
-    this.getComponent(BoxCollider).on('onTriggerEnter', this.onTriggerEnter, this)
-    this.getComponent(BoxCollider).on('onTriggerExit', this.onTriggerExit, this)
-  }
-
-
-  private onTriggerEnter(event: ICollisionEvent) {
-    console.log(event.otherCollider.node.name)
-
-    if (event.otherCollider.name == 'myself') {
-      // emit can climb event
-    }
-  }
-
-  private onTriggerExit(event: ICollisionEvent) {
-    console.log(event.otherCollider.node.name)
-
-    if (event.otherCollider.name == 'myself') {
-      // emit can climb event
-    }
-  }
-
-  translucent(did: boolean) {
-    if (this.isTranslucent == did) return
-
-    for (let i = 0; i < this.leverMeshRenderer.materials.length; ++i) {
-      let name = this.leverMeshRenderer.materials[i].parent.name.split('-translucent')[0]
-      name = !this.isTranslucent && did ? `${name}-translucent` : name
-      this.leverMeshRenderer.setMaterial(LilliputAssetMgr.getMaterial(name), i)
-    }
-
-    for (let i = 0; i < this.handleMeshRenderer.materials.length; ++i) {
-      let name = this.handleMeshRenderer.materials[i].parent.name.split('-translucent')[0]
-      name = !this.isTranslucent && did ? `${name}-translucent` : name
-      this.handleMeshRenderer.setMaterial(LilliputAssetMgr.getMaterial(name), i)
-    }
-
-    this.isTranslucent = did
+    Quat.rotateX(CommonPropMgr.q_rotation, CommonPropMgr.q_rotation, Math.PI / 180 * angle)
   }
 }
 

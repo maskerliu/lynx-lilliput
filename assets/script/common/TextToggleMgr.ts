@@ -1,5 +1,6 @@
 import { Node, Toggle, _decorator } from 'cc'
 import ToggleMgr from './ToggleMgr'
+
 const { ccclass, property } = _decorator
 
 

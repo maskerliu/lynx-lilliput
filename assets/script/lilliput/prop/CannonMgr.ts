@@ -1,14 +1,14 @@
-import { Node, Quat, RigidBody, Vec3, _decorator, instantiate, quat, v3 } from 'cc'
+import { Node, Prefab, Quat, RigidBody, Vec3, _decorator, instantiate, quat, resources, v3 } from 'cc'
 import { Game } from '../../model'
 import LilliputAssetMgr from '../LilliputAssetMgr'
-import TerrainItemMgr from '../TerrainItemMgr'
 import CannonBallMgr from './CannonBallMgr'
+import CommonPropMgr from './CommonPropMgr'
 
 
 const { ccclass, property } = _decorator
 
 @ccclass('CannonMgr')
-export default class CannonMgr extends TerrainItemMgr {
+export default class CannonMgr extends CommonPropMgr {
   protected barrel: Node
   protected _rotation: Quat = quat()
 
@@ -24,30 +24,13 @@ export default class CannonMgr extends TerrainItemMgr {
 
 
   onLoad() {
-    super.onLoad()
-
-    this.rigidBody = this.getComponent(RigidBody)
-    this.barrel = this.node.getChildByName('barrelCannon')
-    
-    
-
     Quat.fromAxisAngle(this.MAX_QUAT, Vec3.UNIT_X, 50 * Math.PI / 180)
     Quat.fromAxisAngle(this.MIN_QUAT, Vec3.UNIT_X, 0)
   }
 
-  start() {
-    for (let i = 0; i < this.capacity; ++i) {
-      let ballNode = instantiate(LilliputAssetMgr.getPrefab('cannonBall'))
-      ballNode.addComponent(CannonBallMgr)
-      ballNode.active = false
-      ballNode.parent = null
-      this.balls.push(ballNode)
-    }
-  }
-
   update(dt: number) {
 
-    if (this._isSleep) return
+    if (!this._loaded) return
 
     let angle = Quat.getAxisAngle(this._rotation, this.barrel.rotation)
     let step = 0.8 * dt
@@ -66,8 +49,20 @@ export default class CannonMgr extends TerrainItemMgr {
     }
   }
 
-  preview() {
+  protected addSubModel(prefab: Prefab): void {
+    super.addSubModel(prefab)
 
+    this.barrel = this.node.getChildByName(this.config.name).getChildByName('barrelCannon')
+
+    let ballPrefab = LilliputAssetMgr.instance.getTerrainPrefab('cannonBall')
+    if (ballPrefab) {
+      this.initBullet(ballPrefab)
+    } else {
+      resources.load(`prefab/terrain/weapon/cannonBall`, Prefab, (err, data) => {
+        LilliputAssetMgr.instance.addTerrainPrefab('cannonBall', data)
+        this.initBullet(data)
+      })
+    }
   }
 
   interact(action: Game.CharacterState) {
@@ -78,7 +73,17 @@ export default class CannonMgr extends TerrainItemMgr {
     }
   }
 
-  fire() {
+  private initBullet(prefab: Prefab) {
+    for (let i = 0; i < this.capacity; ++i) {
+      let ballNode = instantiate(prefab)
+      ballNode.addComponent(CannonBallMgr)
+      ballNode.active = false
+      ballNode.parent = null
+      this.balls.push(ballNode)
+    }
+  }
+
+  private fire() {
     for (let node of this.balls) {
       if (node.parent == null) {
         node.position = this.ballPosition

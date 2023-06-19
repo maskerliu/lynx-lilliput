@@ -18,7 +18,7 @@ export default class CannonBallMgr extends Component {
   private bombed: boolean = false
 
   onLoad() {
-    this.rigidBody = this.getComponent(RigidBody)
+    this.rigidBody = this.addComponent(RigidBody)
     this.getComponent(SphereCollider)?.on('onCollisionEnter', this.onCollisionEnter, this)
   }
 

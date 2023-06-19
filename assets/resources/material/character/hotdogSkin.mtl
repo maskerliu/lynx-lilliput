@@ -57,11 +57,7 @@
   ],
   "_props": [
     {
-      "roughness": 1,
-      "mainTexture": {
-        "__uuid__": "67466ba4-8c80-4d41-b382-b9bcb060a519@6c48a",
-        "__expectedType__": "cc.Texture2D"
-      }
+      "roughness": 1
     },
     {},
     {},

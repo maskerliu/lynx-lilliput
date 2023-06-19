@@ -1,0 +1,126 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "792491ed-55c5-4962-a348-ea2fee442ff2",
+  "files": [],
+  "subMetas": {
+    "e9e68": {
+      "importer": "gltf-mesh",
+      "uuid": "792491ed-55c5-4962-a348-ea2fee442ff2@e9e68",
+      "displayName": "",
+      "id": "e9e68",
+      "name": "barrelLarge.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1291d": {
+      "importer": "gltf-mesh",
+      "uuid": "792491ed-55c5-4962-a348-ea2fee442ff2@1291d",
+      "displayName": "",
+      "id": "1291d",
+      "name": "cannonLarge.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3dd4d": {
+      "importer": "gltf-embeded-image",
+      "uuid": "792491ed-55c5-4962-a348-ea2fee442ff2@3dd4d",
+      "displayName": "",
+      "id": "3dd4d",
+      "name": "common.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "792491ed-55c5-4962-a348-ea2fee442ff2@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "792491ed-55c5-4962-a348-ea2fee442ff2@3dd4d"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "5d721": {
+      "importer": "gltf-scene",
+      "uuid": "792491ed-55c5-4962-a348-ea2fee442ff2@5d721",
+      "displayName": "",
+      "id": "5d721",
+      "name": "cannonLarge.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "common",
+        "uri": "792491ed-55c5-4962-a348-ea2fee442ff2@3dd4d"
+      }
+    ],
+    "redirect": "792491ed-55c5-4962-a348-ea2fee442ff2@5d721",
+    "assetFinder": {
+      "meshes": [
+        "792491ed-55c5-4962-a348-ea2fee442ff2@e9e68",
+        "792491ed-55c5-4962-a348-ea2fee442ff2@1291d"
+      ],
+      "skeletons": [],
+      "textures": [
+        "792491ed-55c5-4962-a348-ea2fee442ff2@e39f7"
+      ],
+      "materials": [
+        "4d3f7e07-a14a-4c19-ba3c-b0bd0631e41a"
+      ],
+      "scenes": [
+        "792491ed-55c5-4962-a348-ea2fee442ff2@5d721"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

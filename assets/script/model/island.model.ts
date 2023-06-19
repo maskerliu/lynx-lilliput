@@ -10,7 +10,7 @@ export namespace Island {
   export interface Island {
     id: string
     owner?: string
-    map: Array<MapItem>
+    info?: Array<Array<any>>
     status: IslandStatus
   }
 
@@ -20,13 +20,14 @@ export namespace Island {
     Dirt
   }
 
-  export interface MapItem {
+  export interface MapItem1 {
+    id: number
     x: number
     y: number
     z: number
-    prefab: string
     angle: number
     skin?: MapItemSkin
+    prefab?: string
   }
-  
+
 }

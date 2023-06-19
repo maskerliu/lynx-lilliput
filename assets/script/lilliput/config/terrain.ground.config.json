@@ -1,0 +1,186 @@
+[
+  {
+    "id": 1,
+    "name": "block",
+    "group": 0,
+    "skinnable": true,
+    "skins": [
+      "groundGrass",
+      "groundSnow"
+    ],
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 2,
+    "name": "bridgeStart",
+    "group": 0,
+    "skinnable": false
+  },
+  {
+    "id": 3,
+    "name": "bridgeTile",
+    "group": 0
+  },
+  {
+    "id": 4,
+    "name": "fence",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 5,
+    "name": "fenceCorner",
+    "group": 0
+  },
+  {
+    "id": 6,
+    "name": "poles",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 7,
+    "name": "tree",
+    "group": 0
+  },
+  {
+    "id": 8,
+    "name": "treePine",
+    "group": 0
+  },
+  {
+    "id": 9,
+    "name": "rockLarge",
+    "group": 0,
+    "skinnable": false,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 10,
+    "name": "rockMiddle",
+    "group": 0,
+    "skinnable": false,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 11,
+    "name": "rockSmall",
+    "group": 0,
+    "skinnable": false,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 12,
+    "name": "blockMoving",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 13,
+    "name": "bridge",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 14,
+    "name": "platform",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 15,
+    "name": "ladder",
+    "group": 0,
+    "interaction": [
+      6
+    ],
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 16,
+    "name": "hedge",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 17,
+    "name": "hedgeCorner",
+    "group": 0,
+    "physical": {
+      "type": 2,
+      "group": 4,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 18,
+    "name": "arrow",
+    "group": 0
+  },
+  {
+    "id": 19,
+    "name": "arrows",
+    "group": 0
+  },
+  {
+    "id": 20,
+    "name": "sign",
+    "group": 0
+  }  
+]

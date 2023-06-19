@@ -1,5 +1,6 @@
 [
   {
+    "id": 201,
     "name": "cannon",
     "group": 2,
     "interaction": [
@@ -7,6 +8,7 @@
     ]
   },
   {
+    "id": 202,
     "name": "cannonLarge",
     "group": 2,
     "interaction": [
@@ -14,6 +16,7 @@
     ]
   },
   {
+    "id": 203,
     "name": "cannonMobile",
     "group": 2,
     "interaction": [

@@ -695,6 +695,8 @@
         "preserveBorderEdges": false,
         "maxIterationCount": 100
       }
-    }
+    },
+    "dumpMaterials": false,
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

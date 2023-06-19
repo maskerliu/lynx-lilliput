@@ -1,0 +1,77 @@
+[
+  {
+    "id": 301,
+    "name": "bushLarge",
+    "group": 3
+  },
+  {
+    "id": 302,
+    "name": "bushMiddle",
+    "group": 3
+  },
+  {
+    "id": 303,
+    "name": "bushSmall",
+    "group": 3
+  },
+  {
+    "id": 304,
+    "name": "cactus",
+    "group": 3
+  },
+  {
+    "id": 305,
+    "name": "cactusLarge",
+    "group": 3
+  },
+  {
+    "id": 306,
+    "name": "daisy",
+    "group": 3
+  },
+  {
+    "id": 307,
+    "name": "flowers",
+    "group": 3
+  },
+  {
+    "id": 308,
+    "name": "flowersLow",
+    "group": 3
+  },
+  {
+    "id": 309,
+    "name": "grass01",
+    "group": 3
+  },
+  {
+    "id": 310,
+    "name": "grass02",
+    "group": 3
+  },
+  {
+    "id": 311,
+    "name": "mushrooms",
+    "group": 3
+  },
+  {
+    "id": 312,
+    "name": "plant",
+    "group": 3
+  },
+  {
+    "id": 313,
+    "name": "rocks",
+    "group": 3
+  },
+  {
+    "id": 314,
+    "name": "treeTrunk",
+    "group": 3
+  },
+  {
+    "id": 315,
+    "name": "treeTrunkLarge",
+    "group": 3
+  }
+]

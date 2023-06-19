@@ -1,0 +1,126 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "d2c1c425-1b21-4e07-8c4a-d849905be24c",
+  "files": [],
+  "subMetas": {
+    "296d5": {
+      "importer": "gltf-mesh",
+      "uuid": "d2c1c425-1b21-4e07-8c4a-d849905be24c@296d5",
+      "displayName": "",
+      "id": "296d5",
+      "name": "knobSquare.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "466fd": {
+      "importer": "gltf-mesh",
+      "uuid": "d2c1c425-1b21-4e07-8c4a-d849905be24c@466fd",
+      "displayName": "",
+      "id": "466fd",
+      "name": "buttonSquare.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3dd4d": {
+      "importer": "gltf-embeded-image",
+      "uuid": "d2c1c425-1b21-4e07-8c4a-d849905be24c@3dd4d",
+      "displayName": "",
+      "id": "3dd4d",
+      "name": "common.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "d2c1c425-1b21-4e07-8c4a-d849905be24c@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "d2c1c425-1b21-4e07-8c4a-d849905be24c@3dd4d"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f31d9": {
+      "importer": "gltf-scene",
+      "uuid": "d2c1c425-1b21-4e07-8c4a-d849905be24c@f31d9",
+      "displayName": "",
+      "id": "f31d9",
+      "name": "buttonSquare.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "common",
+        "uri": "d2c1c425-1b21-4e07-8c4a-d849905be24c@3dd4d"
+      }
+    ],
+    "redirect": "d2c1c425-1b21-4e07-8c4a-d849905be24c@f31d9",
+    "assetFinder": {
+      "meshes": [
+        "d2c1c425-1b21-4e07-8c4a-d849905be24c@296d5",
+        "d2c1c425-1b21-4e07-8c4a-d849905be24c@466fd"
+      ],
+      "skeletons": [],
+      "textures": [
+        "d2c1c425-1b21-4e07-8c4a-d849905be24c@e39f7"
+      ],
+      "materials": [
+        "4d3f7e07-a14a-4c19-ba3c-b0bd0631e41a"
+      ],
+      "scenes": [
+        "d2c1c425-1b21-4e07-8c4a-d849905be24c@f31d9"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

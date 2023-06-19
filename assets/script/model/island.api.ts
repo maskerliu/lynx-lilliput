@@ -1,6 +1,6 @@
-import { Island } from '.'
 import { RemoteAPI } from './api.const'
 import { get, post } from './base.api'
+import { Island } from './island.model'
 
 
 export namespace IslandApi {
@@ -9,8 +9,8 @@ export namespace IslandApi {
     return get<Island.Island>(RemoteAPI.Island.BasePath + RemoteAPI.Island.Info, { islandId, owner })
   }
 
-  export function saveIsland(owner: string, mapInfo: Array<Island.MapItem>) {
-    return post<Island.Island>(RemoteAPI.Island.BasePath + RemoteAPI.Island.Update, { owner, map: mapInfo })
+  export function save(info: Island.Island) {
+    return post<Island.Island>(RemoteAPI.Island.BasePath + RemoteAPI.Island.Update, info)
   }
 
   export function enter(islandId: string) {

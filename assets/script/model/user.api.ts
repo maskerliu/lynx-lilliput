@@ -1,7 +1,7 @@
 import Crypto from 'crypto-es'
-import { User } from '.'
 import { RemoteAPI } from './api.const'
 import { get, post } from './base.api'
+import { User } from './user.model'
 
 export namespace UserApi {
 

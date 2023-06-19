@@ -101,7 +101,7 @@
         "_value": false
       },
       "terrain": {
-        "_value": false
+        "_value": true
       },
       "light-probe": {
         "_value": false
@@ -136,6 +136,7 @@
       "primitive",
       "profiler",
       "skeletal-animation",
+      "terrain",
       "tween",
       "ui",
       "websocket"

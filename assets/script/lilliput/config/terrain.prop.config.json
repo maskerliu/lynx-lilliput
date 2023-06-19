@@ -1,45 +1,31 @@
 [
   {
-    "name": "arrow",
-    "group": 1
-  },
-  {
-    "name": "arrows",
-    "group": 1
-  },
-  {
+    "id": 101,
     "name": "barrel",
     "group": 1
   },
   {
-    "name": "bomb",
-    "group": 1
-  },
-  {
+    "id": 102,
     "name": "buttonRound",
     "group": 1
   },
   {
+    "id": 103,
     "name": "buttonSquare",
     "group": 1
   },
   {
+    "id": 104,
     "name": "chest",
     "group": 1
   },
   {
-    "name": "coinBronze",
+    "id": 105,
+    "name": "coin",
     "group": 1
   },
   {
-    "name": "coinGold",
-    "group": 1
-  },
-  {
-    "name": "coinSilver",
-    "group": 1
-  },
-  {
+    "id": 106,
     "name": "crate",
     "group": 1,
     "interaction": [
@@ -53,10 +39,12 @@
     }
   },
   {
-    "name": "crateItemStrong",
+    "id": 107,
+    "name": "crateStrong",
     "group": 1
   },
   {
+    "id": 108,
     "name": "dice",
     "group": 1,
     "interaction": [
@@ -66,131 +54,88 @@
     "physical": {
       "type": 1,
       "group": 4,
+      "mass": 2,
       "collider": 1,
       "isTrriger": false
     }
   },
   {
-    "name": "doorClosed",
+    "id": 109,
+    "name": "door",
     "group": 1
   },
   {
-    "name": "doorLargeClosed",
+    "id": 110,
+    "name": "doorLarge",
     "group": 1
   },
   {
-    "name": "fence",
-    "group": 1,
-    "physical": {
-      "type": 2,
-      "group": 4,
-      "collider": 0,
-      "isTrriger": false
-    }
-  },
-  {
-    "name": "fenceCorner",
-    "group": 1,
-    "physical": {
-      "type": 2,
-      "group": 4,
-      "collider": 0,
-      "isTrriger": false
-    }
-  },
-  {
+    "id": 111,
     "name": "flag",
     "group": 1
   },
   {
-    "name": "flowers",
+    "id": 112,
+    "name": "gift",
     "group": 1
   },
   {
-    "name": "flowersLow",
-    "group": 1
-  },
-  {
-    "name": "fishPond",
-    "group": 1
-  },
-  {
+    "id": 113,
     "name": "heart",
     "group": 1
   },
   {
-    "name": "hedge",
-    "group": 1
-  },
-  {
-    "name": "hedgeCorner",
-    "group": 1
-  },
-  {
+    "id": 114,
     "name": "jewel",
     "group": 1
   },
   {
+    "id": 115,
     "name": "key",
     "group": 1
   },
   {
-    "name": "ladder",
-    "group": 1,
-    "interaction": [
-      6
-    ]
-  },
-  {
+    "id": 116,
     "name": "lever",
     "group": 1
   },
   {
-    "name": "mushrooms",
-    "group": 1,
-    "interaction": [
-      5
-    ],
-    "physical": {
-      "type": 2,
-      "group": 4,
-      "collider": 1,
-      "isTrriger": true
-    }
-  },
-  {
-    "name": "plant",
+    "id": 117,
+    "name": "lock",
     "group": 1
   },
   {
-    "name": "poles",
-    "group": 1
-  },
-  {
-    "name": "rocks",
-    "group": 1
-  },
-  {
+    "id": 118,
     "name": "saw",
     "group": 1
   },
   {
-    "name": "sign",
-    "group": 1
-  },
-  {
+    "id": 119,
     "name": "spikeBlock",
     "group": 1
   },
   {
-    "name": "stones",
+    "id": 120,
+    "name": "spikeBlockWide",
     "group": 1
   },
   {
+    "id": 121,
+    "name": "spikes",
+    "group": 1
+  },
+  {
+    "id": 122,
+    "name": "star",
+    "group": 1
+  },
+  {
+    "id": 123,
     "name": "tent",
     "group": 1
   },
   {
+    "id": 124,
     "name": "tentLarge",
     "group": 1
   }

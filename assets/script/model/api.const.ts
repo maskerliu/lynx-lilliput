@@ -1,5 +1,8 @@
 export namespace RemoteAPI {
 
+  export const Host = '192.168.24.77'
+  // export const Host = '192.168.101.7'
+
   export const User = {
     BasePath: '/user',
     ValidCheck: '/validCheck',

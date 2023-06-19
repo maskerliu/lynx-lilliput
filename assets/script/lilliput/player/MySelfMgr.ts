@@ -1,25 +1,22 @@
 import { ITriggerEvent, Quat, UITransform, Vec2, Vec3, _decorator, quat, v3 } from 'cc'
-import PlayerMgr, { Climb_Speed, QuatNeg, Roate_Speed, SyncableStates } from '../../common/PlayerMgr'
+import { BigWorld } from '../../common/BigWorld'
 import { RockerTarget } from '../../common/RockerMgr'
-import { v3ToXYZ } from '../../misc/Utils'
+import { QuatNeg, v3ToXYZ } from '../../misc/Utils'
 import { Game, PlayerState } from '../../model'
 import BattleService from '../BattleService'
-import IslandMgr from '../IslandMgr'
-import { Lilliput } from '../LilliputEvents'
-import { InteractEvent } from '../TerrainItemMgr'
-
+import CommonPlayerMgr, { Climb_Speed, Roate_Speed } from './CommonPlayerMgr'
 
 const { ccclass, property } = _decorator
 
+const TryEnterEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.TryEnter)
+const LeaveEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.OnLeave)
+const InteractEvent = new BigWorld.PropEvent(BigWorld.PropEvent.Type.ShowInteractMenu)
 
-const TryEnterEvent = new Lilliput.UIEvent(Lilliput.PlayerEvent.Type.TryEnter)
-const LeaveEvent = new Lilliput.UIEvent(Lilliput.PlayerEvent.Type.OnLeave)
-
-const Move_Speed = 2
-const Swim_Speed = 1.5
+const Move_Speed = 100
+const Swim_Speed = 120
 
 @ccclass('MyselfMgr')
-export default class MyselfMgr extends PlayerMgr implements RockerTarget {
+export default class MyselfMgr extends CommonPlayerMgr implements RockerTarget {
 
   private dstRotation: Quat = quat(QuatNeg)
   private frameCount = 0
@@ -28,10 +25,9 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
   private lstPos = v3()
 
   update(dt: number) {
+    if (this.rigidBody == null || this.character == null) return
 
-    if (QuatNeg.equals(this.dstRotation)) {
-
-    } else {
+    if (!QuatNeg.equals(this.dstRotation)) {
       if (this.node.rotation.equals(this.dstRotation, 0.12)) {
         this.dstRotation.set(QuatNeg)
       } else {
@@ -39,20 +35,18 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
       }
     }
 
-
-
     super.update(dt)
 
     switch (this._state) {
       case Game.CharacterState.Run:
         this.rigidBody.getLinearVelocity(this.v3_speed)
         let speedY = this.v3_speed.y
-        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Move_Speed)
+        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Move_Speed * dt)
         this.v3_speed.y = speedY
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
       case Game.CharacterState.Swim:
-        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Swim_Speed)
+        Vec3.multiplyScalar(this.v3_speed, this.node.forward.negative(), Swim_Speed * dt)
         this.v3_speed.y = 0
         this.rigidBody.setLinearVelocity(this.v3_speed)
         break
@@ -70,24 +64,25 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
   }
 
   lateUpdate(dt: number) {
-    if (this.frameCount < 4) this.frameCount++
-    else this.frameCount = 0
 
-    this.frameCount = this.frameCount < 4 ? this.frameCount + 1 : 0
-
-    if (SyncableStates.includes(this._state)) {
-
-      if (this.frameCount == 0) {
-        // try to sync
-        if (this.node.position.equals(this.lstPos, 0.03)) return
+    if (BigWorld.PlayerSyncableStates.includes(this._state)) {
+      if (this.lstState != this._state) {
         this.syncStateFrame()
-        this.lstState = this._state
-        this.lstPos.set(this.node.position)
+      } else {
+        if (this.frameCount == 0 && !this.node.position.equals(this.lstPos, 0.03)) {
+          this.syncStateFrame()
+        } else {
+          this.frameCount = this.frameCount < 4 ? this.frameCount + 1 : 0
+          this.lstState = this._state
+        }
       }
     }
   }
 
   syncStateFrame() {
+    this.lstPos.set(this.node.position)
+    this.lstState = this._state
+    this.frameCount = 0
     let msg: Game.PlayerMsg = {
       cmd: Game.PlayerMsgType.Sync,
       state: this._state,
@@ -97,7 +92,7 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
     BattleService.instance.sendPlayerMsg(msg)
   }
 
-  enter(island: IslandMgr, state: PlayerState): void {
+  enter(island: BigWorld.IslandMgr, state: PlayerState): void {
     super.enter(island, state)
   }
 
@@ -108,7 +103,7 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
   onAction(msg: Game.PlayerMsg) {
     super.onAction(msg)
 
-    if (!SyncableStates.includes(msg.state)) {
+    if (!BigWorld.PlayerSyncableStates.includes(msg.state)) {
       BattleService.instance.sendPlayerMsg(msg)
     }
 
@@ -121,11 +116,8 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
 
     if (event.otherCollider.node.name == 'island') {
       let pos = event.otherCollider.node.getComponent(UITransform).convertToNodeSpaceAR(this.node.worldPosition)
-      let mgr = event.otherCollider.node.getComponent(IslandMgr)
-      TryEnterEvent.customData = {
-        islandId: mgr.senceInfo.id,
-        pos
-      }
+      let mgr = event.otherCollider.node.getComponent('LilliputIslandMgr') as BigWorld.IslandMgr
+      TryEnterEvent.customData = { islandId: mgr.senceInfo.id, pos }
       this.node.dispatchEvent(TryEnterEvent)
       return
     }
@@ -145,13 +137,13 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
   protected updateInteractObj(event: ITriggerEvent, enter: boolean): void {
     super.updateInteractObj(event, enter)
 
-    InteractEvent.interactions = this._interactObj?.config.interaction
+    InteractEvent.interactions = this._islandMgr.mapInfo(this._curInteractObj)?.config.interaction
     this.node.dispatchEvent(InteractEvent)
   }
 
   onDirectionChanged(dir: Vec2) {
     this.dstRotation.set(QuatNeg)
-    if (!SyncableStates.includes(this._state)) return
+    if (!BigWorld.PlayerSyncableStates.includes(this._state)) return
 
     this._curDir.set(dir)
 
@@ -162,7 +154,7 @@ export default class MyselfMgr extends PlayerMgr implements RockerTarget {
 
     this.state = this._inWater ? Game.CharacterState.Swim : Game.CharacterState.Run
     this.dstPos.set(Vec3.NEG_ONE)
-    this.v3_dir.set(this.followCamera.forward)
+    this.v3_dir.set(this._followCamera.forward)
     Vec3.rotateY(this.v3_dir, this.v3_dir, Vec3.ZERO, dir.signAngle(Vec2.UNIT_Y))
     Quat.fromViewUp(this.dstRotation, this.v3_dir.normalize())
   }

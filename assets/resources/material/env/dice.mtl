@@ -51,11 +51,11 @@
   "_props": [
     {
       "mainTexture": {
-        "__uuid__": "2f321728-bfce-49c6-84fd-9a058af41b54@221a5",
+        "__uuid__": "69d90053-5a74-4857-8a2f-0918816eb1f7@221a5",
         "__expectedType__": "cc.Texture2D"
       },
       "normalMap": {
-        "__uuid__": "2f321728-bfce-49c6-84fd-9a058af41b54@3effa",
+        "__uuid__": "69d90053-5a74-4857-8a2f-0918816eb1f7@3effa",
         "__expectedType__": "cc.Texture2D"
       }
     },

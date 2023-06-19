@@ -721,6 +721,8 @@
       "scenes": [
         "047b49d2-eda5-4a68-848f-d01a228b17c1@0d864"
       ]
-    }
+    },
+    "dumpMaterials": false,
+    "materialDumpDir": "db://assets/resources/material/env"
   }
 }

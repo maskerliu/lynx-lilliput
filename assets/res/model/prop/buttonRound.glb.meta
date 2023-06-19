@@ -1,0 +1,126 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5",
+  "files": [],
+  "subMetas": {
+    "dcc4b": {
+      "importer": "gltf-mesh",
+      "uuid": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@dcc4b",
+      "displayName": "",
+      "id": "dcc4b",
+      "name": "knobRound.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "07c61": {
+      "importer": "gltf-mesh",
+      "uuid": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@07c61",
+      "displayName": "",
+      "id": "07c61",
+      "name": "buttonRound.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3dd4d": {
+      "importer": "gltf-embeded-image",
+      "uuid": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@3dd4d",
+      "displayName": "",
+      "id": "3dd4d",
+      "name": "common.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@3dd4d"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "1587a": {
+      "importer": "gltf-scene",
+      "uuid": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@1587a",
+      "displayName": "",
+      "id": "1587a",
+      "name": "buttonRound.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "common",
+        "uri": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@3dd4d"
+      }
+    ],
+    "redirect": "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@1587a",
+    "assetFinder": {
+      "meshes": [
+        "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@dcc4b",
+        "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@07c61"
+      ],
+      "skeletons": [],
+      "textures": [
+        "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@e39f7"
+      ],
+      "materials": [
+        "4d3f7e07-a14a-4c19-ba3c-b0bd0631e41a"
+      ],
+      "scenes": [
+        "fdf8c4b2-de17-4da6-9cda-1c9fb11e6ce5@1587a"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

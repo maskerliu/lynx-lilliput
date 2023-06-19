@@ -1,12 +1,11 @@
 import { Button, Component, Event, EventHandler, Node, Prefab, Sprite, SpriteAtlas, _decorator, instantiate, v3 } from 'cc'
+import { BigWorld } from '../common/BigWorld'
 import { Game } from '../model'
-import { Lilliput } from './LilliputEvents'
-import { Terrain } from '../common/Terrain'
-
 
 const { ccclass, property } = _decorator
 
-const PlayerActionEvent = new Lilliput.PlayerEvent(Lilliput.PlayerEvent.Type.OnAction)
+const PlayerActionEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.OnAction)
+
 
 @ccclass('ActionsMgr')
 export default class ActionsMgr extends Component {
@@ -31,7 +30,7 @@ export default class ActionsMgr extends Component {
     this.clickHanlder.handler = 'onInteract'
   }
 
-  updateActions(interactions: Array<Terrain.InteractType>) {
+  updateActions(interactions: Array<BigWorld.InteractType>) {
     this.interactionNode.removeAllChildren()
     if (interactions == null) return
     for (let i = 0; i < interactions.length; ++i) {
@@ -40,22 +39,22 @@ export default class ActionsMgr extends Component {
   }
 
   onInteract(event: Event, data: string) {
-    let interaction = Number.parseInt(data) as Terrain.InteractType
+    let interaction = Number.parseInt(data) as BigWorld.InteractType
     let action: Game.CharacterState = Game.CharacterState.None
     switch (interaction) {
-      case Terrain.InteractType.Lift:
+      case BigWorld.InteractType.Lift:
         action = Game.CharacterState.Lift
         break
-      case Terrain.InteractType.Shake:
+      case BigWorld.InteractType.Shake:
         action = Game.CharacterState.Kick
         break
-      case Terrain.InteractType.Grab:
+      case BigWorld.InteractType.Grab:
         action = Game.CharacterState.Grab
         break
-      case Terrain.InteractType.Climb:
+      case BigWorld.InteractType.Climb:
         action = Game.CharacterState.Climb
         break
-      case Terrain.InteractType.Fire:
+      case BigWorld.InteractType.Fire:
         action = Game.CharacterState.Attack
         break
     }
@@ -66,31 +65,31 @@ export default class ActionsMgr extends Component {
     }
   }
 
-  private generateActionBtn(interaction: Terrain.InteractType, index: number) {
+  private generateActionBtn(interaction: BigWorld.InteractType, index: number) {
     let icon: string = null
     switch (interaction) {
-      case Terrain.InteractType.Lift:
+      case BigWorld.InteractType.Lift:
         icon = 'ic_lift'
         break
-      case Terrain.InteractType.Push:
+      case BigWorld.InteractType.Push:
         icon = 'ic_grab'
         break
-      case Terrain.InteractType.Grab:
+      case BigWorld.InteractType.Grab:
         icon = 'ic_grab'
         break
-      case Terrain.InteractType.Shake:
+      case BigWorld.InteractType.Shake:
         icon = 'ic_kick'
         break
-      case Terrain.InteractType.Throw:
+      case BigWorld.InteractType.Throw:
         icon = 'ic_throw'
         break
-      case Terrain.InteractType.Climb:
+      case BigWorld.InteractType.Climb:
         icon = 'ic_handup'
         break
-      case Terrain.InteractType.Sit:
+      case BigWorld.InteractType.Sit:
         icon = 'ic_props'
         break
-      case Terrain.InteractType.Fire:
+      case BigWorld.InteractType.Fire:
         icon = 'ic_throw'
         break
       default:

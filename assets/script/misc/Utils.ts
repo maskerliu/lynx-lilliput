@@ -1,9 +1,11 @@
 
-import { Vec3 } from 'cc'
+import { Quat, Vec3 } from 'cc'
 
 const MAP_X = 20
 const MAP_Z = 20
 const MAP_Y = 4
+
+export const QuatNeg = new Quat(0, -2, 0, 1)
 
 export const isDebug = false
 

@@ -1,11 +1,11 @@
 import { Collider, Component, ICollisionEvent, MeshRenderer, Node, Vec4, _decorator, director } from 'cc'
 
-
 const { ccclass, property } = _decorator
 
 // The number of rings that can be rendered at once.
 // Must be the samve value as the array size in the shader.
 const QueueSize = 20
+
 
 @ccclass('SonarMgr')
 export class SonarMgr extends Component {

@@ -1,11 +1,11 @@
 import { MeshRenderer, Node, _decorator, tween, v3 } from 'cc'
-import TerrainItemMgr from '../TerrainItemMgr'
+import CommonPropMgr from './CommonPropMgr'
 
 
 const { ccclass, property } = _decorator
 
 @ccclass('SpikesMgr')
-export default class SpikesMgr extends TerrainItemMgr {
+export default class SpikesMgr extends CommonPropMgr {
 
   private spikes: Node
   private spikesMeshRenderer: MeshRenderer

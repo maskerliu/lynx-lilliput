@@ -1,5 +1,6 @@
 import { axios } from 'db://assets/package'
-import { BizCode, BizResponse } from '.'
+import { RemoteAPI } from './api.const'
+import { BizResponse } from './base.model'
 
 
 axios.defaults.timeout = 5000
@@ -11,7 +12,7 @@ axios.defaults.headers.common = {
 
 let clientUID: string = null
 let accessToken: string = '5c2c44f25096b201d0c5a716704f4029'
-let BASE_DOMAIN: string = 'http://192.168.24.77:3000'
+let BASE_DOMAIN: string = `http://${RemoteAPI.Host}:3000`
 
 async function request<T>(method: string, url: string, baseURL?: string, headers?: any, params?: {}, data?: any) {
   let reqOpt = {

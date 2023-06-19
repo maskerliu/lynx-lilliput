@@ -1,0 +1,126 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "b82eacad-7df4-4bb9-9fca-9bc47c147338",
+  "files": [],
+  "subMetas": {
+    "57778": {
+      "importer": "gltf-mesh",
+      "uuid": "b82eacad-7df4-4bb9-9fca-9bc47c147338@57778",
+      "displayName": "",
+      "id": "57778",
+      "name": "handle.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a0642": {
+      "importer": "gltf-mesh",
+      "uuid": "b82eacad-7df4-4bb9-9fca-9bc47c147338@a0642",
+      "displayName": "",
+      "id": "a0642",
+      "name": "lever.mesh",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3dd4d": {
+      "importer": "gltf-embeded-image",
+      "uuid": "b82eacad-7df4-4bb9-9fca-9bc47c147338@3dd4d",
+      "displayName": "",
+      "id": "3dd4d",
+      "name": "common.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "b82eacad-7df4-4bb9-9fca-9bc47c147338@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "b82eacad-7df4-4bb9-9fca-9bc47c147338@3dd4d"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d6260": {
+      "importer": "gltf-scene",
+      "uuid": "b82eacad-7df4-4bb9-9fca-9bc47c147338@d6260",
+      "displayName": "",
+      "id": "d6260",
+      "name": "lever.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "common",
+        "uri": "b82eacad-7df4-4bb9-9fca-9bc47c147338@3dd4d"
+      }
+    ],
+    "redirect": "b82eacad-7df4-4bb9-9fca-9bc47c147338@d6260",
+    "assetFinder": {
+      "meshes": [
+        "b82eacad-7df4-4bb9-9fca-9bc47c147338@57778",
+        "b82eacad-7df4-4bb9-9fca-9bc47c147338@a0642"
+      ],
+      "skeletons": [],
+      "textures": [
+        "b82eacad-7df4-4bb9-9fca-9bc47c147338@e39f7"
+      ],
+      "materials": [
+        "4d3f7e07-a14a-4c19-ba3c-b0bd0631e41a"
+      ],
+      "scenes": [
+        "b82eacad-7df4-4bb9-9fca-9bc47c147338@d6260"
+      ]
+    },
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/resources/material/env"
+  }
+}

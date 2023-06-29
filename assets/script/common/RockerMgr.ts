@@ -1,4 +1,4 @@
-import { Component, math, Node, Size, tween, v2, v3, Vec2, Vec3, view, _decorator } from 'cc'
+import { Component, EventTouch, Node, Size, Tween, Vec2, Vec3, _decorator, math, tween, v2, v3, view } from 'cc'
 
 const { ccclass, property } = _decorator
 
@@ -11,39 +11,36 @@ export interface RockerTarget {
 export default class RockerMgr extends Component {
 
   @property(Node)
-  rockerDianNode: Node
+  rockerDian: Node
   @property(Node)
-  rockerDirNode: Node
+  rockerDir: Node
 
   target: RockerTarget
 
-  private winSize: Size = new Size()
-  private rockerDianPos: Vec2 = v2()
-  private lastPos: Vec2 = v2()
+  private lstPos: Vec2 = v2()
   private moveDir: Vec2 = v2()
 
   private _isTouchStart: boolean = false
-  private _lastang = 100
-  private _tmpVec2: Vec2 = v2()
-  private _tmpVec3: Vec3 = v3()
 
-  private curMove = v2(0, 0)
+  private v2_dir = v2()
+  private v3_pos = v3()
   private tarMove = v2(0, 0)
 
   private scale = v3(1.1, 1.1, 1.1)
-  private dstPos: Vec3
+  private dstPos: Vec3 = v3()
+
+  private tweenScale: Tween<Node>
 
   onLoad() {
-    this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
-    this.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
-    this.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
-    this.node.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
-    this.dstPos = v3(this.node.position)
-  }
+    this.rockerDir.active = false
 
-  start() {
-    this.winSize = view.getVisibleSize()
-    this.rockerDianPos = v2(this.rockerDianNode.position.x, this.rockerDianNode.position.y)
+    this.rockerDian.on(Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this.rockerDian.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this)
+    this.rockerDian.on(Node.EventType.TOUCH_END, this.onTouchEnd, this)
+    this.rockerDian.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this)
+    this.dstPos.set(this.node.position)
+
+    this.tweenScale = tween(this.node)
   }
 
   update(dt: number) {
@@ -55,68 +52,56 @@ export default class RockerMgr extends Component {
     tween(this.node).to(0.5, { position: this.dstPos }, { easing: 'elasticOut' }).start()
   }
 
-  private onTouchStart(ev: any) {
-    let p = ev.getUILocation()
-    p.x -= this.winSize.width / 2
-    p.y -= this.winSize.height / 2
-    this.lastPos = p
-
+  private onTouchStart(ev: EventTouch) {
+    this.lstPos.set(ev.getUILocation())
+    this.tarMove.set(Vec2.ZERO)
     this.target?.onDirectionChanged(Vec2.ZERO)
 
-    tween(this.node).to(0.1, { scale: this.scale }).start()
+    // this.tweenScale.stop()
+    // this.tweenScale.to(0.1, { scale: this.scale }).start()
 
     this._isTouchStart = true
-    this._lastang = -this._lastang
-
     ev.propagationStopped = true
   }
 
-  private onTouchMove(ev: any) {
-    if (!this._isTouchStart) {
-      return
-    }
-
-    this.tarMove = ev.getUILocation()
+  private onTouchMove(ev: EventTouch) {
+    if (!this._isTouchStart) return
+    this.tarMove.set(ev.getUILocation())
     ev.propagationStopped = true
   }
 
-  private onTouchEnd(ev: any) {
-    this.rockerDianNode.position = v3(this.rockerDianPos.x, this.rockerDianPos.y, 0)
-    this.rockerDirNode.active = false
+  private onTouchEnd(ev: EventTouch) {
+    this.tweenScale.stop()
+    this.rockerDian.position = Vec3.ZERO
+    this.rockerDir.active = false
 
     this.target?.onDirectionChanged(Vec2.ZERO)
-    tween(this.node).to(0.1, { scale: Vec3.ONE }).start()
+    // this.tweenScale.to(0.1, { scale: Vec3.ONE }).start()
     this._isTouchStart = false
     ev.propagationStopped = true
   }
 
   private updateMove() {
-    if (!this._isTouchStart || this.curMove.equals(this.tarMove)) return
-    
-    this.curMove = this.tarMove
-    this.curMove.x -= this.winSize.width / 2
-    this.curMove.y -= this.winSize.height / 2
+    if (!this._isTouchStart || Vec2.ZERO.equals(this.tarMove)) return
 
-    Vec2.subtract(this._tmpVec2, this.curMove, this.lastPos)
-    this._tmpVec2.normalize()
-    this.moveDir.x = -this._tmpVec2.x
-    this.moveDir.y = this._tmpVec2.y
+    Vec2.subtract(this.v2_dir, this.tarMove, this.lstPos)
+    if (Vec2.ZERO.equals(this.v2_dir)) return
 
-    let len = Vec2.distance(this.curMove, this.lastPos)
+    this.v2_dir.normalize()
+    this.moveDir.set(-this.v2_dir.x, this.v2_dir.y)
+
+    let len = Vec2.distance(this.tarMove, this.lstPos)
     len = len > 60 ? 60 : len
-    this._tmpVec2.multiplyScalar(len).add(this.rockerDianPos)
-    this._tmpVec3.set(this._tmpVec2.x, this._tmpVec2.y, 0)
-    this.rockerDianNode.position = this._tmpVec3
+    this.v2_dir.multiplyScalar(len)
+    this.v3_pos.set(this.v2_dir.x, this.v2_dir.y, 0)
+    this.rockerDian.position = this.v3_pos
+    this.rockerDir.angle = -math.toDegree(this.v2_dir.signAngle(Vec2.UNIT_Y))
 
-
-    if (this._tmpVec2.equals(Vec2.ZERO)) return
-
-    this.rockerDirNode.angle = -math.toDegree(this._tmpVec2.signAngle(Vec2.UNIT_Y))
     if (len > 20) {
-      this.rockerDirNode.active = true
+      this.rockerDir.active = true
       this.target?.onDirectionChanged(this.moveDir)
     } else {
-      this.rockerDirNode.active = false
+      this.rockerDir.active = false
     }
   }
 }

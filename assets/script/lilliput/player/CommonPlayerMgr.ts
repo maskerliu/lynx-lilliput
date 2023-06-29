@@ -1,7 +1,7 @@
 import {
-  CylinderCollider, ICollisionEvent, ITriggerEvent, Node, Prefab, Quat,
+  CylinderCollider, ICollisionEvent, ITriggerEvent, Node, PhysicsSystem, Prefab, Quat,
   RigidBody, SkeletalAnimation, SkinnedMeshRenderer, SphereCollider, Texture2D,
-  Vec2, Vec3, instantiate, quat, resources, tween, v2, v3
+  Vec2, Vec3, geometry, instantiate, math, quat, resources, tween, v2, v3
 } from 'cc'
 import { BigWorld } from '../../common/BigWorld'
 import { QuatNeg } from '../../misc/Utils'
@@ -22,7 +22,7 @@ const BreakableStates = [
   Game.CharacterState.JumpLand,
 ]
 
-const MAX_RAIDUS = Math.PI / 180 * 5
+const MAX_RAIDUS = math.toRadian(5)
 
 export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
 
@@ -61,6 +61,9 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
   protected _inWater: boolean = false
   protected _islandMgr: BigWorld.IslandMgr
   protected _bombPrefab: Prefab
+  private _ray: geometry.Ray = new geometry.Ray()
+
+  private debug: Node
 
   update(dt: number) {
     if (!this.animState) {
@@ -167,7 +170,14 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
   private _init(prefab: Prefab) {
     // this.node.getChildByName('Debug').active = false
     this.character = instantiate(prefab)
-    this.character.position = v3(0, -0.5, 0)
+
+    this.debug = this.character.getChildByName('Debug')
+    this.debug.removeFromParent()
+    this.debug.position = Vec3.ZERO
+    this.node.addChild(this.debug)
+
+    this.v3_pos.set(0, -0.5, 0)
+    this.character.position = this.v3_pos
     this.node.addChild(this.character)
     this.animation = this.getComponentInChildren(SkeletalAnimation)
     this.meshRenderer = this.getComponentInChildren(SkinnedMeshRenderer)
@@ -268,31 +278,57 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
 
   protected onTriggerEnter(event: ITriggerEvent) {
     let name = event.otherCollider.node.name
-    if (name == 'Water') {
-      this._inWater = true
-      this.state = Game.CharacterState.TreadWater
-      return
-    }
+    // if (name == 'Water') {
+    //   geometry.Ray.set(this._ray, this.node.position.x, this.node.position.y, this.node.position.z,
+    //     this.node.position.x, this.node.position.y - 6, this.node.position.z)
+    //   if (PhysicsSystem.instance.raycast(this._ray, 0xffffffff, 10)) {
+    //     if (PhysicsSystem.instance.raycastResults.length <= 2) {
+    //       this._inWater = true
+    //       this.state = Game.CharacterState.TreadWater
+    //       return
+    //     }
+    //   }
+    // }
+
     this.updateInteractObj(event, true)
   }
 
   protected onTriggerStay(event: ITriggerEvent) {
     let name = event.otherCollider.node.name
     if (name == 'Water') {
-      this._inWater = true
-
-      if (this._state != Game.CharacterState.TreadWater && this._state != Game.CharacterState.Swim) {
-        this.state = Game.CharacterState.TreadWater
+      geometry.Ray.set(this._ray, this.node.worldPosition.x, this.node.worldPosition.y - 0.5, this.node.worldPosition.z,
+        this.node.worldPosition.x, this.node.worldPosition.y - 6, this.node.worldPosition.z)
+      if (!PhysicsSystem.instance.raycastClosest(this._ray)) {
+        this._inWater = false
+        return
+      }
+      // console.log(PhysicsSystem.instance.raycastClosestResult.collider.node.name)
+      if (PhysicsSystem.instance.raycastClosestResult.collider.node.name == 'Seabed') {
+        this._inWater = true
+        if (this._state != Game.CharacterState.TreadWater && this._state != Game.CharacterState.Swim) {
+          this.state = Vec2.ZERO.equals(this._curDir) ? Game.CharacterState.TreadWater : Game.CharacterState.Swim
+        } else {
+          this.v3_pos.set(this.node.position)
+          this.v3_pos.y = 0.34
+          this.node.position = this.v3_pos
+        }
       } else {
-        this.v3_pos.set(this.node.position)
-        this.v3_pos.y = event.otherCollider.node.position.y - 0.15
-        this.node.position = this.v3_pos
+        this._inWater = false
+        if(this.node.position.y < PhysicsSystem.instance.raycastClosestResult.hitPoint.y + 0.5) {
+          this.v3_pos.set(this.node.position)
+          this.v3_pos.y =  PhysicsSystem.instance.raycastClosestResult.hitPoint.y + 0.5
+          this.node.position = this.v3_pos
+        }
+        this.state = Vec2.ZERO.equals(this._curDir) ? Game.CharacterState.Idle : Game.CharacterState.Run
       }
     }
   }
 
   protected onTriggerExit(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'Water') this._inWater = false
+    if (event.otherCollider.node.name == 'Water') {
+      this._inWater = false
+      return
+    }
     this.updateInteractObj(event, false)
   }
 
@@ -323,7 +359,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         distance = tmpDst
       }
     })
-    
+
     if (this._curInteractObj == Number.MAX_VALUE) { this._canClimb = false }
     else { this._canClimb = this._islandMgr.mapInfo(this._curInteractObj).canInteract(BigWorld.InteractType.Climb) }
   }
@@ -432,7 +468,8 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
     // let ladderMgr = this._interactObj.getComponent(LadderMgr)
     Vec3.subtract(this.v3_dir, this.node.position, interactObj.node.position)
     let rotation = quat()
-    Quat.rotateY(rotation, rotation, (interactObj.info[4] - 180) * Math.PI / 180)
+
+    Quat.rotateY(rotation, rotation, math.toRadian((interactObj.info[4] - 180)))
     this.node.rotation = rotation
 
     this.v3_pos.set(interactObj.modelPos)
@@ -491,7 +528,9 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
 
     this.animation?.crossFade(this.anim(this._state), 0)
     this.rigidBody.useGravity = true
+    this.collider.direction = CylinderCollider.Axis.Y_AXIS
     this.v3_pos.set(0, -0.5, 0)
+    this.q_rotation.set(0, 0, 0, 1)
     switch (this._state) {
       case Game.CharacterState.Idle:
         this.rigidBody.getLinearVelocity(this.v3_speed)
@@ -500,13 +539,19 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         this.dstPos.set(Vec3.NEG_ONE)
         break
       case Game.CharacterState.TreadWater:
+        // this.v3_pos.y = -0.4
+        this.v3_pos.z = -0.2
         this.rigidBody.useGravity = false
         this.rigidBody.setLinearVelocity(Vec3.ZERO)
-        this.v3_pos.set(0, -0.5, -0.2)
+        // this.collider.height = 0.1
+        // this.collider.direction = CylinderCollider.Axis.Z_AXIS
         break
       case Game.CharacterState.Swim:
+        Quat.rotateX(this.q_rotation, this.q_rotation, Math.PI / 2)
+        this.v3_pos.y = -0.3
+        this.v3_pos.z = -0.2
         this.rigidBody.useGravity = false
-        this.v3_pos.set(0, -0.5, -0.3)
+        this.collider.direction = CylinderCollider.Axis.Z_AXIS
         break
       case Game.CharacterState.Lift:
       case Game.CharacterState.Throw:
@@ -516,6 +561,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         this.rigidBody.clearState()
         break
     }
+    this.debug.rotation = this.q_rotation
     if (this.character) this.character.position = this.v3_pos
   }
 }

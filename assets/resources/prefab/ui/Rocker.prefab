@@ -70,7 +70,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "rocker_dian",
+    "_name": "Dian",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -203,7 +203,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "rocker_dir",
+    "_name": "Dir",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -416,10 +416,10 @@
     "__prefab": {
       "__id__": 19
     },
-    "rockerDianNode": {
+    "rockerDian": {
       "__id__": 2
     },
-    "rockerDirNode": {
+    "rockerDir": {
       "__id__": 8
     },
     "_id": ""

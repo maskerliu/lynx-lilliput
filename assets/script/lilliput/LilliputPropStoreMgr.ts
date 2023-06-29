@@ -29,7 +29,7 @@ export default class LilliputPropStoreMgr extends Component {
   @property(SpriteAtlas)
   private uiAtlas: SpriteAtlas
 
-  private dstPos: Vec3
+  private dstPos: Vec3 = v3()
   private scrollView: ScrollView
   private selectedPropSnap: Sprite
   private modelType: BigWorld.ModelGroup = BigWorld.ModelGroup.Ground
@@ -37,8 +37,8 @@ export default class LilliputPropStoreMgr extends Component {
   onLoad() {
     this.scrollView = this.getComponent(ScrollView)
     this.selectedPropSnap = this.selectedProp.getComponentInChildren(Sprite)
-    this.dstPos = v3(this.node.position)
-    this.dstPos.x = screen.windowSize.width / 2 - 30
+    this.dstPos.set(this.node.position)
+    this.dstPos.x = screen.windowSize.width / 2 - 10
 
     let groupSelectHandler = new EventHandler()
     groupSelectHandler.target = this.node
@@ -78,6 +78,7 @@ export default class LilliputPropStoreMgr extends Component {
 
   show(show: boolean) {
     this.dstPos.y = show ? 280 : -160
+    if (show) this.node.active = show
     tween(this.node).to(0.5, { position: this.dstPos }, {
       easing: 'bounceOut', onComplete: () => {
         if (show) {
@@ -85,6 +86,7 @@ export default class LilliputPropStoreMgr extends Component {
           this.scrollView.scrollToLeft(0.2)
           this.onTerrainItemSelected(this.itemsContainer.toggleItems[0])
         } else {
+          this.node.active = false
           this.itemsContainer.node.removeAllChildren()
         }
       }
@@ -105,7 +107,7 @@ export default class LilliputPropStoreMgr extends Component {
     let scaleY = 80 / contentSize.height
     let scale = scaleX > scaleY ? scaleY : scaleX
     this.selectedPropSnap.node.scale = v3(scale, scale)
-    
+
     let mgr = event.node.getComponent(ToggleMgr)
     IslandItemChangedEvent.customData = { prefab: mgr.customData }
     this.node.dispatchEvent(IslandItemChangedEvent)
@@ -115,7 +117,7 @@ export default class LilliputPropStoreMgr extends Component {
   }
 
   private loadTrrainGroupItems() {
-    let configs = LilliputAssetMgr.instance.getModelCongfigs(this.modelType)
+    let configs = LilliputAssetMgr.instance.getModelConfigs(this.modelType)
     let s = size(configs.length * 115 - 15, 140)
     this.scrollView.content.getComponent(UITransform).setContentSize(s)
     this.itemsContainer.node.getComponent(UITransform).setContentSize(s)

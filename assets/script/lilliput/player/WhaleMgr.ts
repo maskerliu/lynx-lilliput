@@ -1,4 +1,4 @@
-import { Component, quat, Quat, Vec3, _decorator } from 'cc'
+import { Component, Quat, Vec3, _decorator, math, quat } from 'cc'
 
 const { ccclass, property } = _decorator
 
@@ -23,7 +23,7 @@ export default class WhaleMgr extends Component {
       this.angle += 0.2
     }
 
-    this.node.rotation = Quat.fromAxisAngle(this.node.rotation, Vec3.UNIT_Y, Math.PI * this.angle / 180)
+    this.node.rotation = Quat.fromAxisAngle(this.node.rotation, Vec3.UNIT_Y, math.toRadian(this.angle))
     this.node.position = this.node.position.add(this.node.forward.negative().multiplyScalar(dt))
   }
 

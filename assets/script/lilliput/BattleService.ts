@@ -2,9 +2,11 @@ import { Node, Vec3, v3 } from 'cc'
 import Colyseus from 'colyseus.js'
 import { BigWorld } from '../common/BigWorld'
 import { ChatRoomState, Game, IslandState, MsgTopic, PlayerState, RemoteAPI } from '../model'
+import { Lilliput } from './LilliputEvents'
 
 const DidEnterEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.DidEnter)
 const LeaveEvent = new BigWorld.PlayerEvent(BigWorld.PlayerEvent.Type.OnLeave)
+const ChatMsgEvent = new Lilliput.UIEvent(Lilliput.UIEvent.Type.ChatMsg)
 
 
 export default class BattleService {
@@ -28,7 +30,6 @@ export default class BattleService {
     this._positions.push({ pos: v3(-offset, 0, 0), existed: false })
   }
 
-
   private _myself: string
   private _client: Colyseus.Client
   private _island: Colyseus.Room<IslandState>
@@ -46,43 +47,6 @@ export default class BattleService {
   private _timer: any = null
 
 
-  init(uid: string, handler: Node) {
-    this._client = new Colyseus.Client(`ws://${RemoteAPI.Host}:3000`)
-    this._myself = uid
-    this._handler = handler
-  }
-
-  async leave() {
-    if (this._island) {
-      this.island().enablePhysic(false)
-      this._curIsland = null
-      this._island.removeAllListeners()
-      this.unregisterHandlers()
-      await this._island.leave()
-      this._island = null
-
-      // console.log(PhysicsSystem.instance.physicsWorld)
-    }
-    if (this._timer) clearInterval(this._timer)
-  }
-
-  isMyself(uid: string) { return this._myself == uid }
-
-  player(uid?: string) {
-    try {
-      if (uid == null)
-        return this._players.get(this._myself)
-      else
-        return this._players.get(uid)
-    } catch (err) {
-      return null
-    }
-  }
-
-  addPlayer(mgr: BigWorld.PlayerMgr) {
-    this._players.set(mgr.profile.id, mgr)
-  }
-
   get randomPos() {
     // return v3(0, 0, 0)
     let ps = this._positions.filter(it => { return !it.existed })
@@ -91,22 +55,32 @@ export default class BattleService {
 
   }
 
+  init(uid: string, handler: Node) {
+    this._client = new Colyseus.Client(`ws://${RemoteAPI.Host}:3000`)
+    this._myself = uid
+    this._handler = handler
+  }
+
+  isMyself(uid: string) { return this._myself == uid }
+
+  player(uid?: string) {
+    return this._players.get(uid == null ? this._myself : uid)
+  }
+
+  addPlayer(mgr: BigWorld.PlayerMgr) {
+    this._players.set(mgr.profile.id, mgr)
+  }
+
   island(id?: string, owner?: string) {
-    if (id == null && owner == null) return this._islands.get(this._curIsland)
-
-    if (id) {
-      return this._islands.get(id)
-    }
-
     if (owner) {
       for (let island of this._islands.values()) {
         if (island.senceInfo?.owner == owner) {
           return island
         }
       }
+    } else {
+      return this._islands.get(id == null ? this._curIsland : id)
     }
-
-    return null
   }
 
   addIsland(mgr: BigWorld.IslandMgr) {
@@ -131,6 +105,14 @@ export default class BattleService {
     this._localStateFrames.push(msg)
   }
 
+  sendChatMsg(msg: string) {
+    this._chatroom?.send(MsgTopic.ChatMsg, { sendId: this._myself, content: msg })
+  }
+
+  get chatMsgs() {
+    return this._chatroom?.state.chatMessages
+  }
+
   async tryEnter(uid: string, islandId: string, pos: Vec3 = v3(0, 1.5, 1), state: Game.CharacterState) {
     if (this._curIsland == islandId) return
     this.island()?.enablePhysic(false)
@@ -138,6 +120,7 @@ export default class BattleService {
     this._island = await this._client.joinOrCreate('island', { islandId, uid, px: pos.x, py: pos.y, pz: pos.z, state })
     this._chatroom = await this._client.joinOrCreate('chatRoom')
     this.registerHandlers()
+    this.registerChatHandler()
   }
 
   async didEnter(player: BigWorld.PlayerMgr) {
@@ -153,9 +136,27 @@ export default class BattleService {
 
     if (this._timer) clearInterval(this._timer)
     this._timer = setInterval(() => {
-      this._island.send(MsgTopic.PlayerUpdate, this._localStateFrames)
+      this._island?.send(MsgTopic.PlayerUpdate, this._localStateFrames)
       this._localStateFrames.splice(0, this._localStateFrames.length)
     }, 70)
+  }
+
+  async leave() {
+    if (this._island) {
+      this.island().enablePhysic(false)
+      this._curIsland = null
+      this._island.removeAllListeners()
+      this.unregisterHandlers()
+      await this._island.leave()
+      this._island = null
+    }
+
+    if (this._chatroom) {
+      await this._chatroom.leave()
+      this._chatroom = null
+    }
+
+    if (this._timer) clearInterval(this._timer)
   }
 
   private registerHandlers() {
@@ -165,11 +166,27 @@ export default class BattleService {
     this._island?.state.players.onRemove(BattleService.instance.onRemovePlayer)
   }
 
+  private registerChatHandler() {
+
+    this._chatroom.state.chatMessages.onAdd(() => {
+      this._handler.dispatchEvent(ChatMsgEvent)
+    })
+
+    this._chatroom.state.chatMessages.onRemove(() => {
+      this._handler.dispatchEvent(ChatMsgEvent)
+    })
+
+  }
+
   private unregisterHandlers() {
     this._island?.onLeave.remove(this.onLeaveIsland)
     this._island?.onStateChange.remove(this.onIslandStateChanged)
     // this._island?.state.players.onAdd(null)
     // this._island?.state.players.onRemove.
+  }
+
+  private unregisterChatHandler() {
+
   }
 
   private onLeaveIsland() {
@@ -197,5 +214,4 @@ export default class BattleService {
     //   BattleService.instance._players.delete(state.profile.uid)
     // }
   }
-
 }

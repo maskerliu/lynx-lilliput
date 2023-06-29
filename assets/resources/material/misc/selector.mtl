@@ -31,12 +31,12 @@
         "__uuid__": "cd37eb30-9cdb-4a60-afb2-8ed73eb9ed8a@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "mainColor": {
-        "__type__": "cc.Color",
-        "r": 99,
-        "g": 226,
-        "b": 39,
-        "a": 255
+      "tilingOffset": {
+        "__type__": "cc.Vec4",
+        "x": 0.8,
+        "y": 0.8,
+        "z": 0.1,
+        "w": 0.1
       }
     }
   ]

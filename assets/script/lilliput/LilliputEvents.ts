@@ -4,16 +4,15 @@ export namespace Lilliput {
 
   export class UIEvent extends Event {
 
-    static Name = 'UIEvent'
-
     static Type = {
+      ChatMsg: 'ChatMsg',
       UserInfoBind: 'OnUserInfoBind',
     }
 
     customData: any
 
     constructor(type: string, data?: any) {
-      super(UIEvent.Name, true)
+      super(type, true)
       this.type = type
       this.customData = data
     }

@@ -1,5 +1,6 @@
 import {
-  Button, Component, Director, EditBox, Event, EventHandler,
+  Button, Component,
+  EditBox, Event, EventHandler,
   Label, Node, Prefab, Sprite, SpriteAtlas, Toggle, ToggleContainer,
   UITransform, Widget, _decorator, director, instantiate, size, tween, v3, view
 } from 'cc'
@@ -10,6 +11,7 @@ import LocalPrefs from '../misc/LocalPrefs'
 import { Game, Island } from '../model'
 import ActionsMgr from './ActionsMgr'
 import BattleService from './BattleService'
+import ChatMessagesMgr from './ChatMessagesMgr'
 import LilliputLoginMgr from './LilliputLoginMgr'
 import LilliputPropStoreMgr from './LilliputPropStoreMgr'
 
@@ -40,7 +42,7 @@ export default class LilliputUIMgr extends Component {
   private terrainEditBtn: Node
 
   @property(Node)
-  private terrainItemBar: Node
+  private propStore: Node
 
   @property(Node)
   reactArea: Node
@@ -71,12 +73,6 @@ export default class LilliputUIMgr extends Component {
   private overlay: Node
 
   @property(Node)
-  private network: Node
-
-  // @property(Label)
-  // private fpsLabel: Label
-
-  @property(Node)
   private assetLoadIndicator: Node
 
   @property(Node)
@@ -84,6 +80,19 @@ export default class LilliputUIMgr extends Component {
 
   @property(EditBox)
   private inputRoomId: EditBox
+
+  @property(Node)
+  private bottomBar: Node
+
+  @property(EditBox)
+  private inputChat: EditBox
+
+  @property(Node)
+  private sendBtn: Node
+
+ 
+
+  set updateIslandId(id: string) { this.inputRoomId.string = id }
 
   @property(SpriteAtlas)
   private uiAtlas: SpriteAtlas
@@ -96,33 +105,17 @@ export default class LilliputUIMgr extends Component {
   private frameCount: number = 0
   private frameTime: number = Date.now()
 
-  private actionsMgr: ActionsMgr
-
   private _curToolItem = 'Select'
 
+  private actionsMgr: ActionsMgr
+  private chatMsgMgr: ChatMessagesMgr
   private loginMgr: LilliputLoginMgr
-
   private _isEdit: boolean = false
 
   onLoad() {
-    // TODO not work 
-    this.frameTime = Date.now()
-    this.node.on(Director.EVENT_AFTER_DRAW, () => {
-      if (Date.now() - this.frameTime >= 1000) {
-        // this.fpsLabel.string = `FPS:\t ${this.frameCount}`
-        this.frameTime = Date.now()
-        this.frameCount = 0
-      } else {
-        this.frameCount++
-      }
-    }, this)
-
     this.actionsMgr = this.actions.getComponent(ActionsMgr)
-
+    this.chatMsgMgr = this.getComponentInChildren(ChatMessagesMgr)
     this.loginMgr = this.loginPanel.getComponent(LilliputLoginMgr)
-
-    this.networkSprite = this.network.getComponent(Sprite)
-    // this.networkLabel = this.network.getComponentInChildren(Label)
 
     let wid = this.node.getComponent(Widget)
     wid.top = -view.getViewportRect().y
@@ -142,6 +135,10 @@ export default class LilliputUIMgr extends Component {
     layerMenuHandler.component = 'LilliputUIMgr'
     layerMenuHandler.handler = 'onEnvLayerChanged'
     this.layerMenu.getComponent(ToggleContainer).checkEvents.push(layerMenuHandler)
+
+    this.terrainEditBtn.on(Button.EventType.CLICK, this.onEdit, this)
+
+    this.sendBtn.on(Button.EventType.CLICK, this.sendMsg, this)
 
     this.roateLeft = this.rotateMenu.getChildByName('RotateLeft')
     this.roateRight = this.rotateMenu.getChildByName('RotateRight')
@@ -225,6 +222,14 @@ export default class LilliputUIMgr extends Component {
     this.node.dispatchEvent(TryEnterEvent)
   }
 
+  protected sendMsg() {
+    BattleService.instance.sendChatMsg(this.inputChat.string)
+  }
+
+  updateChatMsg() {
+    console.log(BattleService.instance.chatMsgs)
+  }
+
   protected onAction(event: Event, data: string) {
     PlayerActionEvent.action = Number.parseInt(data) as Game.CharacterState
     this.node.dispatchEvent(PlayerActionEvent)
@@ -267,9 +272,6 @@ export default class LilliputUIMgr extends Component {
 
   protected onEnvLayerChanged(event: Toggle) {
     let layer = Number.parseInt(event.node.name.split('Layer')[1])
-
-    // layer = this.layerMenu.getComponent(ToggleContainer).toggleItems.findIndex(it => it == event)
-
     IslandLayerChangedEvent.customData = { layer }
     this.node.dispatchEvent(IslandLayerChangedEvent)
   }
@@ -291,10 +293,10 @@ export default class LilliputUIMgr extends Component {
   }
 
   protected updateEditMode() {
-    this.terrainEditBtn.getComponent(Button)
-
     this.profileBtn.active = !this._isEdit
     this.actions.active = !this._isEdit
+    // this.bottomBar.active = !this._isEdit
+    this.bottomBar.active = false
     this.selectedTerrainItem.active = this._isEdit
     this.terrainEditToolbar.active = this._isEdit
 
@@ -308,7 +310,7 @@ export default class LilliputUIMgr extends Component {
     tc = this.layerMenu.getComponent(ToggleContainer)
     tc.toggleItems[0].isChecked = true
 
-    this.terrainItemBar.getComponent(LilliputPropStoreMgr).show(this._isEdit)
+    this.propStore.getComponent(LilliputPropStoreMgr).show(this._isEdit)
     this.rocker.getComponent(RockerMgr).show(!this._isEdit)
   }
 
@@ -330,7 +332,8 @@ export default class LilliputUIMgr extends Component {
 
     if (event.customData.show) {
       let container = this.skinMenu.getComponent(ToggleContainer)
-      container.toggleItems[event.customData.skin ? event.customData.skin : 0].isChecked = true
+      // console.log(event.customData.skin)
+      container.toggleItems[event.customData.skin].isChecked = true
     }
   }
 

@@ -1,4 +1,4 @@
-import { BatchingUtility, Camera, EventTouch, MeshRenderer, Node, PhysicsSystem, Touch, UITransform, Vec2, _decorator, geometry, quat, tween, v3 } from 'cc'
+import { BatchingUtility, Camera, Color, EventTouch, MeshRenderer, Node, PhysicsSystem, Touch, UITransform, Vec2, Vec3, _decorator, geometry, quat, tween, v3 } from 'cc'
 import { BigWorld } from '../common/BigWorld'
 import OrbitCamera from '../common/OrbitCamera'
 import { isDebug, terrainItemIdx } from '../misc/Utils'
@@ -20,9 +20,6 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
   private hitNode: Node
 
   @property(Node)
-  private hitPoint: Node
-
-  @property(Node)
   private anchorNode: Node
 
   get curAnchorNode() {
@@ -32,13 +29,11 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
   @property(Node)
   private skinBtn: Node
 
-  @property(Node)
-  private staticNodeGroup: Node
-
-  @property(Node)
-  private mergedNodeGroup: Node
+  private staticNodeGroup = [new Node(), new Node(), new Node()]
+  private mergedNodeGroup = [new Node(), new Node(), new Node()]
 
   private _isMove = false
+  private _color: Color = new Color()
 
   camera: Camera
 
@@ -47,6 +42,7 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
 
   private hitMeshRenderer: MeshRenderer
 
+  private _infos: Array<Array<number>> = []
   private skinBtnPos = v3(0, -2, 0)
   private _mapInfo: Map<number, BigWorld.MapItemMgr> = new Map()
   mapInfo(idx: number) { return this._mapInfo.get(idx) }
@@ -68,10 +64,31 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
   private curPropId: number
   private selectedItem: number
   private myself: BigWorld.PlayerMgr
+  private _loaded: boolean = false
+  private _curIdx = -1
 
   onLoad() {
     this.hitMeshRenderer = this.hitNode.getComponentInChildren(MeshRenderer)
     this.q_skinBtn.set(this.skinBtn.rotation)
+
+    for (let i = 0; i < this.staticNodeGroup.length; ++i) {
+      this.node.addChild(this.staticNodeGroup[i])
+      this.node.addChild(this.mergedNodeGroup[i])
+    }
+  }
+
+  protected update(dt: number): void {
+    if (this._loaded || this._senceInfo == null) return
+
+    if (this._mapInfo.size - 1 == this._curIdx) {
+      if (this._curIdx == this._senceInfo.info.length - 1) {
+        this._loaded = true
+      } else {
+        this._curIdx++
+        this.addTerrainItem(this._senceInfo.info[this._curIdx], false)
+      }
+    }
+
   }
 
   protected onDestroy(): void {
@@ -92,13 +109,13 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
         item.node.destroy()
       }
 
-      for (let i = 0; i < this._senceInfo.info.length; ++i) {
-        try {
-          this.addTerrainItem(this._senceInfo.info[i], false)
-        } catch (err) {
-          console.error(this._senceInfo.info[i], i)
-        }
-      }
+      // for (let i = 0; i < this._senceInfo.info.length; ++i) {
+      //   try {
+      //     this.addTerrainItem(this._senceInfo.info[i], false)
+      //   } catch (err) {
+      //     console.error(err, i)
+      //   }
+      // }
 
       // let arr: Map<number, Array<number>> = new Map()
       // for (let i = 0; i < this._senceInfo.info.length; ++i) {
@@ -119,8 +136,6 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
     } catch (err) {
       console.log(err)
     }
-
-    this.node.getChildByName('Range').active = isDebug
   }
 
   private batchStatic() {
@@ -143,7 +158,7 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
   }
 
   enablePhysic(enable: boolean) {
-    this._mapInfo.forEach(it => { it.enablePhysic(enable) })
+    this._mapInfo.forEach(it => { try { it.enablePhysic(enable) } catch (err) { console.log(err, it.config.name) } })
   }
 
   private initIsland() {
@@ -151,7 +166,6 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
     this.node.dispatchEvent(SkinMenuEvent)
 
     this.hitNode.active = this._isEdit
-    this.hitPoint.active = this._isEdit
     this.anchorNode.active = this._isEdit
     this.checkLayer.active = this._isEdit
     this.skinBtn.active = this._isEdit
@@ -159,7 +173,6 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
 
     this.hitNode.position.set(0, -2, 0)
     this.skinBtn.position.set(0, -2, 0)
-    this.hitPoint.position.set(0, -2, 0)
     this.curPropId = -1
     if (this._isEdit) {
       this.curLayer = 0
@@ -175,7 +188,7 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
     this._isEdit = !this._isEdit
     this.initIsland()
 
-    this.myself = this.node.getChildByName('myself').getComponent('MyselfMgr') as BigWorld.PlayerMgr
+    this.myself = this.node.getComponentInChildren('MyselfMgr') as BigWorld.PlayerMgr
     if (this.myself) {
       this.myself.sleep(this._isEdit)
       this.orginPlayerPos.set(this.myself.node.position)
@@ -185,27 +198,16 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
 
     for (let mgr of this._mapInfo.values()) { mgr.preview(this._isEdit) }
     if (this._isEdit) {
-      BatchingUtility.unbatchStaticModel(this.staticNodeGroup, this.mergedNodeGroup)
+      // BatchingUtility.unbatchStaticModel(this.staticNodeGroup[0], this.mergedNodeGroup[0])
       // this.mergedNodeGroup.active = false
     } else {
-      let arr = []
-      for (let i of this._mapInfo.keys()) { arr.push(this._mapInfo.get(i).info) }
-      arr.sort((a, b) => terrainItemIdx(a[1], a[2], a[3]) - terrainItemIdx(b[1], b[2], b[3]))
-      this._senceInfo.info = arr
       await IslandApi.save(this._senceInfo)
       this.enablePhysic(true)
       setTimeout(() => {
-        BatchingUtility.batchStaticModel(this.staticNodeGroup, this.mergedNodeGroup)
+        // BatchingUtility.batchStaticModel(this.staticNodeGroup[0], this.mergedNodeGroup[0])
         // this.staticNodeGroup.active = false
       }, 500)
     }
-  }
-
-  private syncLocalData() {
-    let arr = []
-    for (let i of this._mapInfo.keys()) { arr.push(this._mapInfo.get(i).info) }
-    arr.sort((a, b) => terrainItemIdx(a[1], a[2], a[3]) - terrainItemIdx(b[1], b[2], b[3]))
-    this._senceInfo.info = arr
   }
 
   onEditItemChanged(event: BigWorld.IslandEvent): void {
@@ -234,9 +236,14 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
   }
 
   onSkinChanged(event: BigWorld.IslandEvent) {
-    for (let mgr of this._mapInfo.values()) {
-      if (!mgr.selected) { continue }
-      mgr.updateSkin(event.customData.skin)
+    let mgr = this._mapInfo.get(this.selectedItem)
+    if (mgr) {
+      this.v3_0.set(mgr.info[Island.Idx_X], mgr.info[Island.Idx_Y], mgr.info[Island.Idx_Z])
+      let idx = this.getInfoIdx(this.v3_0)
+      if (idx != -1) {
+        mgr.updateSkin(event.customData.skin)
+        this._senceInfo.info[idx][Island.Idx_Skin] = event.customData.skin
+      }
     }
   }
 
@@ -285,32 +292,33 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
     let checkIdx = PhysicsSystem.instance.raycastResults.findIndex((it) => it.collider.node.name == 'CheckLayer')
 
     if (skinIdx != -1) {
-      SkinMenuEvent.customData = { show: true, skin: this._mapInfo.get(this.selectedItem).info[5] }
-      this.node.dispatchEvent(SkinMenuEvent)
+      if (this._mapInfo.has(this.selectedItem)) {
+        SkinMenuEvent.customData = { show: true, skin: this._mapInfo.get(this.selectedItem).info[5] }
+        this.node.dispatchEvent(SkinMenuEvent)
+      }
       return BigWorld.ActionType.None
     }
 
-    if (checkIdx != -1) {
-      this.v3_0.set(this.node.getComponent(UITransform).convertToNodeSpaceAR(PhysicsSystem.instance.raycastResults[checkIdx].hitPoint))
-      this.hitPoint.position = this.v3_0
-      this.v3_0.set(Math.floor(this.v3_0.x + 0.5), this.curLayer, Math.floor(this.v3_0.z + 0.5))
+    if (checkIdx == -1) return BigWorld.ActionType.None
 
-      let action = this.curAction
-      if (this.curAction == BigWorld.ActionType.Add) {
-        if (this.hitNode.position.equals(this.v3_0)) { action = this.curAction }
-        else { action = BigWorld.ActionType.Selected }
-      }
+    this.v3_0.set(this.node.getComponent(UITransform).convertToNodeSpaceAR(PhysicsSystem.instance.raycastResults[checkIdx].hitPoint))
+    this.v3_0.set(Math.floor(this.v3_0.x + 0.5), this.curLayer, Math.floor(this.v3_0.z + 0.5))
 
-      this.hitNode.position = this.v3_0
-      if (Math.abs(this.hitNode.position.x) > 9 || Math.abs(this.hitNode.position.z) > 9) {
-        this.hitMeshRenderer.setMaterial(LilliputAssetMgr.instance.getMaterial('heart'), 0)
-        action = BigWorld.ActionType.Selected
-      } else {
-        this.hitMeshRenderer.setMaterial(LilliputAssetMgr.instance.getMaterial('green'), 0)
-      }
-      return action
+    let action = this.curAction
+    if (this.curAction == BigWorld.ActionType.Add) {
+      if (this.hitNode.position.equals(this.v3_0)) { action = this.curAction }
+      else { action = BigWorld.ActionType.Selected }
     }
-    return BigWorld.ActionType.None
+
+    this.hitNode.position = this.v3_0
+    if (Math.abs(this.hitNode.position.x) > 9 || Math.abs(this.hitNode.position.z) > 9) {
+      this.hitMeshRenderer.material.setProperty('mainColor', Color.RED)
+      action = BigWorld.ActionType.Selected
+    } else {
+      this.hitMeshRenderer.material.setProperty('mainColor', Color.WHITE)
+    }
+    return action
+
   }
 
   private updateMapInfo(action: BigWorld.EditAction) {
@@ -318,8 +326,9 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
     switch (action.type) {
       case BigWorld.ActionType.Add: {
         let item = [this.curPropId, action.pos.x, action.pos.y, action.pos.z, 0]
-        this.addTerrainItem(item)
-        this.syncLocalData()
+        let result = this.addTerrainItem(item)
+        if (result) this._senceInfo.info.push(item)
+
         this.updateAroundMatrix(action.pos.x, action.pos.y, action.pos.z)
         break
       }
@@ -328,34 +337,49 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
           this._mapInfo.get(idx)!.node.active = false
           this._mapInfo.get(idx)!.node.destroy()
           this._mapInfo.delete(idx)
-          this.syncLocalData()
+
+          let infoIdx = this.getInfoIdx(action.pos)
+          if (infoIdx != -1) {
+            this._senceInfo.info.splice(infoIdx, 1)
+          }
+
           this.updateAroundMatrix(action.pos.x, action.pos.y, action.pos.z)
         }
         break
       case BigWorld.ActionType.Rotate: {
         this._mapInfo.get(idx)?.rotate(action.angle)
+
+        let infoIdx = this.getInfoIdx(action.pos)
+        if (infoIdx != -1) {
+          this._senceInfo.info[infoIdx][4] = this._mapInfo.get(idx).angle(this._senceInfo.info[infoIdx][4] + action.angle)
+        }
         break
       }
       case BigWorld.ActionType.Selected: {
         if (this.selectedItem != idx) {
-          this._mapInfo.get(this.selectedItem)?.onSelected(false)
+          if (this._mapInfo.has(this.selectedItem))
+            this._mapInfo.get(this.selectedItem).selected = false
+
           this.selectedItem = idx
-          this._mapInfo.get(this.selectedItem)?.onSelected(true)
+
+          if (this._mapInfo.has(this.selectedItem))
+            this._mapInfo.get(this.selectedItem).selected = true
+
         }
 
         if (this._mapInfo.get(idx)?.skinnable) {
           this.skinBtnPos.set(action.pos)
-          this.skinBtnPos.y += 3
+          this.skinBtnPos.y += 2
           this.skinBtn.position = this.skinBtnPos
           this.skinBtn.active = true
           this.skinBtn.rotation = this.camera.node.rotation
         } else {
-          SkinMenuEvent.customData = { show: false }
-          this.node.dispatchEvent(SkinMenuEvent)
-
           this.skinBtn.active = false
-          this.skinBtn.position = this.skinBtnPos
         }
+
+        SkinMenuEvent.customData = { show: false }
+        this.node.dispatchEvent(SkinMenuEvent)
+
         break
       }
     }
@@ -370,13 +394,17 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
       if (mgr.info[0] == info[0]) return false
       this._mapInfo.delete(idx)
       mgr.node.destroy()
+
+      this.v3_0.set(info[1], info[2], info[3])
+      let infoIdx = this.getInfoIdx(this.v3_0)
+      if (infoIdx != -1) this._senceInfo.info.splice(infoIdx, 1)
     }
 
     let config = LilliputAssetMgr.instance.getModelConfig(info[0])
     let item = new Node()
 
     if (config.group == BigWorld.ModelGroup.Ground) {
-      this.staticNodeGroup.addChild(item)
+      this.staticNodeGroup[0].addChild(item)
     } else {
       this.node.addChild(item)
     }
@@ -384,65 +412,71 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
     mgr = item.addComponent(BigWorld.getPropMgr(config.name))
     mgr.init(info, preview)
     this._mapInfo.set(mgr.index, mgr)
-    if (info[0] == 1) { mgr.matrix = this.genMatrix(info[1], info[2], info[3]) }
+    mgr.matrix = this.genMatrix(info)
 
     return true
   }
 
   private updateAroundMatrix(x: number, y: number, z: number) {
-    let idx = terrainItemIdx(x + 1, y, z)
-    if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[0] == 1)
-      this._mapInfo.get(idx).matrix = this.genMatrix(x + 1, y, z) // left
-    idx = terrainItemIdx(x - 1, y, z)
-    if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[0] == 1)
-      this._mapInfo.get(idx).matrix = this.genMatrix(x - 1, y, z) // right
-    idx = terrainItemIdx(x, y, z + 1)
-    if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[0] == 1)
-      this._mapInfo.get(idx).matrix = this.genMatrix(x, y, z + 1) // forward
-    idx = terrainItemIdx(x, y, z - 1)
-    if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[0] == 1)
-      this._mapInfo.get(idx).matrix = this.genMatrix(x, y, z - 1) // behind
-    idx = terrainItemIdx(x, y - 1, z)
-    if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[0] == 1)
-      this._mapInfo.get(idx).matrix = this.genMatrix(x, y - 1, z) // below
+    let idx: number
+    if (y > 0) {
+      idx = terrainItemIdx(x, y - 1, z)
+      if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[Island.Idx_Id] == 1)
+        this._mapInfo.get(idx).matrix = this.genMatrix(this._mapInfo.get(idx).info)
+    }
+
+    for (let i = -1; i < 2; i += 2) {
+      let idx = terrainItemIdx(x + i, y, z)
+      if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[Island.Idx_Id] == 1)
+        this._mapInfo.get(idx).matrix = this.genMatrix(this._mapInfo.get(idx).info)
+
+      idx = terrainItemIdx(x, y, z + i)
+      if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[Island.Idx_Id] == 1)
+        this._mapInfo.get(idx).matrix = this.genMatrix(this._mapInfo.get(idx).info)
+
+      if (y < 1) continue
+      idx = terrainItemIdx(x + i, y - 1, z)
+      if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[Island.Idx_Id] == 20)
+        this._mapInfo.get(idx).matrix = this.genMatrix(this._mapInfo.get(idx).info)
+      idx = terrainItemIdx(x, y - 1, z + i)
+      if (this._mapInfo.has(idx) && this._mapInfo.get(idx).info[Island.Idx_Id] == 20)
+        this._mapInfo.get(idx).matrix = this.genMatrix(this._mapInfo.get(idx).info)
+    }
   }
 
-  private genMatrix(x: number, y: number, z: number) {
+  private genMatrix(info: Array<number>) {
     let martix = 0b00000
-
-    // for (let i of this._mapInfo.keys()) {
-    //   let it = this._mapInfo.get(i)
-    //   if (it[0] != 1) continue
-    //   if (it[1] == x + 1 && it[2] == y && it[3] == z) {
-    //     martix |= BigWorld.Cube_Left
-    //     continue
-    //   }
-    //   if (it[1] == x - 1 && it[2] == y && it[3] == z) {
-    //     martix |= BigWorld.Cube_Right
-    //     continue
-    //   }
-    //   if (it[1] == x && it[2] == y && it[3] == z + 1) {
-    //     martix |= BigWorld.Cube_Forward
-    //     continue
-    //   }
-    //   if (it[1] == x && it[2] == y && it[3] == z - 1) {
-    //     martix |= BigWorld.Cube_Behind
-    //     continue
-    //   }
-    //   if (it[1] == x && it[2] == y + 1 && it[3] == z) {
-    //     martix |= BigWorld.Cube_Up
-    //     continue
-    //   }
-    // }
-
+    let [id, x, y, z] = info
     this._senceInfo.info.forEach(it => {
-      if (it[0] != 1) return
-      if (it[1] == x + 1 && it[2] == y && it[3] == z) martix |= BigWorld.Cube_Left
-      if (it[1] == x - 1 && it[2] == y && it[3] == z) martix |= BigWorld.Cube_Right
-      if (it[1] == x && it[2] == y && it[3] == z + 1) martix |= BigWorld.Cube_Forward
-      if (it[1] == x && it[2] == y && it[3] == z - 1) martix |= BigWorld.Cube_Behind
-      if (it[1] == x && it[2] == y + 1 && it[3] == z) martix |= BigWorld.Cube_Up
+      if (id == 1 && it[0] != 1) return
+      let [_, ix, iy, iz] = it
+      if (ix == x && iy == y && iz == z + 1) {
+        if ((id == 20 && it[0] == 20) || id == 1) martix |= BigWorld.Cube_F
+      }
+      if (ix == x && iy == y && iz == z - 1) {
+        if ((id == 20 && it[0] == 20) || id == 1) martix |= BigWorld.Cube_B
+      }
+      if (ix == x + 1 && iy == y && iz == z) {
+        if ((id == 20 && it[0] == 20) || id == 1) martix |= BigWorld.Cube_L
+      }
+      if (ix == x - 1 && iy == y && iz == z) {
+        if ((id == 20 && it[0] == 20) || id == 1) martix |= BigWorld.Cube_R
+      }
+      if (ix == x && iy == y + 1 && iz == z) {
+        if ((id == 20 && it[0] == 20) || id == 1) martix |= BigWorld.Cube_U
+      }
+
+      if (id == 20) {
+        if (ix == x && iy == y + 1 && iz == z + 1) martix |= BigWorld.Cube_UF
+        if (ix == x && iy == y + 1 && iz == z - 1) martix |= BigWorld.Cube_UB
+        if (ix == x + 1 && iy == y + 1 && iz == z) martix |= BigWorld.Cube_UL
+        if (ix == x - 1 && iy == y + 1 && iz == z) martix |= BigWorld.Cube_UR
+      }
     })
     return martix
+  }
+
+  private getInfoIdx(pos: Vec3) {
+    return this._senceInfo.info.findIndex(it => it[1] == Math.round(pos.x) && it[2] == Math.round(pos.y) && it[3] == Math.round(pos.z))
   }
 }

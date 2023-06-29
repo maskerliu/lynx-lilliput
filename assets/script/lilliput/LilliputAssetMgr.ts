@@ -30,8 +30,9 @@ export default class LilliputAssetMgr implements AssetMgr {
     LilliputAssetMgr._instance = this
   }
 
-  get preloaded() { return this._mtls.size + this._phyMtls.size + this._terrains.size >= (3 + 5 + 2) }
-
+  get preloaded() { return this._mtls.size + this._phyMtls.size + this._terrains.size }
+  get totalPreload() { return 0 + 5 + 8 }
+  
   getModelConfig(id: number) {
     for (let item of this.groundConfigs) {
       if (item.id == id) return item
@@ -47,7 +48,7 @@ export default class LilliputAssetMgr implements AssetMgr {
     }
   }
 
-  getModelCongfigs(type: BigWorld.ModelGroup) {
+  getModelConfigs(type: BigWorld.ModelGroup) {
     switch (type) {
       case BigWorld.ModelGroup.Ground:
         return GroundConfigs
@@ -83,24 +84,16 @@ export default class LilliputAssetMgr implements AssetMgr {
 
   preload() {
 
-    resources.loadDir(`prefab/terrain/test`, Prefab, (err, assets) => {
+    resources.load('prefab/terrain/island', Prefab, (err, data) => {
+      this._terrains.set(data.name, data)
+    })
+
+    resources.loadDir(`prefab/terrain/ground/block`, Prefab, (err, assets) => { // 3
       assets.forEach(it => { this._terrains.set(it.name, it) })
     })
 
-    resources.load(`prefab/terrain/debug`, Prefab, (err, prefab) => {
-      this._terrains.set('debug', prefab)
-    })
-
-    resources.load(`material/misc/translucent`, Material, (err, mtl) => {
-      this._mtls.set('translucent', mtl)
-    })
-
-    resources.load(`material/misc/green`, Material, (err, mtl) => {
-      this._mtls.set('green', mtl)
-    })
-
-    resources.load(`material/misc/heart`, Material, (err, mtl) => {
-      this._mtls.set('heart', mtl)
+    resources.loadDir(`prefab/terrain/ground/bridge`, Prefab, (err, assets) => { // 4
+      assets.forEach(it => { this._terrains.set(it.name, it) })
     })
 
     resources.load(`material/physical/island`, PhysicMaterial, (err, mtl) => {

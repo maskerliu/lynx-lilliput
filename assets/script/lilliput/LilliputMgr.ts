@@ -1,6 +1,9 @@
 import {
-  AmbientInfo, Camera, Component, DirectionalLight, Node, Prefab,
-  SkyboxInfo, UITransform, Vec3, _decorator, director, instantiate, quat, v3
+  AmbientInfo,
+  BatchingUtility,
+  Camera, Component, DirectionalLight, Node, PhysicsSystem, Prefab,
+  Quat,
+  SkyboxInfo, UITransform, Vec3, _decorator, director, geometry, instantiate, quat, v3
 } from 'cc'
 import { BigWorld } from '../common/BigWorld'
 import OrbitCamera from '../common/OrbitCamera'
@@ -11,9 +14,9 @@ import LilliputAssetMgr from './LilliputAssetMgr'
 import { Lilliput } from './LilliputEvents'
 import LilliputUIMgr from './LilliputUIMgr'
 import UserService from './UserService'
+import MyselfMgr from './player/MyselfMgr'
 import OtherMgr from './player/OtherMgr'
 import { registerProps } from './prop'
-import MyselfMgr from './player/MyselfMgr'
 
 const { ccclass, property } = _decorator
 
@@ -30,8 +33,7 @@ export default class LilliputMgr extends Component {
   @property(Node)
   private bornNode: Node
 
-  @property(Prefab)
-  islandPrefab: Prefab
+  private mergedBornNode: Node = new Node()
 
   @property(Node)
   test: Node
@@ -43,10 +45,6 @@ export default class LilliputMgr extends Component {
   private ambientInfo: AmbientInfo
 
   private uiMgr: LilliputUIMgr
-  private once: boolean = true
-
-  private q_rotation = quat()
-  private v3_0 = v3()
 
   private worldTime: number = 0
   private isDay: boolean = false
@@ -58,11 +56,7 @@ export default class LilliputMgr extends Component {
     this.uiMgr = this.getComponentInChildren(LilliputUIMgr)
     this.orbitCamera.reactArea = this.uiMgr?.reactArea
 
-
     registerProps()
-
-    // this.test.rotation = Quat.rotateY(this.test.rotation, this.test.rotation, Math.PI * 90 / 180)
-    // this.test.rotation = quat(0, 0, 0, 1)
   }
 
   async start() {
@@ -70,18 +64,32 @@ export default class LilliputMgr extends Component {
     this.orbitCamera.target = this.bornNode
     this.uiMgr?.canEdit(false, false)
     this.registerUIEvent()
-    this.schedule(this.onPreloaded, 0.5)
+    this.schedule(this.onPreloaded, 0.1)
 
-  }
+    this.node.addChild(this.mergedBornNode)
+    BatchingUtility.batchStaticModel(this.bornNode, this.mergedBornNode)
 
-  private async onPreloaded() {
-    if (LilliputAssetMgr.instance.preloaded) {
-      this.preload()
-      this.unschedule(this.onPreloaded)
+    let ray = new geometry.Ray()
+
+    geometry.Ray.set(ray, 0, -0.0, 0, 0, -5.5, 0)
+    console.log(ray)
+
+    if (PhysicsSystem.instance.raycast(ray)) {
+      console.log(PhysicsSystem.instance.raycastResults)
     }
   }
 
-  async update(dt: number) {
+  private async onPreloaded() {
+    if (LilliputAssetMgr.instance.preloaded >= LilliputAssetMgr.instance.totalPreload) {
+      this.preload()
+      this.unschedule(this.onPreloaded)
+      this.uiMgr.updateLoading(false)
+    } else {
+      this.uiMgr.updateLoading(true, `${LilliputAssetMgr.instance.preloaded} /${LilliputAssetMgr.instance.totalPreload}`)
+    }
+  }
+
+  update(dt: number) {
     if (this.isDay) {
       if (this.mainLight.illuminance < 80000) {
         this.mainLight.illuminance += 100
@@ -95,10 +103,6 @@ export default class LilliputMgr extends Component {
         this.isDay = true
       }
     }
-
-    // Quat.rotateY(this.q_rotation, this.test.rotation, Math.PI / 180)
-    // Quat.rotateX(this.q_rotation, this.q_rotation, Math.PI / 180)
-    // this.test.rotation = this.q_rotation
 
     if (this.skyboxInfo.rotationAngle >= 360) {
       this.skyboxInfo.rotationAngle = 0
@@ -145,6 +149,8 @@ export default class LilliputMgr extends Component {
     this.node.on(BigWorld.IslandEvent.Type.OnLayerChanged, island.onEditLayerChanged, island)
     this.node.on(BigWorld.IslandEvent.Type.OnRotate, island.onRotate, island)
     this.node.on(BigWorld.IslandEvent.Type.OnSkinChanged, island.onSkinChanged, island)
+
+    this.node.on(Lilliput.UIEvent.Type.ChatMsg, this.uiMgr.updateChatMsg, this.uiMgr)
   }
 
   private unregisterIslandEvent() {
@@ -155,6 +161,8 @@ export default class LilliputMgr extends Component {
     this.node.off(BigWorld.IslandEvent.Type.OnLayerChanged, island?.onEditLayerChanged, island)
     this.node.off(BigWorld.IslandEvent.Type.OnRotate, island?.onRotate, island)
     this.node.off(BigWorld.IslandEvent.Type.OnSkinChanged, island?.onSkinChanged, island)
+
+    this.node.off(Lilliput.UIEvent.Type.ChatMsg, this.uiMgr.updateChatMsg, this.uiMgr)
   }
 
   async onUserInfoBind() {
@@ -255,7 +263,7 @@ export default class LilliputMgr extends Component {
   private async generateIsland(islandId: string, uid: string) {
     let mgr = BattleService.instance.island(islandId, uid)
     if (mgr == null) {
-      let island = instantiate(this.islandPrefab)
+      let island = instantiate(LilliputAssetMgr.instance.getTerrainPrefab('island'))
       island.position = BattleService.instance.randomPos
       this.node.addChild(island)
       let mgr = island.getComponent('LilliputIslandMgr') as BigWorld.IslandMgr

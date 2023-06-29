@@ -163,9 +163,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 59,
-      "g": 118,
-      "b": 206,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_string": "",
@@ -178,8 +178,8 @@
     "_overflow": 1,
     "_enableWrapText": false,
     "_font": {
-      "__uuid__": "9b72fb7d-4816-4ad7-a8ba-4cbd9c02c80a",
-      "__expectedType__": "cc.TTFFont"
+      "__uuid__": "767456f7-7669-4d32-a921-caad09a6a8cd",
+      "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
@@ -352,8 +352,8 @@
     "_overflow": 1,
     "_enableWrapText": false,
     "_font": {
-      "__uuid__": "9b72fb7d-4816-4ad7-a8ba-4cbd9c02c80a",
-      "__expectedType__": "cc.TTFFont"
+      "__uuid__": "767456f7-7669-4d32-a921-caad09a6a8cd",
+      "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
@@ -361,7 +361,7 @@
     "_isBold": false,
     "_isUnderline": false,
     "_underlineHeight": 2,
-    "_cacheMode": 2,
+    "_cacheMode": 0,
     "_id": ""
   },
   {

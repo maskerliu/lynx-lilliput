@@ -10,6 +10,7 @@
   "_techIdx": 1,
   "_defines": [
     {
+      "USE_INSTANCING": true,
       "HAS_SECOND_UV": true
     }
   ],
@@ -29,8 +30,8 @@
       "mainColor": {
         "__type__": "cc.Color",
         "r": 0,
-        "g": 102,
-        "b": 158,
+        "g": 75,
+        "b": 116,
         "a": 151
       },
       "reflectTexture": {
@@ -42,13 +43,6 @@
       "noiseTexture": {
         "__uuid__": "60b52f34-201d-491b-8b8c-f7b459ffd583@6c48a",
         "__expectedType__": "cc.Texture2D"
-      },
-      "rimColor": {
-        "__type__": "cc.Color",
-        "r": 66,
-        "g": 180,
-        "b": 176,
-        "a": 255
       }
     }
   ]

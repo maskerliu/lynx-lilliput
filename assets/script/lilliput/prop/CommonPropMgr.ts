@@ -1,4 +1,4 @@
-import { BoxCollider, Collider, Mesh, MeshCollider, MeshRenderer, Prefab, Quat, RigidBody, Vec3, _decorator, instantiate, quat, resources, tween, v3 } from 'cc'
+import { BoxCollider, Collider, Mesh, MeshCollider, MeshRenderer, Node, Prefab, Quat, RigidBody, Tween, Vec3, _decorator, instantiate, math, quat, resources, tween, v3 } from 'cc'
 import { BigWorld } from '../../common/BigWorld'
 import { terrainItemIdx } from '../../misc/Utils'
 import LilliputAssetMgr from '../LilliputAssetMgr'
@@ -36,7 +36,7 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
   get skinnable() { return this.config.skinnable != null && this.config.skinnable }
 
   init(info: Array<number>, preview: boolean = false) {
-    this._info = Object.assign(info)
+    this._info = Object.assign([], info)
     this._index = terrainItemIdx(this.info[1], this.info[2], this.info[3])
     this._preview = preview
 
@@ -95,9 +95,7 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
     this._selected = false
     CommonPropMgr.v3_pos.set(this._info[1], this._info[2], this._info[3])
     this.node.position = CommonPropMgr.v3_pos
-    let q = quat()
-    Quat.rotateY(q, q, Math.PI / 180 * this._info[4])
-    this.node.rotation = q
+    this.node.rotation = Quat.rotateY(this.node.rotation, this.node.rotation, math.toRadian(this._info[4]))
 
     this.initPhysical()
 
@@ -108,7 +106,6 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
 
   protected initPhysical() {
     if (this.config.physical == null) return
-
 
     this.rigidBody = this.node.addComponent(RigidBody)
     this.rigidBody.type = this.config.physical.type as RigidBody.Type
@@ -156,30 +153,31 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
     this.enablePhysic(false)
   }
 
-  onSelected(selected: boolean) {
-    if (this._selected == selected || this._animating) return
+  set selected(isSelected: boolean) {
+    if (this._selected == isSelected || this._animating) return
 
     this._animating = true
     CommonPropMgr.v3_pos.set(this.node.position)
 
-    if (!selected && this._selected) {
+    if (!isSelected && this._selected) {
       CommonPropMgr.v3_pos.y -= DROP_Height
     }
 
-    if (selected && !this._selected) {
+    if (isSelected && !this._selected) {
       CommonPropMgr.v3_pos.y += DROP_Height
     }
 
     tween(this.node).to(0.5, { position: CommonPropMgr.v3_pos }, {
       easing: 'bounceOut', onComplete: () => {
-        this._selected = selected
+        this._selected = isSelected
         this._animating = false
       }
     }).start()
   }
 
   preview(preview: boolean) {
-    if (this._animating) return
+    if (this._animating || this._preview == preview) return
+
     this._animating = true
     if (!preview && this._selected) {
       CommonPropMgr.v3_pos.set(this._info[1], this._info[2], this._info[3])
@@ -188,7 +186,7 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
     }
 
     tween(this.node).to(0.5, { scale: preview ? PreviewScale : Vec3.ONE }, {
-      easing: preview ? 'sineIn' : 'sineOut',
+      easing: 'bounceOut',
       onComplete: () => {
         this._animating = false
         this._preview = preview
@@ -204,22 +202,24 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
     if (this._animating) return
 
     this._animating = true
-    Quat.rotateY(CommonPropMgr.q_rotation, this.node.rotation, Math.PI / 180 * angle)
+    Quat.rotateY(CommonPropMgr.q_rotation, this.node.rotation, math.toRadian(angle))
     tween(this.node).to(0.3, { rotation: CommonPropMgr.q_rotation }, {
       easing: 'linear',
       onComplete: () => {
         this._animating = false
-        this._info[4] += angle
-
-        if (this._info[4] >= 360) {
-          this._info[4] -= 360
-        }
-
-        if (this._info[4] <= -360) {
-          this._info[4] += 360
-        }
+        this._info[4] = this.angle(this._info[4] + angle)
       }
     }).start()
+  }
+
+  angle(oldAngle: number) {
+    let a = 0
+    let sin = Math.sin(math.toRadian(oldAngle))
+    if (sin == 0) { a = 0 }
+    else if (sin == 1) { a = 90 }
+    else if (sin == -1) { a = -90 }
+    else { a = 180 }
+    return a
   }
 
   enablePhysic(active: boolean) {
@@ -237,15 +237,18 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
   }
 
   protected phyMtl() {
+    let name: string
     switch (this.config.group) {
       case BigWorld.ModelGroup.Ground:
-        if (this.config.physical?.type == RigidBody.Type.STATIC) return LilliputAssetMgr.instance.getPhyMtl('terrain')
+        name = 'terrain'
       case BigWorld.ModelGroup.Prop:
-        if (this.config.physical.type == RigidBody.Type.STATIC) return LilliputAssetMgr.instance.getPhyMtl('propStatic')
-        else return LilliputAssetMgr.instance.getPhyMtl('propDynamic')
+        if (this.config.physical.type == RigidBody.Type.STATIC) name = 'propStatic'
+        else name = 'propDynamic'
       default:
-        return LilliputAssetMgr.instance.getPhyMtl('terrain')
+        name = 'terrain'
     }
+
+    return LilliputAssetMgr.instance.getPhyMtl(name)
   }
 }
 

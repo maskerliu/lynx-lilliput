@@ -1,4 +1,4 @@
-import { Node, Prefab, Quat, RigidBody, Vec3, _decorator, instantiate, quat, resources, v3 } from 'cc'
+import { Node, Prefab, Quat, RigidBody, Vec3, _decorator, instantiate, math, quat, resources, v3 } from 'cc'
 import { Game } from '../../model'
 import LilliputAssetMgr from '../LilliputAssetMgr'
 import CannonBallMgr from './CannonBallMgr'
@@ -12,7 +12,7 @@ export default class CannonMgr extends CommonPropMgr {
   protected barrel: Node
   protected _rotation: Quat = quat()
 
-  protected static MAX_ANGLE = 50 * Math.PI / 180
+  protected static MAX_ANGLE = math.toRadian(50)
   protected MAX_QUAT: Quat = quat()
   protected MIN_QUAT: Quat = quat()
   protected isUp: boolean = false
@@ -24,7 +24,7 @@ export default class CannonMgr extends CommonPropMgr {
 
 
   onLoad() {
-    Quat.fromAxisAngle(this.MAX_QUAT, Vec3.UNIT_X, 50 * Math.PI / 180)
+    Quat.fromAxisAngle(this.MAX_QUAT, Vec3.UNIT_X, math.toRadian(50))
     Quat.fromAxisAngle(this.MIN_QUAT, Vec3.UNIT_X, 0)
   }
 

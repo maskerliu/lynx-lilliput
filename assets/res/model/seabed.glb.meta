@@ -1,0 +1,122 @@
+{
+  "ver": "2.3.4",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "f42abd4a-c9a5-4da5-918e-9a01290204dc",
+  "files": [],
+  "subMetas": {
+    "b785b": {
+      "importer": "gltf-mesh",
+      "uuid": "f42abd4a-c9a5-4da5-918e-9a01290204dc@b785b",
+      "displayName": "",
+      "id": "b785b",
+      "name": "seabed.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "3dd4d": {
+      "importer": "gltf-embeded-image",
+      "uuid": "f42abd4a-c9a5-4da5-918e-9a01290204dc@3dd4d",
+      "displayName": "",
+      "id": "3dd4d",
+      "name": "common.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "f42abd4a-c9a5-4da5-918e-9a01290204dc@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "f42abd4a-c9a5-4da5-918e-9a01290204dc@3dd4d"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ada28": {
+      "importer": "gltf-material",
+      "uuid": "f42abd4a-c9a5-4da5-918e-9a01290204dc@ada28",
+      "displayName": "",
+      "id": "ada28",
+      "name": "common.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a1e0b": {
+      "importer": "gltf-scene",
+      "uuid": "f42abd4a-c9a5-4da5-918e-9a01290204dc@a1e0b",
+      "displayName": "",
+      "id": "a1e0b",
+      "name": "seabed.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "common",
+        "uri": "f42abd4a-c9a5-4da5-918e-9a01290204dc@3dd4d"
+      }
+    ],
+    "redirect": "f42abd4a-c9a5-4da5-918e-9a01290204dc@a1e0b",
+    "assetFinder": {
+      "meshes": [
+        "f42abd4a-c9a5-4da5-918e-9a01290204dc@b785b"
+      ],
+      "skeletons": [],
+      "textures": [
+        "f42abd4a-c9a5-4da5-918e-9a01290204dc@e39f7"
+      ],
+      "materials": [
+        "f42abd4a-c9a5-4da5-918e-9a01290204dc@ada28"
+      ],
+      "scenes": [
+        "f42abd4a-c9a5-4da5-918e-9a01290204dc@a1e0b"
+      ]
+    }
+  }
+}

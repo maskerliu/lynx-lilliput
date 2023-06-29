@@ -1,4 +1,4 @@
-import { Component, Node, Prefab, Vec3, _decorator, instantiate, resources, v3 } from 'cc'
+import { BatchingUtility, Component, Node, Prefab, Vec3, _decorator, instantiate, resources, v3 } from 'cc'
 import info from '../lilliput.Island.json'
 import LilliputAssetMgr from '../lilliput/LilliputAssetMgr'
 
@@ -27,13 +27,31 @@ export default class TestMgr extends Component {
   private curPreload = -1
 
   protected onLoad(): void {
+    // info.info.forEach(it => {
+    //   if (!this.preloads.includes(it[0])) this.preloads.push(it[0])
+    // })
+    // console.log(this.preloads)
+    // this.schedule(this.preload, 0.02)
+    let arr = [5, 2, 8, 1, 4, 6, 11, 33, 3, 15]
+    this.quickSort(arr, 0, arr.length - 1)
+    console.log(arr)
 
-    info.info.forEach(it => {
-      if (!this.preloads.includes(it[0])) this.preloads.push(it[0])
-    })
-    console.log(this.preloads)
-    this.schedule(this.preload, 0.02)
-    // 
+    let treeNodes = []
+    for (let i = 0; i < 5; ++i) {
+      let node = new BinaryTreeNode(i)
+      treeNodes.push(node)
+    }
+
+    treeNodes[0].left = treeNodes[1]
+    treeNodes[1].right = treeNodes[2]
+    treeNodes[1].left = treeNodes[3]
+    treeNodes[3].right = treeNodes[4]
+
+    console.log(this.treeHeight(treeNodes[0]))
+    console.log(this.treeLevel(treeNodes[0]))
+
+    BatchingUtility.batchStaticModel(this.staticNode, this.dstNode)
+
   }
 
 
@@ -41,7 +59,7 @@ export default class TestMgr extends Component {
     if (this.prefabs.size <= this.curPreload) return
     this.curPreload++
     if (this.curPreload == this.preloads.length) return
-    let config = LilliputAssetMgr.instance.getModelConfigById(this.preloads[this.curPreload])
+    let config = LilliputAssetMgr.instance.getModelConfig(this.preloads[this.curPreload])
     console.log(`load: ${config.name}[${this.curPreload}], cur prefabs: ${this.prefabs.size}`)
     resources.load(`prefab/terrain/env/${config.name}`, Prefab, (err, data) => {
       this.prefabs.set(config.id, data)
@@ -85,4 +103,86 @@ export default class TestMgr extends Component {
     cube.position = this.v3_pos
     this.staticNode.addChild(cube)
   }
+
+  private partition(arr: Array<number>, left: number, right: number) {
+
+    let midVal = arr[left]
+    let tmp = 0
+    let i = left + 1, j = right
+    while (i < j) {
+      while (i <= j && arr[i] <= midVal)
+        ++i
+      while (i <= j && arr[j] >= midVal)
+        --j
+
+      tmp = arr[i]
+      arr[i] = arr[j]
+      arr[j] = tmp
+    }
+
+    arr[left] = arr[j]
+    arr[j] = midVal
+
+    return j
+  }
+
+  quickSort(arr: Array<number>, left: number, right: number) {
+    if (left < right) {
+      let mid = this.partition(arr, left, right)
+      this.quickSort(arr, left, mid - 1)
+      this.quickSort(arr, mid + 1, right)
+    }
+  }
+
+  treeHeight(tree: any) {
+    if (tree == null) { return 0 }
+    let rightHeight = 0, leftHeight = 0
+    rightHeight = tree.right ? this.treeHeight(tree.right) : 0
+    leftHeight = tree.left ? this.treeHeight(tree.left) : 0
+    return Math.max(rightHeight, leftHeight) + 1
+  }
+
+  treeLevel(tree: BinaryTreeNode) {
+    if (tree == null) return 0
+
+    let level = 1
+    let tmpArr = []
+    tmpArr.push(tree)
+    while (tmpArr.length > 0) {
+      let node = tmpArr.pop()
+
+      if (node.left || node.right) level++
+      if (node.left) { tmpArr.push(node.left) }
+      if (node.right) { tmpArr.push(node.right) }
+    }
+
+    return level
+  }
+
+
+  maxIsland(arr: Array<Array<number>>) {
+    for (let i = 0; i < arr.length; ++i) {
+      for (let j = 0; j < arr[i].length; ++j) {
+
+
+      }
+    }
+  }
+
+  private relative(arr: Array<Array<number>>, i: number, j: number) {
+
+    if (arr[i + 1][j]) { this.relative(arr, i + 1, j) } // left
+    if (arr[i - 1][j]) { this.relative(arr, i - 1, j) }
+    if (arr[i][j + 1]) { this.relative(arr, i, j + 1) }
+    if (arr[i][j - 1]) { this.relative(arr, i, j - 1) }
+  }
+}
+
+
+class BinaryTreeNode {
+  data: any
+  left: BinaryTreeNode
+  right: BinaryTreeNode
+
+  constructor(data: any) { this.data = data }
 }

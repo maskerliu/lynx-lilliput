@@ -133,7 +133,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 149.76,
+      "width": 90.75,
       "height": 40
     },
     "_anchorPoint": {
@@ -163,9 +163,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 12,
-      "g": 160,
-      "b": 230,
+      "r": 110,
+      "g": 132,
+      "b": 143,
       "a": 255
     },
     "_string": "button",
@@ -178,8 +178,8 @@
     "_overflow": 0,
     "_enableWrapText": false,
     "_font": {
-      "__uuid__": "9b72fb7d-4816-4ad7-a8ba-4cbd9c02c80a",
-      "__expectedType__": "cc.TTFFont"
+      "__uuid__": "767456f7-7669-4d32-a921-caad09a6a8cd",
+      "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,

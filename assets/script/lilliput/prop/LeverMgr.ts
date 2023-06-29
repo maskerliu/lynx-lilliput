@@ -1,4 +1,4 @@
-import { MeshRenderer, Node, Prefab, Quat, _decorator } from 'cc'
+import { MeshRenderer, Node, Prefab, Quat, _decorator, math } from 'cc'
 import CommonPropMgr from './CommonPropMgr'
 
 
@@ -21,7 +21,7 @@ export default class LeverMgr extends CommonPropMgr {
     CommonPropMgr.q_rotation.set(this.handle.rotation)
 
     let angle = 90
-    Quat.rotateX(CommonPropMgr.q_rotation, CommonPropMgr.q_rotation, Math.PI / 180 * angle)
+    Quat.rotateX(CommonPropMgr.q_rotation, CommonPropMgr.q_rotation, math.toRadian(angle))
   }
 }
 

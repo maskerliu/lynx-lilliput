@@ -4,10 +4,18 @@
     "name": "block",
     "group": 0,
     "skinnable": true,
-    "skins": [
-      "groundGrass",
-      "groundSnow"
-    ],
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 20,
+    "name": "bridge",
+    "group": 0,
+    "skinnable": false,
     "physical": {
       "type": 2,
       "group": 2,
@@ -17,123 +25,6 @@
   },
   {
     "id": 2,
-    "name": "bridgeStart",
-    "group": 0,
-    "skinnable": false
-  },
-  {
-    "id": 3,
-    "name": "bridgeTile",
-    "group": 0
-  },
-  {
-    "id": 4,
-    "name": "fence",
-    "group": 0,
-    "physical": {
-      "type": 2,
-      "group": 4,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 5,
-    "name": "fenceCorner",
-    "group": 0
-  },
-  {
-    "id": 6,
-    "name": "poles",
-    "group": 0,
-    "physical": {
-      "type": 2,
-      "group": 4,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 7,
-    "name": "tree",
-    "group": 0
-  },
-  {
-    "id": 8,
-    "name": "treePine",
-    "group": 0
-  },
-  {
-    "id": 9,
-    "name": "rockLarge",
-    "group": 0,
-    "skinnable": false,
-    "physical": {
-      "type": 2,
-      "group": 2,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 10,
-    "name": "rockMiddle",
-    "group": 0,
-    "skinnable": false,
-    "physical": {
-      "type": 2,
-      "group": 2,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 11,
-    "name": "rockSmall",
-    "group": 0,
-    "skinnable": false,
-    "physical": {
-      "type": 2,
-      "group": 2,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 12,
-    "name": "blockMoving",
-    "group": 0,
-    "physical": {
-      "type": 2,
-      "group": 2,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 13,
-    "name": "bridge",
-    "group": 0,
-    "physical": {
-      "type": 2,
-      "group": 2,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 14,
-    "name": "platform",
-    "group": 0,
-    "physical": {
-      "type": 2,
-      "group": 2,
-      "collider": 1,
-      "isTrriger": false
-    }
-  },
-  {
-    "id": 15,
     "name": "ladder",
     "group": 0,
     "interaction": [
@@ -147,8 +38,8 @@
     }
   },
   {
-    "id": 16,
-    "name": "hedge",
+    "id": 3,
+    "name": "poles",
     "group": 0,
     "physical": {
       "type": 2,
@@ -158,18 +49,72 @@
     }
   },
   {
-    "id": 17,
-    "name": "hedgeCorner",
+    "id": 4,
+    "name": "blockMoving",
     "group": 0,
     "physical": {
       "type": 2,
-      "group": 4,
+      "group": 2,
       "collider": 1,
       "isTrriger": false
     }
   },
   {
-    "id": 18,
+    "id": 5,
+    "name": "rockLarge",
+    "group": 0,
+    "skinnable": false,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 6,
+    "name": "rockMiddle",
+    "group": 0,
+    "skinnable": false,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 7,
+    "name": "rockSmall",
+    "group": 0,
+    "skinnable": false,
+    "physical": {
+      "type": 2,
+      "group": 2,
+      "collider": 1,
+      "isTrriger": false
+    }
+  },
+  {
+    "id": 8,
+    "name": "treeTrunkLarge",
+    "group": 0,
+    "interaction": [
+      7
+    ]
+  },
+  {
+    "id": 40,
+    "name": "tree",
+    "group": 0
+  },
+  {
+    "id": 41,
+    "name": "treePine",
+    "group": 0
+  },
+  {
+    "id": 42,
     "name": "arrow",
     "group": 0
   },
@@ -179,8 +124,8 @@
     "group": 0
   },
   {
-    "id": 20,
+    "id": 43,
     "name": "sign",
     "group": 0
-  }  
+  }
 ]

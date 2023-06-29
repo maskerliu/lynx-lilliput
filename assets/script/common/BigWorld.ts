@@ -4,11 +4,15 @@ import { Game, Island, PlayerState, User } from '../model'
 
 export namespace BigWorld {
 
-  export const Cube_Up = 0b10000
-  export const Cube_Left = 0b01000
-  export const Cube_Right = 0b00100
-  export const Cube_Forward = 0b00010
-  export const Cube_Behind = 0b00001
+  export const Cube_F = 0b000000001
+  export const Cube_B = 0b000000010
+  export const Cube_L = 0b000000100
+  export const Cube_R = 0b000001000
+  export const Cube_U = 0b000010000
+  export const Cube_UL = 0b000100000
+  export const Cube_UR = 0b001000000
+  export const Cube_UF = 0b010000000
+  export const Cube_UB = 0b100000000
 
   export enum PhyEnvGroup {
     Default = 1 << 0,
@@ -167,14 +171,15 @@ export namespace BigWorld {
     abstract get info(): Array<number>
     abstract get loaded(): boolean
     abstract get selected(): boolean
+    abstract set selected(isSelected: boolean)
     abstract get skinnable(): boolean
     get modelPos(): Vec3 { return this.node.position }
     set matrix(data: number) { }
 
     abstract init(info: Array<number>, preview: boolean): void
-    abstract onSelected(selected: boolean): void
     abstract preview(preview: boolean): void
     abstract hide(): void
+    abstract angle(oldAngle: number): number
     abstract rotate(angle: number): void
     abstract enablePhysic(active: boolean): void
 

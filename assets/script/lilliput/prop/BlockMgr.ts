@@ -1,4 +1,4 @@
-import { BoxCollider, MeshRenderer, Node, Quat, RigidBody, Vec3, _decorator, instantiate, tween, v3 } from 'cc'
+import { BoxCollider, MeshRenderer, Node, Prefab, Quat, RigidBody, Vec3, _decorator, instantiate, math, resources, tween, v3 } from 'cc'
 import { BigWorld } from '../../common/BigWorld'
 import { terrainItemIdx } from '../../misc/Utils'
 import { Island } from '../../model'
@@ -7,13 +7,7 @@ import CommonPropMgr, { PreviewScale } from './CommonPropMgr'
 
 const { ccclass, property } = _decorator
 
-const Prefix_GTC = 'groundTileCenter'
-const Prefix_GTS = 'groundTileSide'
-const Suffix_Dirt = 'Dirt'
-const Suffix_Grass = 'Grass'
-const Suffix_Snow = 'Snow'
-
-const CubeMatchs = [BigWorld.Cube_Left, BigWorld.Cube_Behind, BigWorld.Cube_Right, BigWorld.Cube_Forward]
+const CubeMatchs = [BigWorld.Cube_L, BigWorld.Cube_B, BigWorld.Cube_R, BigWorld.Cube_F]
 
 @ccclass('BlockMgr')
 export default class BlockMgr extends CommonPropMgr {
@@ -22,9 +16,10 @@ export default class BlockMgr extends CommonPropMgr {
   private bSides: Array<Node> = []
   private gCenter: Node
   private gSides: Array<Node> = []
+  private decorator: Node
 
   init(info: number[], preview?: boolean) {
-    this._info = info
+    this._info = Object.assign([], info)
     this._index = terrainItemIdx(this.info[1], this.info[2], this.info[3])
 
     CommonPropMgr.v3_pos.set(this._info[1], this._info[2], this._info[3])
@@ -32,28 +27,21 @@ export default class BlockMgr extends CommonPropMgr {
 
     let btsPrefab = LilliputAssetMgr.instance.getTerrainPrefab('blockTileSide')
     for (let i = 0; i < 4; ++i) {
-      let tile = instantiate(btsPrefab)
-      tile.rotation = Quat.rotateY(tile.rotation, tile.rotation, Math.PI * 90 * i / 180)
-      this.node.addChild(tile)
-      this.bSides.push(tile)
+
     }
 
-    this.initGround()
-
-    this.initPhysical()
-
-    this.preview(preview)
-
-    this._loaded = true
-  }
-
-  initGround() {
     let gtcPrefab = LilliputAssetMgr.instance.getTerrainPrefab('groundTileCenter')
     let gtsPrefab = LilliputAssetMgr.instance.getTerrainPrefab('groundTileSide')
 
     for (let i = 0; i < 4; ++i) {
-      let tile = instantiate(gtsPrefab)
-      tile.rotation = Quat.rotateY(tile.rotation, tile.rotation, Math.PI * 90 * i / 180)
+      let tile = instantiate(btsPrefab)
+      Quat.rotateY(CommonPropMgr.q_rotation, tile.rotation, math.toRadian(90 * i))
+      tile.rotation = CommonPropMgr.q_rotation
+      this.node.addChild(tile)
+      this.bSides.push(tile)
+
+      tile = instantiate(gtsPrefab)
+      tile.rotation = CommonPropMgr.q_rotation
       this.node.addChild(tile)
       this.gSides.push(tile)
     }
@@ -63,7 +51,16 @@ export default class BlockMgr extends CommonPropMgr {
 
     let skin = this._info[5] == null ? Island.MapItemSkin.Grass : this._info[5]
     this._info[5] = -1
+
     this.updateSkin(skin)
+
+    // this.decortate()
+
+    this.initPhysical()
+
+    this.preview(preview)
+
+    this._loaded = true
   }
 
   updateSkin(skin?: Island.MapItemSkin): void {
@@ -82,9 +79,26 @@ export default class BlockMgr extends CommonPropMgr {
       default:
         break
     }
-    
+
     this.gCenter.getComponentInChildren(MeshRenderer).setInstancedAttribute('a_offset', offset)
     this.gSides.forEach(it => { it.getComponentInChildren(MeshRenderer).setInstancedAttribute('a_offset', offset) })
+  }
+
+  rotate(angle: number) {
+    if (this._animating) return
+
+    this._animating = true
+    Quat.rotateY(CommonPropMgr.q_rotation, this.node.rotation, math.toRadian(angle))
+    tween(this.node).to(0.3, { rotation: CommonPropMgr.q_rotation }, {
+      easing: 'linear',
+      onComplete: () => {
+        this._animating = false
+      }
+    }).start()
+  }
+
+  angle(oldAngle: number): number {
+    return 0
   }
 
   preview(preview: boolean): void {
@@ -92,16 +106,8 @@ export default class BlockMgr extends CommonPropMgr {
     this._animating = true
 
     if (preview) {
-      this.gCenter.active = true
-      this.node.addChild(this.gCenter)
-      this.gSides.forEach(it => {
-        it.active = true
-        this.node.addChild(it)
-      })
-      this.bSides.forEach(it => {
-        it.active = true
-        this.node.addChild(it)
-      })
+      this._preview = preview
+      this.matrix = this._matrix
     }
 
     if (!preview && this._selected) {
@@ -111,11 +117,11 @@ export default class BlockMgr extends CommonPropMgr {
     }
 
     tween(this.node).to(0.5, { scale: preview ? PreviewScale : Vec3.ONE }, {
-      easing: preview ? 'sineIn' : 'sineIn',
+      easing: 'bounceOut',
       onComplete: () => {
         this._animating = false
         this._preview = preview
-        if (!preview) this.matrix = this._matrix
+        this.matrix = this._matrix
       }
     }).start()
   }
@@ -150,7 +156,7 @@ export default class BlockMgr extends CommonPropMgr {
       }
     }
 
-    if (this._matrix & BigWorld.Cube_Up) {
+    if (this._matrix & BigWorld.Cube_U) {
       this.gCenter.active = false
       this.gCenter.removeFromParent()
       this.gSides?.forEach(it => {
@@ -159,6 +165,7 @@ export default class BlockMgr extends CommonPropMgr {
       })
     } else {
       this.gCenter.active = true
+      this.decortate()
       this.node.addChild(this.gCenter)
     }
   }
@@ -175,6 +182,33 @@ export default class BlockMgr extends CommonPropMgr {
     this.modelCollider.material = this.phyMtl()
 
     this.enablePhysic(false)
+  }
+
+  private decortate() {
+    if (Math.random() < 0.4) return
+
+    let configs = LilliputAssetMgr.instance.getModelConfigs(BigWorld.ModelGroup.Decorator)
+    let idx = Math.ceil(Math.random() * (configs.length - 1))
+
+    let prefab = LilliputAssetMgr.instance.getTerrainPrefab(configs[idx].name)
+
+    if (prefab == null) {
+      resources.load(`prefab/terrain/decorator/${configs[idx].name}`, Prefab, (err, data) => {
+        LilliputAssetMgr.instance.addTerrainPrefab(configs[idx].name, data)
+        this.addDecorator(data)
+      })
+    } else {
+      this.addDecorator(prefab)
+    }
+  }
+
+  private addDecorator(prefab: Prefab) {
+    if (this.decorator) this.decorator.destroy()
+    this.decorator = instantiate(prefab).children[0]
+    CommonPropMgr.v3_pos.set(0, 1.1, 0)
+    this.decorator.position = CommonPropMgr.v3_pos
+    this.decorator.rotation = Quat.rotateY(this.decorator.rotation, this.decorator.rotation, Math.PI * Math.random() * 2)
+    this.node.addChild(this.decorator)
   }
 }
 

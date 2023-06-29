@@ -8,6 +8,10 @@ const { ccclass, property } = _decorator
 @ccclass('LilliputLoginMgr')
 export default class LilliputLoginMgr extends Component {
 
+
+  @property(Label)
+  private title: Label
+
   @property(Button)
   private switchBtn: Button
 
@@ -86,10 +90,14 @@ export default class LilliputLoginMgr extends Component {
   }
 
   private async onSwitch() {
-
     this.islogin = !this.islogin
     this.login.active = this.islogin
     this.signUp.active = !this.islogin
+
+    let str = this.islogin ? 'SIGN IN' : 'SIGN UP'
+    this.switchBtn.getComponentInChildren(Label).string = this.islogin ? 'SIGN UP' : 'SIGN IN'
+    this.submitBtn.getComponentInChildren(Label).string = str
+    this.title.string = str
   }
 
   private init() {

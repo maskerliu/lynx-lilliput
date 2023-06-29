@@ -137,8 +137,11 @@ export default class MyselfMgr extends CommonPlayerMgr implements RockerTarget {
   protected updateInteractObj(event: ITriggerEvent, enter: boolean): void {
     super.updateInteractObj(event, enter)
 
-    InteractEvent.interactions = this._islandMgr.mapInfo(this._curInteractObj)?.config.interaction
-    this.node.dispatchEvent(InteractEvent)
+    if (this._islandMgr) {
+      InteractEvent.interactions = this._islandMgr.mapInfo(this._curInteractObj)?.config.interaction
+      this.node.dispatchEvent(InteractEvent)
+    }
+
   }
 
   onDirectionChanged(dir: Vec2) {

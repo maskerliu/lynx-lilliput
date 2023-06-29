@@ -1,4 +1,4 @@
-import { Button, Component, Event, EventHandler, Node, Prefab, Sprite, SpriteAtlas, _decorator, instantiate, v3 } from 'cc'
+import { Button, Component, Event, EventHandler, Node, Prefab, Sprite, SpriteAtlas, _decorator, instantiate, math, v3 } from 'cc'
 import { BigWorld } from '../common/BigWorld'
 import { Game } from '../model'
 
@@ -100,8 +100,8 @@ export default class ActionsMgr extends Component {
     let btnNode = instantiate(this.actionBtnPrefab)
     let iconSprite = btnNode.getComponentInChildren(Sprite)
     iconSprite.spriteFrame = this.atlas.getSpriteFrame(icon)
-    let angle = (index * 60 + 80) * Math.PI / 180
-    btnNode.position = v3(Math.cos(angle) * 200, Math.sin(angle) * 200, 0)
+    let radian = math.toRadian((index * 60 + 80))
+    btnNode.position = v3(Math.cos(radian) * 200, Math.sin(radian) * 200, 0)
     let clickHanlder = new EventHandler()
     clickHanlder.target = this.node
     clickHanlder.component = 'ActionsMgr'

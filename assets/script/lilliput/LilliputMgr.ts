@@ -1,9 +1,14 @@
 import {
   AmbientInfo,
-  BatchingUtility,
-  Camera, Component, DirectionalLight, Node, PhysicsSystem, Prefab,
+  Camera, Component, DirectionalLight, Mesh, MeshRenderer, Node,
   Quat,
-  SkyboxInfo, UITransform, Vec3, _decorator, director, geometry, instantiate, quat, v3
+  SkyboxInfo, UITransform, Vec2, Vec3, _decorator, director,
+  gfx,
+  instantiate, math,
+  primitives,
+  utils,
+  v2,
+  v3
 } from 'cc'
 import { BigWorld } from '../common/BigWorld'
 import OrbitCamera from '../common/OrbitCamera'
@@ -17,6 +22,7 @@ import UserService from './UserService'
 import MyselfMgr from './player/MyselfMgr'
 import OtherMgr from './player/OtherMgr'
 import { registerProps } from './prop'
+import { MapQuad, Vertex, VertexHex } from '../common/MapGrid'
 
 const { ccclass, property } = _decorator
 
@@ -39,6 +45,9 @@ export default class LilliputMgr extends Component {
   test: Node
 
   @property(Node)
+  test1: Node
+
+  @property(Node)
   private seagulls: Node
 
   private skyboxInfo: SkyboxInfo
@@ -56,7 +65,41 @@ export default class LilliputMgr extends Component {
     this.uiMgr = this.getComponentInChildren(LilliputUIMgr)
     this.orbitCamera.reactArea = this.uiMgr?.reactArea
 
+
     registerProps()
+  }
+
+  static Axis_X = 0b001
+  static Axis_Y = 0b010
+  static Axis_Z = 0b100
+
+  private rotate(name: string, rotation: number, axis: number) {
+    let result = name
+    if (axis & LilliputMgr.Axis_Y) {
+      result = name
+    } else if (axis & LilliputMgr.Axis_X) {
+      result = name[0] + name[3] + name[7] + name[4] + name[1] + name[2] + name[6] + name[5]
+    } else if (axis & LilliputMgr.Axis_Z) {
+      name[0] + name[4] + name[5] + name[1] + name[3] + name[7] + name[6] + name[2]
+    }
+    return result.substring(rotation, 4) + result.substring(0, rotation) + result.substring(rotation + 4, 8) + result.substring(4, rotation + 4)
+  }
+
+  private flip(name: string, axis: number) {
+    let result: string = name
+    if (axis & LilliputMgr.Axis_X) {
+      result = result[1] + result[0] + result[3] + result[2] + result[5] + result[4] + result[7] + result[6]
+    }
+
+    if (axis & LilliputMgr.Axis_Z) {
+      result = result[3] + result[2] + result[1] + result[0] + result[7] + result[6] + result[5] + result[4]
+    }
+
+    if (axis & LilliputMgr.Axis_Y) {
+      result = result[4] + result[5] + result[6] + result[7] + result[0] + result[1] + result[2] + result[3]
+    }
+
+    return result
   }
 
   async start() {
@@ -67,16 +110,44 @@ export default class LilliputMgr extends Component {
     this.schedule(this.onPreloaded, 0.1)
 
     this.node.addChild(this.mergedBornNode)
-    BatchingUtility.batchStaticModel(this.bornNode, this.mergedBornNode)
+    // BatchingUtility.batchStaticModel(this.bornNode, this.mergedBornNode)
 
-    let ray = new geometry.Ray()
+    let mesh = this.test.getComponentInChildren(MeshRenderer).mesh
 
-    geometry.Ray.set(ray, 0, -0.0, 0, 0, -5.5, 0)
-    console.log(ray)
 
-    if (PhysicsSystem.instance.raycast(ray)) {
-      console.log(PhysicsSystem.instance.raycastResults)
+    let stride = mesh.struct.vertexBundles[0].view.stride
+    let count = mesh.struct.vertexBundles[0].view.count
+    let offset = mesh.struct.vertexBundles[0].view.offset
+    let data = new Float32Array(mesh.data.buffer)
+    let wrapIntData = structuredClone(mesh.data)
+    let wrapFloatData = new Float32Array(wrapIntData.buffer)
+    let v3_0 = v3()
+    for (let i = 0; i < count; ++i) {
+      offset = i * stride / 4
+      // wrapFloatData[offset] = -data[offset]
+      // wrapFloatData[offset + 1] = data[offset + 1]
+      // wrapFloatData[offset + 2] = data[offset + 2]
+      v3_0.set(wrapFloatData[offset], wrapFloatData[offset + 1], wrapFloatData[offset + 2])
+      Vec3.rotateY(v3_0, v3_0, Vec3.UNIT_Y, math.toRadian(90 * 2))
+      wrapFloatData[offset] = v3_0.x
+      wrapFloatData[offset + 1] = v3_0.y
+      wrapFloatData[offset + 2] = v3_0.z
+      // for (let j = 3; j < stride / 4; ++j) {
+      //   wrapFloatData[i * stride / 4 + j] = data[i * stride / 4 + j]
+      // }
     }
+
+    let newMesh = new Mesh()
+    newMesh.reset({ struct: mesh.struct, data: wrapIntData })
+    newMesh.initialize()
+    this.test.getComponentInChildren(MeshRenderer).mesh = newMesh
+    this.test.getComponentInChildren(MeshRenderer).onGeometryChanged()
+
+
+    v3_0 = v3(0, 0, 1)
+
+    console.log(v3_0)
+
   }
 
   private async onPreloaded() {
@@ -170,11 +241,11 @@ export default class LilliputMgr extends Component {
     BattleService.instance.init(profile.id, this.node)
 
     let player = this.genereatorPlayer(profile)
-    player.node.position = v3(1, 3, 1)
+    player.node.position = v3(0, 3, 0)
   }
 
   async onTryEnter(event: BigWorld.PlayerEvent) {
-    await this.generateIsland(event.customData.islandId, null)
+    let island = await this.generateIsland(event.customData.islandId, null)
     let player = BattleService.instance.player()
     await BattleService.instance.tryEnter(player.profile.id, event.customData.islandId, event.customData.pos, player.state)
   }
@@ -185,12 +256,10 @@ export default class LilliputMgr extends Component {
     let player = this.genereatorPlayer(profile)
 
     let island = BattleService.instance.island()
-    await BattleService.instance.didEnter(player)
-
-    this.seagulls.position = island.node.position
+    if (island == null) return
 
     if (BattleService.instance.isMyself(profile.id)) {
-
+      this.seagulls.position = island.node.position
       // Add shadow for Debug 
       let newProfile = Object.assign({}, profile)
       newProfile.id = 'shadow'
@@ -207,6 +276,7 @@ export default class LilliputMgr extends Component {
         this.unregisterIslandEvent()
       }
     }
+    await BattleService.instance.didEnter(player)
   }
 
   async onLeave(event: BigWorld.PlayerEvent) {
@@ -215,15 +285,13 @@ export default class LilliputMgr extends Component {
     if (BattleService.instance.isMyself(player.profile.id)) {
       this.seagulls.position = Vec3.ZERO
 
-      await BattleService.instance.leave()
       let pos = this.node.getComponent(UITransform).convertToNodeSpaceAR(player.node.worldPosition)
       player.leave()
-      this.node.addChild(player.node)
+      player.node.parent = this.node
       player.node.position = pos
-      player.node.active = true
 
       BattleService.instance.player('shadow')?.leave()
-
+      await BattleService.instance.leave()
       this.uiMgr.canEdit(false, false)
       this.unregisterIslandEvent()
     } else {
@@ -233,7 +301,7 @@ export default class LilliputMgr extends Component {
   }
 
   async onPlayerAction(event: BigWorld.PlayerEvent) {
-    let msg: Game.PlayerMsg = { cmd: Game.PlayerMsgType.Sync, state: event.action }
+    let msg: Game.PlayerMsg = { state: event.action }
     BattleService.instance.player().onAction(msg)
   }
 
@@ -292,6 +360,6 @@ export default class LilliputMgr extends Component {
       uids.push(LocalPrefs.myself.id)
     }
 
-    for (let uid of uids) { await this.generateIsland(null, uid) }
+    // for (let uid of uids) { await this.generateIsland(null, uid) }
   }
 }

@@ -74,7 +74,7 @@
         "_value": false
       },
       "geometry-renderer": {
-        "_value": false
+        "_value": true
       },
       "debug-renderer": {
         "_value": false
@@ -129,6 +129,7 @@
       "animation",
       "audio",
       "base",
+      "geometry-renderer",
       "gfx-webgl",
       "gfx-webgl2",
       "particle",

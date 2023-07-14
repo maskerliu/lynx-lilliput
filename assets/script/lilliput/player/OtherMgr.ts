@@ -8,8 +8,8 @@ import CommonPlayerMgr, { Climb_Speed } from './CommonPlayerMgr'
 const { ccclass, property } = _decorator
 
 const Speed_Def = 200
-const Speed_Fast = 100
-const Swim_Speed = 120
+const Speed_Fast = 120
+const Swim_Speed = 130
 const FRAME_SIZE = 10
 
 
@@ -27,8 +27,8 @@ export default class OtherMgr extends CommonPlayerMgr {
   onLoad() {
     for (let i = 0; i < FRAME_SIZE; ++i) {
       this._stateFrames.push({
-        cmd: Game.PlayerMsgType.Local,
         state: Game.CharacterState.None,
+        interactObj: Number.MAX_VALUE,
         dir: { x: -1, y: -1, z: -1 },
         pos: { x: -1, y: -1, z: -1 }
       })
@@ -73,32 +73,30 @@ export default class OtherMgr extends CommonPlayerMgr {
     }
   }
 
-  protected runTo(): void {
-    // if (this._stateFrameCost == 6 && !Vec3.NEG_ONE.equals(this.dstPos)) {
-    //   this.dstPos.set(Vec3.NEG_ONE)
-    //   this.dstForward.set(Vec3.NEG_ONE)
-    //   this.dstState = Game.CharacterState.None
-    //   this.popStateFrame()
-    // } else {
-    super.runTo()
-    this._stateFrameCost++
-    // }
-  }
-
   onAction(msg: Game.PlayerMsg) {
     if (msg == null) return
-    super.onAction(msg)
-
-    this._stateFrameCost = 0
-
-
+    this._curInteractObj = msg.interactObj
+    // console.log(this._curInteractObj)
+    if (msg.state == Game.CharacterState.Climb) { console.log(msg.pos) }
     if (this._curInteractObj != Number.MAX_VALUE && BigWorld.PlayerInteractStates.includes(msg.state)) {
       BattleService.instance.island()?.handleInteract(this._curInteractObj, msg.state)
     }
+
+    super.onAction(msg)
+
+    this._stateFrameCost = 0
   }
 
-  enter(island: BigWorld.IslandMgr, state: PlayerState): void {
-    super.enter(island, state)
+  enter(island: BigWorld.IslandMgr, state: PlayerState) {
+    this._playerState = state
+    this._islandMgr = island
+
+    this.v3_pos.set(state.px, state.py, state.pz)
+    this.node.position = this.v3_pos
+    this.node.parent = island.node
+    this.state = state.state
+    this.node.active = true
+    this.resume()
 
     this._stateFrames.forEach(it => {
       it.pos.x = -1
@@ -108,6 +106,7 @@ export default class OtherMgr extends CommonPlayerMgr {
       it.dir.y = 0
       it.dir.z = 0
       it.state = Game.CharacterState.None
+      it.interactObj = Number.MAX_VALUE
     })
 
     this._curIdx = FRAME_SIZE - 1
@@ -115,15 +114,26 @@ export default class OtherMgr extends CommonPlayerMgr {
 
     this.updateStateFrame()
 
-    this._playerState.onChange((changes: DataChange[]) => {
-      this.onPlayerStateChanged(changes)
-    })
+    this._playerState.onChange((changes: DataChange[]) => { this.onPlayerStateChanged(changes) })
   }
 
-  init(profile: User.Profile): this {
-    super.init(profile)
+  leave() {
+    this.node.removeFromParent()
+    this.node.active = false
+    this._playerState = null
+    this._islandMgr = null
+  }
 
-    return this
+  protected runTo(): void {
+    // if (this._stateFrameCost >= 4 && BigWorld.PlayerSyncableStates.includes(this._state)) {
+    //   this.dstPos.set(Vec3.NEG_ONE)
+    //   this.dstForward.set(Vec3.NEG_ONE)
+    //   this.dstState = Game.CharacterState.None
+    //   this.popStateFrame()
+    // } else {
+      super.runTo()
+      this._stateFrameCost++
+    // }
   }
 
   private onPlayerStateChanged(changes: DataChange[]) {
@@ -150,6 +160,7 @@ export default class OtherMgr extends CommonPlayerMgr {
     this._stateFrames[this._usedIdx].dir.y = this._playerState.dy
     this._stateFrames[this._usedIdx].dir.z = this._playerState.dz
     this._stateFrames[this._usedIdx].state = this._playerState.state
+    this._stateFrames[this._usedIdx].interactObj = this._playerState.interactObj
   }
 
   private popStateFrame(): boolean {

@@ -10,6 +10,8 @@ export default class DiceMgr extends CommonPropMgr {
 
   private _pos = v3()
 
+  private _shaking = false
+
   protected initPhysical(): void {
     super.initPhysical()
 

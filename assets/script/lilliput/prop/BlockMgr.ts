@@ -107,6 +107,10 @@ export default class BlockMgr extends CommonPropMgr {
 
     if (preview) {
       this._preview = preview
+      if (this.decorator) {
+        this.decorator.destroy()
+        this.decorator = null
+      }
       this.matrix = this._matrix
     }
 
@@ -185,7 +189,7 @@ export default class BlockMgr extends CommonPropMgr {
   }
 
   private decortate() {
-    if (Math.random() < 0.4) return
+    if (Math.random() < 0.8) return
 
     let configs = LilliputAssetMgr.instance.getModelConfigs(BigWorld.ModelGroup.Decorator)
     let idx = Math.ceil(Math.random() * (configs.length - 1))
@@ -203,7 +207,10 @@ export default class BlockMgr extends CommonPropMgr {
   }
 
   private addDecorator(prefab: Prefab) {
-    if (this.decorator) this.decorator.destroy()
+    if (this.decorator) {
+      this.decorator.destroy()
+      this.decorator = null
+    }
     this.decorator = instantiate(prefab).children[0]
     CommonPropMgr.v3_pos.set(0, 1.1, 0)
     this.decorator.position = CommonPropMgr.v3_pos

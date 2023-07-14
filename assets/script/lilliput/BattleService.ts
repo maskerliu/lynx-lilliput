@@ -127,7 +127,7 @@ export default class BattleService {
     player.leave()
     let uid = player.profile.id == 'shadow' ? this._myself : player.profile.id
 
-    if (!this._island.state.players.has(uid)) {
+    if (this._island == null || !this._island.state.players.has(uid)) {
       console.log(`error: no player state ${uid}`)
       return
     }
@@ -181,8 +181,6 @@ export default class BattleService {
   private unregisterHandlers() {
     this._island?.onLeave.remove(this.onLeaveIsland)
     this._island?.onStateChange.remove(this.onIslandStateChanged)
-    // this._island?.state.players.onAdd(null)
-    // this._island?.state.players.onRemove.
   }
 
   private unregisterChatHandler() {
@@ -205,6 +203,7 @@ export default class BattleService {
 
   private onRemovePlayer(state: PlayerState, key: string) {
     LeaveEvent.customData = state.profile.uid
+    console.log('on remove player')
     BattleService.instance._handler.dispatchEvent(LeaveEvent)
 
     // let player = BattleService.instance._players.get(state.profile.uid)

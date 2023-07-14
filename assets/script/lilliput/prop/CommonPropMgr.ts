@@ -71,7 +71,7 @@ export default class CommonPropMgr extends BigWorld.MapItemMgr {
       try {
         LilliputAssetMgr.instance.addTerrainPrefab(this.config.name, data)
         this.addSubModel(data)
-      } catch (err) { console.error(this._info, this.config) }
+      } catch (err) { console.error(this._info, this.config, err) }
     })
   }
 

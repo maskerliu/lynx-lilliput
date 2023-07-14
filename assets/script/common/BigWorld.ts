@@ -27,7 +27,7 @@ export namespace BigWorld {
 
   export const GroundMask = PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle
   export const PropMask = PhyEnvGroup.Terrain | PhyEnvGroup.Prop | PhyEnvGroup.Player | PhyEnvGroup.Vehicle
-  export const PlayerMask = PhyEnvGroup.Terrain | PhyEnvGroup.Prop
+  export const PlayerMask = PhyEnvGroup.Terrain | PhyEnvGroup.Prop | PhyEnvGroup.Default
 
   export enum ActionType {
     None = 0,
@@ -267,12 +267,12 @@ export namespace BigWorld {
     abstract set followCamera(node: Node)
 
     abstract init(profile: User.Profile): void
-    abstract enter(island: IslandMgr, state: PlayerState): void
-    abstract leave(): void
+    enter(island: IslandMgr, state: PlayerState): void { }
+    leave(): void { }
 
     abstract onAction(msg: Game.PlayerMsg): void
 
-    abstract sleep(active: boolean): void
+    sleep(active: boolean): void { }
 
     protected anim(state: Game.CharacterState) {
       return PlayerAnim.get(state)

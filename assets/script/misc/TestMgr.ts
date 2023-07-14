@@ -1,4 +1,4 @@
-import { BatchingUtility, Component, Node, Prefab, Vec3, _decorator, instantiate, resources, v3 } from 'cc'
+import { BatchingUtility, Component, Node, Prefab, Quat, UITransform, Vec3, _decorator, instantiate, quat, resources, v3 } from 'cc'
 import info from '../lilliput.Island.json'
 import LilliputAssetMgr from '../lilliput/LilliputAssetMgr'
 
@@ -18,6 +18,9 @@ export default class TestMgr extends Component {
 
   @property(Node)
   dstNode: Node
+
+  @property(Node)
+  lighthouse: Node
 
   private v3_pos = v3()
 
@@ -50,7 +53,17 @@ export default class TestMgr extends Component {
     console.log(this.treeHeight(treeNodes[0]))
     console.log(this.treeLevel(treeNodes[0]))
 
-    BatchingUtility.batchStaticModel(this.staticNode, this.dstNode)
+    // BatchingUtility.batchStaticModel(this.staticNode, this.dstNode)
+
+    // console.log(this.lighthouse.worldPosition, this.lighthouse.position)
+    // let pos = this.dstNode.getComponent(UITransform).convertToNodeSpaceAR(this.lighthouse.worldPosition)
+    // console.log(pos)
+    // this.lighthouse.parent = this.dstNode
+    // this.lighthouse.position = pos
+    let q = quat()
+
+    Quat.rotateAround(q, this.lighthouse.rotation, v3(1, 0, 1).normalize(), Math.PI / 2)
+    this.lighthouse.rotation = q
 
   }
 

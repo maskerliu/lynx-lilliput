@@ -15,6 +15,7 @@ export default class LadderMgr extends CommonPropMgr {
     this._modelPos.x -= Math.sin(radius) * 0.28
     this._modelPos.z -= Math.cos(radius) * 0.28
     this._modelPos.z += 0.05
+    this._modelPos.x -= Math.sin(radius) * 0.05
   }
 
   protected addSubModel(prefab: Prefab): void {
@@ -42,7 +43,7 @@ export default class LadderMgr extends CommonPropMgr {
     let collider = this.node.addComponent(BoxCollider)
     collider.center = this.meshRenderer.model.modelBounds.center
     collider.center.z = -0.2
-    collider.size = v3(this.modelBoundary.x + 0.2, this.modelBoundary.y, 0.5 - this.modelBoundary.z)
+    collider.size = v3(this.modelBoundary.x + 0.2, this.modelBoundary.y, 0.7 - this.modelBoundary.z)
     collider.isTrigger = true
 
     collider.enabled = false

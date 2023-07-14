@@ -48,7 +48,6 @@ export namespace Game {
 
   export interface PlayerMsg extends Msg {
     uid?: string
-    cmd: PlayerMsgType
     state?: CharacterState
     interactObj?: number // 互动对象ID
     pos?: { x: number, y: number, z: number }

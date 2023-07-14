@@ -74,9 +74,9 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -12.899245262145996,
+      "x": 0,
       "y": 0,
-      "z": 0.8680486679077148
+      "z": 0
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -181,6 +181,7 @@
       "__id__": 0
     },
     "fileId": "a9DhN0G7tWyJ70QAs6bQdh",
+    "instance": null,
     "targetOverrides": null
   }
 ]

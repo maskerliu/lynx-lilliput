@@ -5,6 +5,7 @@ import CannonMgr from './CannonMgr'
 import CommonPropMgr from './CommonPropMgr'
 import CrateMgr from './CrateMgr'
 import DiceMgr from './DiceMgr'
+import DoorLargeMgr from './DoorLargeMgr'
 import LadderMgr from './LadderMgr'
 import LeverMgr from './LeverMgr'
 import MushroomMgr from './MushroomMgr'
@@ -24,5 +25,6 @@ export function registerProps() {
   BigWorld.setPropMgr(BlockMgr.ItemName, BlockMgr)
   BigWorld.setPropMgr(BridgeMgr.ItemName, BridgeMgr)
   BigWorld.setPropMgr(TreeTrunkMgr.ItemName, TreeTrunkMgr)
+  BigWorld.setPropMgr(DoorLargeMgr.ItemName, DoorLargeMgr)
   BigWorld.setPropMgr(CommonPropMgr.ItemName, CommonPropMgr)
 }

@@ -1,4 +1,4 @@
-import { BatchingUtility, Camera, Color, EventTouch, MeshRenderer, Node, PhysicsSystem, Touch, UITransform, Vec2, Vec3, _decorator, geometry, quat, tween, v3 } from 'cc'
+import { BatchingUtility, Camera, Color, EventTouch, MeshRenderer, Node, PhysicsSystem, Touch, UITransform, Vec2, Vec3, _decorator, geometry, quat, tween, v2, v3 } from 'cc'
 import { BigWorld } from '../common/BigWorld'
 import OrbitCamera from '../common/OrbitCamera'
 import { isDebug, terrainItemIdx } from '../misc/Utils'
@@ -32,7 +32,7 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
   private staticNodeGroup = [new Node(), new Node(), new Node()]
   private mergedNodeGroup = [new Node(), new Node(), new Node()]
 
-  private _isMove = false
+  private _lstTouch = v2()
   private _color: Color = new Color()
 
   camera: Camera
@@ -190,7 +190,6 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
 
     this.myself = this.node.getComponentInChildren('MyselfMgr') as BigWorld.PlayerMgr
     if (this.myself) {
-      this.myself.sleep(this._isEdit)
       this.orginPlayerPos.set(this.myself.node.position)
       this.anchorNode.position = this.myself.node.position
       this.camera.node.getComponent(OrbitCamera).target = this.curAnchorNode
@@ -265,16 +264,19 @@ export default class LilliputIslandMgr extends BigWorld.IslandMgr {
 
   private onTouchStart(event: EventTouch) {
     if (!this.isEdit) return
-    this._isMove = false
+    this._lstTouch.set(event.getLocation())
   }
 
   private onTouchMove(event: EventTouch) {
     if (!this.isEdit) return
-    this._isMove = !Vec2.ZERO.equals(event.getDelta(), 0.542)
   }
 
   private onTouchEnd(event: EventTouch) {
-    if (!this.isEdit || this._isMove) return
+    this._lstTouch.subtract(event.getLocation())
+    if (!this.isEdit ||
+      Math.abs(this._lstTouch.x) > 10 ||
+      Math.abs(this._lstTouch.y) > 10) return
+
     let action = this.selectGirdItem(event.touch)
     if (action == BigWorld.ActionType.None) return
     this.updateMapInfo({ pos: this.hitNode.position, type: action, angle: 0 })

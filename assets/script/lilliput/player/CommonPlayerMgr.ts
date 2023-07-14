@@ -56,12 +56,12 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
   protected _curDir: Vec2 = v2()
   protected _triggers: Array<number> = []
   protected _curInteractObj: number = Number.MAX_VALUE
-  // protected _interactObj: BigWorld.MapItemMgr
   protected _canClimb: boolean = false
   protected _inWater: boolean = false
   protected _islandMgr: BigWorld.IslandMgr
   protected _bombPrefab: Prefab
   private _ray: geometry.Ray = new geometry.Ray()
+  private _frameCount = 0
 
   private debug: Node
 
@@ -74,14 +74,18 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
       }
     }
 
-    this.runTo()
+    this.inWater()
 
-    if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
+    this.runTo()
+    let radius = Vec3.angle(this.node.up, Vec3.UNIT_Y)
+
+    if (Math.abs(radius) > 0.02) {
       let forward = this.node.forward.negative()
       this.v3_dir.set(forward.x, 0, forward.z)
-      Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
-      this.node.rotation = this.q_rotation
-      this.q_rotation.set(QuatNeg)
+      this.v3_dir.normalize()
+      // console.log(this.node.rotation)
+      // this.node.rotation = this.node.rotation.slerp(this.q_rotation, Roate_Speed * dt)
+      this.node.rotation = Quat.fromViewUp(this.node.rotation, this.v3_dir)
     }
   }
 
@@ -122,21 +126,13 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         this._init(prefab)
       }
     }
-
-    return this
-  }
-
-  sleep(active: boolean): void {
-    if (active) {
-      this.rigidBody.sleep()
-    }
   }
 
   resume() {
     this.rigidBody.clearState()
     this.rigidBody.useGravity = true
 
-    this.state = Game.CharacterState.Idle
+    this.state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
     this.q_rotation.set(QuatNeg)
     this.v3_dir.set(Vec3.ZERO)
     this.v3_speed.set(Vec3.ZERO)
@@ -149,26 +145,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
     this._canClimb = false
   }
 
-  enter(island: BigWorld.IslandMgr, state: PlayerState) {
-    this._playerState = state
-    this._islandMgr = island
-    this.node.position = v3(state.px, state.py, state.pz)
-    island.node.addChild(this.node)
-    this.state = state.state
-    this.node.active = true
-    this.resume()
-  }
-
-  leave() {
-    this.node.removeFromParent()
-    this.node.active = false
-    this.rigidBody.sleep()
-    this._playerState = null
-    this._islandMgr = null
-  }
-
   private _init(prefab: Prefab) {
-    // this.node.getChildByName('Debug').active = false
     this.character = instantiate(prefab)
 
     this.debug = this.character.getChildByName('Debug')
@@ -222,6 +199,14 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         this.dstState = msg.state
         break
       case Game.CharacterState.Climb:
+        if (msg.pos) {
+          console.log(this.node.name, msg.state)
+          this.node.position = this.v3_pos.set(msg.pos.x, msg.pos.y, msg.pos.z)
+          this.state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
+        }
+        if (msg.dir) {
+          this.node.forward = this.v3_dir.set(msg.dir.x, msg.dir.y, msg.dir.z)
+        }
         this.climb()
         break
       case Game.CharacterState.JumpUp:
@@ -276,61 +261,11 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
     }
   }
 
-  protected onTriggerEnter(event: ITriggerEvent) {
-    let name = event.otherCollider.node.name
-    // if (name == 'Water') {
-    //   geometry.Ray.set(this._ray, this.node.position.x, this.node.position.y, this.node.position.z,
-    //     this.node.position.x, this.node.position.y - 6, this.node.position.z)
-    //   if (PhysicsSystem.instance.raycast(this._ray, 0xffffffff, 10)) {
-    //     if (PhysicsSystem.instance.raycastResults.length <= 2) {
-    //       this._inWater = true
-    //       this.state = Game.CharacterState.TreadWater
-    //       return
-    //     }
-    //   }
-    // }
+  protected onTriggerEnter(event: ITriggerEvent) { this.updateInteractObj(event, true) }
 
-    this.updateInteractObj(event, true)
-  }
+  protected onTriggerStay(event: ITriggerEvent) { }
 
-  protected onTriggerStay(event: ITriggerEvent) {
-    let name = event.otherCollider.node.name
-    if (name == 'Water') {
-      geometry.Ray.set(this._ray, this.node.worldPosition.x, this.node.worldPosition.y - 0.5, this.node.worldPosition.z,
-        this.node.worldPosition.x, this.node.worldPosition.y - 6, this.node.worldPosition.z)
-      if (!PhysicsSystem.instance.raycastClosest(this._ray)) {
-        this._inWater = false
-        return
-      }
-      // console.log(PhysicsSystem.instance.raycastClosestResult.collider.node.name)
-      if (PhysicsSystem.instance.raycastClosestResult.collider.node.name == 'Seabed') {
-        this._inWater = true
-        if (this._state != Game.CharacterState.TreadWater && this._state != Game.CharacterState.Swim) {
-          this.state = Vec2.ZERO.equals(this._curDir) ? Game.CharacterState.TreadWater : Game.CharacterState.Swim
-        } else {
-          this.v3_pos.set(this.node.position)
-          this.v3_pos.y = 0.34
-          this.node.position = this.v3_pos
-        }
-      } else {
-        this._inWater = false
-        if(this.node.position.y < PhysicsSystem.instance.raycastClosestResult.hitPoint.y + 0.5) {
-          this.v3_pos.set(this.node.position)
-          this.v3_pos.y =  PhysicsSystem.instance.raycastClosestResult.hitPoint.y + 0.5
-          this.node.position = this.v3_pos
-        }
-        this.state = Vec2.ZERO.equals(this._curDir) ? Game.CharacterState.Idle : Game.CharacterState.Run
-      }
-    }
-  }
-
-  protected onTriggerExit(event: ITriggerEvent) {
-    if (event.otherCollider.node.name == 'Water') {
-      this._inWater = false
-      return
-    }
-    this.updateInteractObj(event, false)
-  }
+  protected onTriggerExit(event: ITriggerEvent) { this.updateInteractObj(event, false) }
 
   protected updateInteractObj(event: ITriggerEvent, enter: boolean) {
     if (this._islandMgr == null) {
@@ -364,6 +299,56 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
     else { this._canClimb = this._islandMgr.mapInfo(this._curInteractObj).canInteract(BigWorld.InteractType.Climb) }
   }
 
+  protected inWater() {
+
+    if (this._frameCount < 3) {
+      this._frameCount++
+      return
+    }
+
+    this._frameCount = 0
+
+    if (this.node.position.y >= 0.5) {
+      this._inWater = false
+      return
+    }
+
+    if (this._state != Game.CharacterState.Idle &&
+      this._state != Game.CharacterState.Run &&
+      this._state != Game.CharacterState.TreadWater &&
+      this._state != Game.CharacterState.Swim) {
+      this._inWater = false
+      return
+    }
+
+    geometry.Ray.set(this._ray, this.node.worldPosition.x, this.node.worldPosition.y - 0.4, this.node.worldPosition.z,
+      this.node.worldPosition.x, this.node.worldPosition.y - 50.5, this.node.worldPosition.z)
+    if (!PhysicsSystem.instance.raycastClosest(this._ray, BigWorld.PhyEnvGroup.Terrain)) {
+      this._inWater = false
+      return
+    }
+    let name = PhysicsSystem.instance.raycastClosestResult.collider.node.name
+    if (name == 'Seabed') {
+      this._inWater = true
+      if (this._state != Game.CharacterState.TreadWater && this._state != Game.CharacterState.Swim) {
+        this.state = Vec2.ZERO.equals(this._curDir) ? Game.CharacterState.TreadWater : Game.CharacterState.Swim
+      }
+
+      this.v3_pos.set(this.node.position)
+      this.v3_pos.y = 0.34
+      this.node.position = this.v3_pos
+    } else {
+      // console.log(PhysicsSystem.instance.raycastClosestResult.collider.node.name)
+      this._inWater = false
+      if (this.node.position.y < PhysicsSystem.instance.raycastClosestResult.hitPoint.y + 0.5) {
+        this.v3_pos.set(this.node.position)
+        this.v3_pos.y = PhysicsSystem.instance.raycastClosestResult.hitPoint.y + 0.5
+        this.node.position = this.v3_pos
+      }
+      // this.state = Vec2.ZERO.equals(this._curDir) ? Game.CharacterState.Idle : Game.CharacterState.Run
+    }
+  }
+
   protected runTo() {
     if (Vec3.NEG_ONE.equals(this.dstPos)) return
 
@@ -394,14 +379,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
       Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
 
       if (Vec3.angle(this.node.forward.negative(), this.v3_dir) > MAX_RAIDUS) {
-        this.node.rotation = this.node.rotation.slerp(this.q_rotation, 0.2)
-        if (!this.node.up.equals(Vec3.UNIT_Y, 0.02)) {
-          let forward = this.node.forward.negative()
-          this.v3_dir.set(forward.x, 0, forward.z)
-          Quat.fromViewUp(this.q_rotation, this.v3_dir.normalize())
-          this.node.rotation = this.q_rotation
-          this.q_rotation.set(QuatNeg)
-        }
+        this.node.rotation = this.node.rotation.slerp(this.q_rotation, 0.16)
       }
     }
   }
@@ -409,6 +387,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
   protected jump() {
     this.state = Game.CharacterState.JumpUp
     setTimeout(() => {
+      this._state = Game.CharacterState.JumpUp
       this.rigidBody.useGravity = true
       let v3Impluse = v3(0, 6, 0)
 
@@ -417,7 +396,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         v3Impluse.z = this.node.forward.negative().z * 1
       }
 
-      this.rigidBody.applyImpulse(v3Impluse, Vec3.ZERO)
+      this.rigidBody.applyImpulse(v3Impluse)
     }, 500)
   }
 
@@ -463,15 +442,12 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
   }
 
   protected climb() {
-    if (!this._canClimb) return
     let interactObj = this._islandMgr.mapInfo(this._curInteractObj)
-    // let ladderMgr = this._interactObj.getComponent(LadderMgr)
-    Vec3.subtract(this.v3_dir, this.node.position, interactObj.node.position)
-    let rotation = quat()
-
-    Quat.rotateY(rotation, rotation, math.toRadian((interactObj.info[4] - 180)))
-    this.node.rotation = rotation
-
+    console.log(this.node.name, interactObj)
+    if (interactObj == null || !interactObj.canInteract(BigWorld.InteractType.Climb)) return
+    console.log(this.node.name, 'can climb')
+    this.q_rotation.set(0, 0, 0, 1)
+    this.node.rotation = Quat.rotateY(this.q_rotation, this.q_rotation, math.toRadian((interactObj.info[4] - 180)))
     this.v3_pos.set(interactObj.modelPos)
     this.v3_pos.y = this.node.position.y
     this.node.position = this.v3_pos
@@ -521,12 +497,15 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
     if (!BreakableStates.includes(this._state) && this.animState) return
 
     if (state == Game.CharacterState.None) {
-      this._state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
+      state = this._inWater ? Game.CharacterState.TreadWater : Game.CharacterState.Idle
+      this._state = state
+    } else if (state == Game.CharacterState.JumpUp) {
+
     } else {
       this._state = state
     }
 
-    this.animation?.crossFade(this.anim(this._state), 0)
+    this.animation?.crossFade(this.anim(state), 0)
     this.rigidBody.useGravity = true
     this.collider.direction = CylinderCollider.Axis.Y_AXIS
     this.v3_pos.set(0, -0.5, 0)
@@ -539,17 +518,14 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
         this.dstPos.set(Vec3.NEG_ONE)
         break
       case Game.CharacterState.TreadWater:
-        // this.v3_pos.y = -0.4
-        this.v3_pos.z = -0.2
+        this.v3_pos.z = -0.1
         this.rigidBody.useGravity = false
         this.rigidBody.setLinearVelocity(Vec3.ZERO)
-        // this.collider.height = 0.1
-        // this.collider.direction = CylinderCollider.Axis.Z_AXIS
         break
       case Game.CharacterState.Swim:
         Quat.rotateX(this.q_rotation, this.q_rotation, Math.PI / 2)
         this.v3_pos.y = -0.3
-        this.v3_pos.z = -0.2
+        this.v3_pos.z = -0.1
         this.rigidBody.useGravity = false
         this.collider.direction = CylinderCollider.Axis.Z_AXIS
         break
@@ -560,6 +536,7 @@ export default abstract class CommonPlayerMgr extends BigWorld.PlayerMgr {
       case Game.CharacterState.Attack:
         this.rigidBody.clearState()
         break
+
     }
     this.debug.rotation = this.q_rotation
     if (this.character) this.character.position = this.v3_pos

@@ -16,6 +16,8 @@ export class PlayerState extends Colyseus.Schema {
   // Game.CharacterState
   @Colyseus.type('number') state: number = 0
 
+  @Colyseus.type('number') interactObj: number = Number.MAX_VALUE
+
   @Colyseus.type('number') timestamp: number = 0.0
 
   @Colyseus.type(ProfileState) profile: ProfileState = new ProfileState()

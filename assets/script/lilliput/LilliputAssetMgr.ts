@@ -31,8 +31,8 @@ export default class LilliputAssetMgr implements AssetMgr {
   }
 
   get preloaded() { return this._mtls.size + this._phyMtls.size + this._terrains.size }
-  get totalPreload() { return 0 + 5 + 8 }
-  
+  get totalPreload() { return 0 + 5 + 8 + 20 }
+
   getModelConfig(id: number) {
     for (let item of this.groundConfigs) {
       if (item.id == id) return item
@@ -83,6 +83,9 @@ export default class LilliputAssetMgr implements AssetMgr {
   addTexture<T extends Asset>(name: string, asset: T) { this.textures.set(name, asset) }
 
   preload() {
+    resources.loadDir('prefab/terrain/cube', Prefab, (err, assets) => { // 20
+      assets.forEach(it => { this._terrains.set(it.name, it) })
+    })
 
     resources.load('prefab/terrain/island', Prefab, (err, data) => {
       this._terrains.set(data.name, data)

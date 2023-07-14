@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "tentSmall",
+    "_name": "00011011",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "tentSmall",
+    "_name": "00011011",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -57,7 +57,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "tentSmall",
+    "_name": "00011011",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -74,30 +74,30 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -7,
-      "y": -0.05000000074505806,
-      "z": -6
+      "x": 0,
+      "y": 0,
+      "z": -7
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
+      "x": -0.4999999850988386,
+      "y": 0.4999999850988386,
+      "z": -0.4999999850988386,
+      "w": 0.5000000447034816
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 2,
-      "y": 1.600000023841858,
-      "z": 2
+      "x": 1,
+      "y": 1,
+      "z": 1
     },
     "_mobility": 0,
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
-      "z": 0
+      "y": 89.99999316981123,
+      "z": -90
     },
     "_id": ""
   },
@@ -123,7 +123,7 @@
       "__id__": 5
     },
     "_mesh": {
-      "__uuid__": "2989f0a9-0f82-49fd-9a51-cd4033159c0f@eadac",
+      "__uuid__": "61d62389-147c-46d1-88d1-dbc85ac54b69@da59b",
       "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
@@ -136,7 +136,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "759s6XZvhf/Kpx4fJo4ip9"
+    "fileId": "56iaUXE1lanIV+jsjPoLyz"
   },
   {
     "__type__": "cc.ModelBakeSettings",
@@ -167,7 +167,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "a3iTNjAlJUjpOnqiT4K2uK",
+    "fileId": "e3rxqt9odb85F/qo2uSzRz",
     "instance": null,
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
@@ -180,7 +180,8 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "baoUD5m1Ndk6s3ag3GWCa3",
+    "fileId": "cfC97NLU9fhaD8hU9XUFAD",
+    "instance": null,
     "targetOverrides": null
   }
 ]

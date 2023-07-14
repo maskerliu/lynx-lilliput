@@ -80,32 +80,43 @@ export default class MyselfMgr extends CommonPlayerMgr implements RockerTarget {
   }
 
   syncStateFrame() {
+    if (this._islandMgr == null || this._playerState == null || !Vec3.NEG_ONE.equals(this.dstPos)) return
     this.lstPos.set(this.node.position)
     this.lstState = this._state
     this.frameCount = 0
     let msg: Game.PlayerMsg = {
-      cmd: Game.PlayerMsgType.Sync,
       state: this._state,
+      // pos: v3ToXYZ(this._islandMgr.node.getComponent(UITransform).convertToNodeSpaceAR(this.node.worldPosition)),
       pos: v3ToXYZ(this.node.position),
       dir: v3ToXYZ(this.node.forward)
     }
+
     BattleService.instance.sendPlayerMsg(msg)
   }
 
   enter(island: BigWorld.IslandMgr, state: PlayerState): void {
-    super.enter(island, state)
+    this._islandMgr = island
+    this._playerState = state
+
+    this.node.parent = this._islandMgr.node
+    this.v3_pos.set(state.px, state.py, state.pz)
+    this.node.position = this.v3_pos
   }
 
   leave(): void {
-    super.leave()
+    this._islandMgr = null
+    this._playerState = null
   }
 
   onAction(msg: Game.PlayerMsg) {
-    super.onAction(msg)
 
     if (!BigWorld.PlayerSyncableStates.includes(msg.state)) {
+      msg.interactObj = this._curInteractObj == Number.MAX_VALUE ? null : this._curInteractObj
+      msg.pos = { x: this.node.position.x, y: this.node.position.y, z: this.node.position.z }
       BattleService.instance.sendPlayerMsg(msg)
     }
+
+    super.onAction(msg)
 
     // if (this._interactObj) {
     //   BattleService.island()?.handleInteract(this._interactObj.index, msg.state)
@@ -113,11 +124,10 @@ export default class MyselfMgr extends CommonPlayerMgr implements RockerTarget {
   }
 
   protected onTriggerEnter(event: ITriggerEvent): void {
-
-    if (event.otherCollider.node.name == 'island') {
+    if (event.otherCollider.node.name == 'island' && this._islandMgr == null) {
+      this._islandMgr = event.otherCollider.node.getComponent('LilliputIslandMgr') as BigWorld.IslandMgr
       let pos = event.otherCollider.node.getComponent(UITransform).convertToNodeSpaceAR(this.node.worldPosition)
-      let mgr = event.otherCollider.node.getComponent('LilliputIslandMgr') as BigWorld.IslandMgr
-      TryEnterEvent.customData = { islandId: mgr.senceInfo.id, pos }
+      TryEnterEvent.customData = { islandId: this._islandMgr.senceInfo.id, pos }
       this.node.dispatchEvent(TryEnterEvent)
       return
     }
@@ -127,6 +137,8 @@ export default class MyselfMgr extends CommonPlayerMgr implements RockerTarget {
 
   protected onTriggerExit(event: ITriggerEvent): void {
     if (event.otherCollider.node.name == 'island') {
+      this._islandMgr = null
+      this._playerState = null
       LeaveEvent.customData = this._profile.id
       this.node.dispatchEvent(LeaveEvent)
       return
